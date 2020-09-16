@@ -27,12 +27,19 @@ public interface TransportApi {
             @Query("size") Integer size
     );
 
+    @GET("/transport/type")
+    public Call<List<Transport>> goGetTransportTyped(
+            @Query("page") Long type,
+            @Query("page") Integer page,
+            @Query("size") Integer size
+    );
+
+
     @Headers("Content-Type: application/json")
     @POST("/transport")
     public Call<Long> doPostTransport(
             @Query("type") String type
     );
-
 
     @Headers("Content-Type: application/json")
     @PUT("/transport")

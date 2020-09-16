@@ -151,6 +151,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        loadFragment("Transport");
+//        loadFragment("Transport");
     }
 }

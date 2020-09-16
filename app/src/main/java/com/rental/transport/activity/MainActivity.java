@@ -3,6 +3,7 @@ package com.rental.transport.activity;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -83,6 +84,30 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    private void showProgress(String text) {
+
+        if (progressDialog == null) {
+            try {
+                progressDialog = ProgressDialog.show(this, "", text);
+                progressDialog.setCancelable(false);
+            } catch (Exception e) {
+
+            }
+
+        }
+
+    }
+
+    public void hideProgress() {
+
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+    }
+
+    private ProgressDialog progressDialog = null;
+
     public BottomNavigationView bottomNavigationView;
 
     public Map<String, Fragment> fragmentMap = new HashMap<>();
@@ -152,5 +177,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         loadFragment("SplashScreen");
+        showProgress("Загрузка доступных яхт");
     }
 }

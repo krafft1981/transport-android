@@ -122,11 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
         String account = getAccount();
 
-        fragmentMap.put("CustomerSettings" ,    new CustomerSettings()  );
-        fragmentMap.put("TransportFragment",    new TransportFragment() );
-        fragmentMap.put("TransportDetails",     new TransportDetails()  );
-        fragmentMap.put("OrdersFragment",       new OrdersFragment()    );
-
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -159,12 +154,12 @@ public class MainActivity extends AppCompatActivity {
 //                                                customer.getImages().isEmpty() ||
                                                 customer.getPhone().isEmpty()) {
 
-                                            loadFragment("CustomerSettings");
+//                                            loadFragment("CustomerSettings");
                                         }
                                         else {
 
                                             bottomNavigationView.setVisibility(View.VISIBLE);
-                                            loadFragment("TransportFragment");
+//                                            loadFragment("TransportFragment");
                                         }
                                     }
 
@@ -201,15 +196,15 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.transport_menu:
-                                loadFragment("TransportFragment");
+//                                loadFragment("TransportFragment");
                                 break;
 
                             case R.id.orders_menu:
-                                loadFragment("OrdersFragment");
+//                                loadFragment("OrdersFragment");
                                 break;
 
                             case R.id.account_menu:
-                                loadFragment("CustomerSetting");
+//                                loadFragment("CustomerSetting");
                                 break;
                         }
 

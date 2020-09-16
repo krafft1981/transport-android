@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
+import com.rental.transport.model.Customer;
 import com.rental.transport.service.NetworkService;
 
 import java.util.Arrays;
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
 
             }
-
         }
 
     }
@@ -121,7 +122,16 @@ public class MainActivity extends AppCompatActivity {
 
         String account = getAccount();
 
-        fragmentMap.put("SplashScreen"   , new SplashScreen()    );
+        fragmentMap.put("CustomerSettings" ,    new CustomerSettings()  );
+        fragmentMap.put("TransportFragment",    new TransportFragment() );
+        fragmentMap.put("TransportDetails",     new TransportDetails()  );
+        fragmentMap.put("OrdersFragment",       new OrdersFragment()    );
+
+        setTheme(R.style.AppTheme);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        showProgress("Загрузка аккаунта");
 
         NetworkService
                 .getInstance(account)
@@ -131,6 +141,45 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<Long> call, @NonNull Response<Long> response) {
 
+                        Long userId = response.body();
+                        NetworkService
+                                .getInstance()
+                                .getCustomerApi()
+                                .doGetCustomer()
+                                .enqueue(new Callback<Customer>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<Customer> call, @NonNull Response<Customer> response) {
+
+                                        hideProgress();
+                                        Customer customer = response.body();
+
+                                        if (customer.getFirstName().isEmpty() ||
+                                                customer.getLastName().isEmpty() ||
+                                                customer.getFamily().isEmpty() ||
+//                                                customer.getImages().isEmpty() ||
+                                                customer.getPhone().isEmpty()) {
+
+                                            loadFragment("CustomerSettings");
+                                        }
+                                        else {
+
+                                            bottomNavigationView.setVisibility(View.VISIBLE);
+                                            loadFragment("TransportFragment");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<Customer> call, @NonNull Throwable t) {
+
+                                        Toast
+                                                .makeText(getApplicationContext(), t.toString(), Toast.LENGTH_LONG)
+                                                .show();
+
+                                        hideProgress();
+                                        finish();
+                                    }
+                                });
+
                     }
 
                     @Override
@@ -139,11 +188,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast
                                 .makeText(getApplicationContext(), t.toString(), Toast.LENGTH_LONG)
                                 .show();
+
+                        hideProgress();
+                        finish();
                     }
                 });
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -152,31 +201,20 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.transport_menu:
-//                                loadFragment("Transport");
+                                loadFragment("TransportFragment");
                                 break;
 
-                            case R.id.order_menu:
-//                                loadFragment("Order");
-                                break;
-
-                            case R.id.customer_menu:
-//                                loadFragment("Customer");
-                                break;
-
-                            case R.id.parking_menu:
-//                                loadFragment("Parking");
+                            case R.id.orders_menu:
+                                loadFragment("OrdersFragment");
                                 break;
 
                             case R.id.account_menu:
-//                                loadFragment("CustomerSetting");
+                                loadFragment("CustomerSetting");
                                 break;
                         }
 
                         return true;
                     }
                 });
-
-        loadFragment("SplashScreen");
-        showProgress("Загрузка доступных яхт");
     }
 }

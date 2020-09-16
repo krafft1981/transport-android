@@ -96,17 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         String account = getAccount();
 
-        fragmentMap.put("Transport"       , new TransportFragment());
-        fragmentMap.put("TransportDetails", new TransportDetails() );
-        fragmentMap.put("Customer"        , new CustomerFragment() );
-        fragmentMap.put("CustomerDetails" , new CustomerDetails()  );
-        fragmentMap.put("Parking"         , new ParkingFragment()  );
-        fragmentMap.put("ParkingDetails"  , new ParkingDetails()   );
-        fragmentMap.put("Order"           , new OrderFragment()    );
-        fragmentMap.put("OrderDetails"    , new OrderDetails()     );
-        fragmentMap.put("CustomerSetting" , new CustomerSetting()  );
-        fragmentMap.put("OrderCreate"     , new OrderCreate()      );
-        fragmentMap.put("FullViewImage"   , new FullViewImage()    );
+//        fragmentMap.put("FullViewImage"   , new FullViewImage()    );
 
         NetworkService
                 .getInstance(account)
@@ -137,23 +127,23 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.transport_menu:
-                                loadFragment("Transport");
+//                                loadFragment("Transport");
                                 break;
 
                             case R.id.order_menu:
-                                loadFragment("Order");
+//                                loadFragment("Order");
                                 break;
 
                             case R.id.customer_menu:
-                                loadFragment("Customer");
+//                                loadFragment("Customer");
                                 break;
 
                             case R.id.parking_menu:
-                                loadFragment("Parking");
+//                                loadFragment("Parking");
                                 break;
 
                             case R.id.account_menu:
-                                loadFragment("CustomerSetting");
+//                                loadFragment("CustomerSetting");
                                 break;
                         }
 

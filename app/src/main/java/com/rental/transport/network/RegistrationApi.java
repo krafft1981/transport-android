@@ -10,7 +10,9 @@ public interface RegistrationApi {
 
     @Headers("Content-Type: application/json")
     @POST("/registration")
-    public Call<Long> doPostRegistration(@Query("account") String account);
+    public Call<Long> doPostRegistration(
+            @Query("account") String account
+    );
 
     @GET("/registration/exist")
     public Call<Boolean> doGetCustomerExist(

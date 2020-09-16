@@ -14,11 +14,13 @@ public interface TypeApi {
     @GET("/type/list")
     public Call<List<Type>> doGetTypeList(
             @Query("page") Integer page,
-            @Query("size") Integer size);
+            @Query("size") Integer size
+    );
 
     @POST("/type")
     public Call<Long> doPostType(
-            @Query("name") Integer name);
+            @Query("name") Integer name
+    );
 
     @GET("/type/count")
     public Call<Long> doGetTypeCount();

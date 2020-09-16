@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         String account = getAccount();
 
-//        fragmentMap.put("FullViewImage"   , new FullViewImage()    );
+        fragmentMap.put("SplashScreen"   , new SplashScreen()    );
 
         NetworkService
                 .getInstance(account)
@@ -151,6 +151,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-//        loadFragment("Transport");
+        loadFragment("SplashScreen");
     }
 }

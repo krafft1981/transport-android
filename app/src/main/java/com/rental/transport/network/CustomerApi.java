@@ -19,13 +19,16 @@ public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
     @PUT("/customer")
-    public Call doPutOrder(@Body Customer customer);
+    public Call doPutOrder(
+            @Body Customer customer
+    );
 
     @Headers("Content-Type: application/json")
     @GET("/customer/list")
     public Call<List<Customer>> doGetCustomerList(
             @Query("page") Integer page,
-            @Query("size") Integer size);
+            @Query("size") Integer size
+    );
 
     @Headers("Content-Type: application/json")
     @GET("/customer")

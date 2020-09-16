@@ -15,20 +15,31 @@ import retrofit2.http.Query;
 
 public interface TransportApi {
 
+    @Headers("Content-Type: application/json")
+    @DELETE("/transport")
+    public Call doDeleteTransport(
+            @Query("id") Long id
+    );
+
     @GET("/transport/list")
     public Call<List<Transport>> doGetTransportList(
             @Query("page") Integer page,
-            @Query("size") Integer size);
+            @Query("size") Integer size
+    );
 
     @Headers("Content-Type: application/json")
     @POST("/transport")
-    public Call<Long> doPostTransport(@Query("type") String type);
+    public Call<Long> doPostTransport(
+            @Query("type") String type
+    );
 
-    @Headers("Content-Type: application/json")
-    @DELETE("/transport")
-    public Call doDeleteTransport(@Query("id") Long id);
 
     @Headers("Content-Type: application/json")
     @PUT("/transport")
-    public Call doPutTransport(@Body Transport transport);
+    public Call doPutTransport(
+            @Body Transport transport
+    );
+
+    @GET("/transport/count")
+    public Call<Long> doGetTransportCount();
 }

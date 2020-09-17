@@ -28,10 +28,10 @@ public class Customer {
     private Integer stopWorkAt;
     @SerializedName("workAtWeekEnd")
     private Boolean workAtWeekEnd;
-    @SerializedName("images")
-    private List<Image> images = new ArrayList<>();
-    @SerializedName("transports")
-    private List<Long> transports = new ArrayList<>();
-    @SerializedName("parkings")
-    private List<Long> parkings = new ArrayList<>();
+    @SerializedName("image")
+    private List<Long> image = new ArrayList<>();
+    @SerializedName("transport")
+    private List<Long> transport = new ArrayList<>();
+    @SerializedName("parking")
+    private List<Long> parking = new ArrayList<>();
 }

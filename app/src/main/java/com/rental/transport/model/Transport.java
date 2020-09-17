@@ -32,8 +32,8 @@ public class Transport {
     private Integer quorum;
     @SerializedName("parking")
     private List<Long> parking = new ArrayList<>();
-    @SerializedName("customers")
-    private List<Long> customers = new ArrayList<>();
-    @SerializedName("images")
-    private List<Long> images = new ArrayList<>();
+    @SerializedName("customer")
+    private List<Long> customer = new ArrayList<>();
+    @SerializedName("image")
+    private List<Long> image = new ArrayList<>();
 }

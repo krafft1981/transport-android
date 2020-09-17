@@ -24,10 +24,10 @@ public class Parking {
     private Double longitude;
     @SerializedName("description")
     private String description;
-    @SerializedName("images")
-    private List<Long> images = new ArrayList<>();
-    @SerializedName("customers")
-    private List<Long> customers = new ArrayList<>();
-    @SerializedName("transports")
-    private List<Long> transports = new ArrayList<>();
+    @SerializedName("image")
+    private List<Long> image = new ArrayList<>();
+    @SerializedName("customer")
+    private List<Long> customer = new ArrayList<>();
+    @SerializedName("transport")
+    private List<Long> transport = new ArrayList<>();
 }

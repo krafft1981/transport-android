@@ -19,7 +19,7 @@ public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
     @PUT("/customer")
-    public Call doPutOrder(
+    public Call<Void> doPutCustomer(
             @Body Customer customer
     );
 

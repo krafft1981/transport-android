@@ -3,6 +3,7 @@ package com.rental.transport.network;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Order;
 
+import java.security.Principal;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,6 +43,10 @@ public interface OrderApi {
             @Query("page") Integer page,
             @Query("size") Integer size
     );
+
+    @Headers("Content-Type: application/json")
+    @GET("/order/client")
+    public Call<List<Order>> doGetCustomerOrders();
 
     @Headers("Content-Type: application/json")
     @POST("/order/confirm")

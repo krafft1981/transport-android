@@ -2,6 +2,8 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Image;
 
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -27,7 +29,7 @@ public interface ImageApi {
 
     @Headers("Content-Type: application/json")
     @DELETE("/image")
-    public Call doDeleteImage(
+    public Call<Void> doDeleteImage(
             @Query("id") Long[] id
     );
 
@@ -35,5 +37,12 @@ public interface ImageApi {
     @GET("/image")
     public Call<byte[]> doGetUriImage(
             @Path("user") Long id
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/image/list")
+    public Call<Set<Long>> doGetImageList(
+            @Query("page") Integer page,
+            @Query("size") Integer size
     );
 }

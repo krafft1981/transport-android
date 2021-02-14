@@ -4,164 +4,185 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.rental.transport.R;
 import com.rental.transport.model.Image;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Set;
 
-import lombok.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ImageService {
 
-    private static ImageService mInstance;
     private Context context;
+    private static ImageService mInstance;
 
-    public ImageService(Context context) {
+    private ImageService(Context context) {
         this.context = context;
     }
 
-    public static ImageService getInstance(@NonNull Context context) {
-        if (mInstance == null) {
+    public static ImageService getInstance(Context context) {
+
+        if (mInstance == null)
             mInstance = new ImageService(context);
-        }
 
         return mInstance;
     }
-
 
     private File getFile(Long id) {
         return new File(context.getCacheDir(), id.toString());
     }
 
-    private Boolean getImageFromCache(Long id, LinearLayout layout) {
+    private void setImageProperty(ImageView image) {
+
+        image.setAdjustViewBounds(true);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    }
+
+    private Boolean setImageFromCache(Long id, ImageView image) {
 
         File file = getFile(id);
-        if (file.exists()) {
-            ImageView iv = new ImageView (context);
-            try {
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                iv.setImageBitmap(bitmap);
+        if (!file.exists())
+            return false;
 
-                layout.addView(iv);
-                layout.invalidate();
-            }
-
-            catch (Exception e) {
-                file.delete();
-                return false;
-            }
-        }
-
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        image.setImageBitmap(bitmap);
+        setImageProperty(image);
         return true;
     }
 
-    public void setImage(Long id, int defaultImage, ImageView imageView) {
+    private void setImageAndCache(Long id, String data, ImageView image) {
 
+        byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
+        try {
+            File file = getFile(id);
+            FileOutputStream out = new FileOutputStream(file);
+            out.write(decodedString, 0, decodedString.length);
+        } catch (Exception e) {
+
+        }
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        image.setImageBitmap(bitmap);
+        setImageProperty(image);
     }
 
-    public void setImage(Long id, int defaultImage, LinearLayout layout) {
+    private ImageView setImageFromResource(Integer resource) {
 
-        if (getImageFromCache(id, layout) == false) {
+        ImageView image = new ImageView(context);
+        image.setImageResource(resource);
+        setImageProperty(image);
+        return image;
+    }
+
+    private void setImage(Long id, int defaultImage, LinearLayout layout) {
+
+        ImageView image = new ImageView(context);
+
+        if (setImageFromCache(id, image)) {
+            image.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            ));
+            layout.addView(image);
+            layout.invalidate();
+        } else {
             NetworkService
                     .getInstance()
                     .getImageApi()
                     .doGetImage(id)
                     .enqueue(new Callback<Image>() {
                         @Override
-                        public void onResponse(@NonNull Call<Image> call, @NonNull Response<Image> response) {
-                            Image body = response.body();
-                            String base64String = body.getData();
-                            byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
+                        public void onResponse(Call<Image> call, Response<Image> response) {
+                            if (response.isSuccessful()) {
+                                String base64String = response.body().getData();
 
-                            try {
-                                File file = getFile(id);
-                                FileOutputStream out = new FileOutputStream(file);
-                                out.write(decodedString, 0, decodedString.length);
+                                setImageAndCache(id, base64String, image);
+                                image.setLayoutParams(new LinearLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.MATCH_PARENT
+                                ));
+                                layout.addView(image);
+                                layout.invalidate();
                             }
-
-                            catch (Exception e) {
-
-                            }
-
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                            ImageView iv = new ImageView (context);
-                            iv.setImageBitmap(bitmap);
-
-                            layout.addView(iv);
-                            layout.invalidate();
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<Image> call, @NonNull Throwable t) {
-                            ImageView iv = new ImageView (context);
-                            iv.setImageResource(defaultImage);
+                        public void onFailure(Call<Image> call, Throwable t) {
 
-                            layout.addView(iv);
-                            layout.invalidate();
+                            ImageView image = setImageFromResource(defaultImage);
+                            image.setLayoutParams(new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT
+                            ));
+                            layout.addView(image);
+                        }
+                    });
+        }
+    }
+
+
+    public ImageView setImage(Set<Long> ids, int defaultImage, LinearLayout layout, Boolean editable) {
+
+        for (Long id : ids)
+            setImage(id, defaultImage, layout);
+
+        if (editable) {
+            ImageView image = setImageFromResource(R.drawable.plus);
+            image.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            ));
+
+            layout.addView(image);
+            return image;
+        }
+
+        return null;
+    }
+
+    public void setImage(Long id, int defaultImage, ImageView image) {
+
+        if (id == Long.MIN_VALUE) {
+            image.setImageResource(defaultImage);
+            image.invalidate();
+            return;
+        }
+
+        if (setImageFromCache(id, image)) {
+
+            image.invalidate();
+        }
+        else {
+            NetworkService
+                    .getInstance()
+                    .getImageApi()
+                    .doGetImage(id)
+                    .enqueue(new Callback<Image>() {
+                        @Override
+                        public void onResponse(Call<Image> call, Response<Image> response) {
+                            if (response.isSuccessful()) {
+                                String base64String = response.body().getData();
+                                setImageAndCache(id, base64String, image);
+                                image.invalidate();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Image> call, Throwable t) {
+                            image.setImageResource(defaultImage);
+                            image.invalidate();
                         }
                     });
         }
     }
 }
-
-/*
-            File file = new File(context.getCacheDir(), imageId.toString());
-
-            if (file.exists()) {
-                try {
-                    FileInputStream in = new FileInputStream(file);
-                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    ImageView image = item.findViewById(R.id.gridview_image);
-                    image.setImageBitmap(bitmap);
-                }
-                catch (Exception e) {
-                    Toast
-                            .makeText(context, "Битая картинка: " + imageId, Toast.LENGTH_LONG)
-                            .show();
-                    file.delete();
-                }
-            }
-
-            else {
-                NetworkService
-                        .getInstance()
-                        .getImageApi()
-                        .doGetImage(imageId)
-                        .enqueue(new Callback<Image>() {
-                            @Override
-                            public void onResponse(@NonNull Call<Image> call, @NonNull Response<Image> response) {
-
-                                Image body = response.body();
-
-                                String base64String = body.getData();
-                                byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
-
-                                try {
-                                    FileOutputStream out = new FileOutputStream(file);
-                                    out.write(decodedString, 0, decodedString.length);
-                                }
-
-                                catch (Exception e) {}
-
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                                ImageView image = item.findViewById(R.id.gridview_image);
-                                image.setImageBitmap(bitmap);
-                                image.invalidate();
-                            }
-
-                            @Override
-                            public void onFailure(@NonNull Call<Image> call, @NonNull Throwable t) {
-
-                                Toast
-                                        .makeText(context, t.toString(), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                        });
-            }
- */

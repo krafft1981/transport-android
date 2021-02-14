@@ -17,52 +17,58 @@ import com.rental.transport.network.TypeApi;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import lombok.NonNull;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService {
 
-    private static final String BASE_URL = "http://88.200.201.2:8080";
-//    private static final String BASE_URL = "http://192.168.15.103:8080";
-    private static final String PASSWORD = "password";
+    private static final String BASE_URL = "http://138.124.187.10:8080";
 
     private static NetworkService mInstance;
 
     private Retrofit mRetrofit;
     private Retrofit mRetrofitDidest;
 
-    public static NetworkService getInstance(@NonNull String account) {
-        if (mInstance == null) {
-            mInstance = new NetworkService(account);
-        }
-
+    public static NetworkService getInstance(String account, String password) {
+        mInstance = new NetworkService(account, password);
         return mInstance;
     }
 
     public static NetworkService getInstance() {
 
+        if (mInstance == null) {
+            mInstance = new NetworkService();
+        }
+
         return mInstance;
     }
 
-    private NetworkService(String account) {
+    private NetworkService() {
+
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    private NetworkService(String account, String password) {
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        final DigestAuthenticator authenticator = new DigestAuthenticator(new Credentials(account, PASSWORD));
+        final DigestAuthenticator authenticator = new DigestAuthenticator(new Credentials(account, password));
         final Map<String, CachingAuthenticator> authCache = new ConcurrentHashMap<>();
 
         mRetrofitDidest = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(new OkHttpClient.Builder()
-                    .authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
-                    .addInterceptor(new AuthenticationCacheInterceptor(authCache))
-                    .build()
+                        .authenticator(new CachingAuthenticatorDecorator(authenticator, authCache))
+                        .addInterceptor(new AuthenticationCacheInterceptor(authCache))
+                        .build()
                 )
                 .build();
     }

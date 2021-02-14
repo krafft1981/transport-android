@@ -2,7 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Customer;
 
-import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,28 +15,32 @@ public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
     @GET("/customer/count")
-    public Call<Long> doGetCustomerCount();
+    public Call<Long> doGetCountCustomerRequest();
 
     @Headers("Content-Type: application/json")
     @PUT("/customer")
-    public Call<Void> doPutCustomer(
+    public Call<Void> doPutUpdateCustomerRequest(
             @Body Customer customer
     );
 
     @Headers("Content-Type: application/json")
     @GET("/customer/list")
-    public Call<List<Customer>> doGetCustomerList(
+    public Call<Set<Customer>> doGetPagesCustomerRequest(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/customer")
-    public Call<List<Customer>> doGetCount(
-            @Query("id") Long[] id
-    );
+    public Call<Set<Customer>> doGetCount();
 
     @Headers("Content-Type: application/json")
-    @GET("/customer/my")
-    public Call<Customer> doGetCustomer();
+    @GET("/customer")
+    public Call<Customer> doGetCustomerRequest();
+
+    @Headers("Content-Type: application/json")
+    @PUT("/customer/update/password")
+    public Call<Void> doPutUpdateCustomerPasswordRequest(
+            @Query("password") String password
+    );
 }

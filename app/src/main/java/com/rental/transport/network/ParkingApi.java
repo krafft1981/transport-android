@@ -2,7 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Parking;
 
-import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,12 +17,18 @@ public interface ParkingApi {
 
     @Headers("Content-Type: application/json")
     @DELETE("/parking")
-    public Call doDeleteParking(
+    public Call<Void> doDeleteParking(
+            @Query("id") Long id
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/parking")
+    public Call<Parking> doGetParking(
             @Query("id") Long id
     );
 
     @GET("/parking/list")
-    public Call<List<Parking>> doGetParkingList(
+    public Call<Set<Parking>> doGetParkingList(
             @Query("page") Integer page,
             @Query("size") Integer size);
 

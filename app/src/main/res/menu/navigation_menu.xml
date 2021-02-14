@@ -1,10 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/transport_menu"
-        android:title="@string/transports"/>
+        android:icon="@drawable/transport"
+        android:title="@string/transport"/>
 
     <item android:id="@+id/orders_menu"
-        android:title="@string/order" />
+        android:icon="@drawable/order"
+        android:title="@string/orders" />
+
+    <item android:id="@+id/calendar_menu"
+        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:title="@string/calendar"/>
+
+    <item android:id="@+id/parking_menu"
+        android:icon="@drawable/parking"
+        android:title="@string/parking"/>
 
     <item android:id="@+id/account_menu"
+        android:icon="@drawable/user"
         android:title="@string/account"/>
 </menu>

@@ -1,9 +1,7 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Calendar;
-
-import java.util.List;
-
+import java.util.Set;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -14,30 +12,34 @@ import retrofit2.http.Query;
 public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
-    @GET("/calendar/count")
+    @GET("/event/count")
     public Call<Long> doGetCountRequest();
 
     @Headers("Content-Type: application/json")
-    @PUT("/calendar")
-    public Call<Void> doPutOutRequest(
-            @Query("start") Integer start,
-            @Query("stop") Integer stop);
+    @GET("/event/transport")
+    public Call<Set<Calendar>> doGetTransportCalendar(
+            @Query("days") Long[] days,
+            @Query("transport_id") Long transportId
+    );
 
     @Headers("Content-Type: application/json")
-    @DELETE("/calendar")
+    @GET("/event/customer")
+    public Call<Set<Calendar>> doGetCustomerCalendar(
+            @Query("days") Long[] days
+    );
+
+    @Headers("Content-Type: application/json")
+    @PUT("/event")
+    public Call<Void> doPutOutRequest(
+            @Query("day") Integer day,
+            @Query("start") Integer start,
+            @Query("stop") Integer stop
+    );
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/event")
     public Call<Void> doDeleteOutRequest(
             @Query("start") Integer start,
-            @Query("stop") Integer stop);
-
-    @Headers("Content-Type: application/json")
-    @GET("/calendar")
-    public Call<Void> doGetOutRequest(
-            @Query("start") Integer start,
-            @Query("stop") Integer stop);
-
-    @Headers("Content-Type: application/json")
-    @GET("/calendar/byTime")
-    public Call<List<Calendar>> doGetByTimeRequest(
-            @Query("start") Integer start,
-            @Query("stop") Integer stop);
+            @Query("stop") Integer stop
+    );
 }

@@ -20,6 +20,7 @@ import com.rental.transport.model.Customer;
 import com.rental.transport.model.Property;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 import com.rental.transport.service.SharedService;
 
@@ -38,19 +39,19 @@ public class CustomerSettings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String msg = bundle.getString("name");
-//            if (msg != null) {
-//            }
-//        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String msg = bundle.getString("name");
+            if (msg != null) {
+            }
+        }
 
         View root = inflater.inflate(R.layout.customer_settings, container, false);
         Customer customer = ((MainActivity) getActivity()).getCustomer();
         TableLayout table = root.findViewById(R.id.tableProperty);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .setPropertyToTable(
                         table,
                         customer.getProperty(),
@@ -58,7 +59,7 @@ public class CustomerSettings extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -70,7 +71,7 @@ public class CustomerSettings extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -82,7 +83,7 @@ public class CustomerSettings extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -95,20 +96,16 @@ public class CustomerSettings extends Fragment {
 
         Button save = new Button(getContext());
         save.setText(getString(R.string.save));
-        save.setBackground(this
-                .getResources()
-                .getDrawable(R.drawable.border)
-        );
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customer.setProperty(
                         PropertyService
-                                .getInstance(getContext())
+                                .getInstance()
                                 .getPropertyFromTable(table)
                 );
 
-                ((MainActivity) getActivity()).showProgress(getString(R.string.customer_saving));
+                ProgresService.getInstance().showProgress(getString(R.string.customer_saving));
                 NetworkService
                         .getInstance()
                         .getCustomerApi()
@@ -116,14 +113,12 @@ public class CustomerSettings extends Fragment {
                         .enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
-
-                                ((MainActivity) getActivity()).hideProgress();
+                                ProgresService.getInstance().hideProgress();
                             }
 
                             @Override
                             public void onFailure(Call<Void> call, Throwable t) {
-
-                                ((MainActivity) getActivity()).hideProgress();
+                                ProgresService.getInstance().hideProgress();
                                 Toast
                                         .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                         .show();
@@ -135,15 +130,11 @@ public class CustomerSettings extends Fragment {
         buttonLayout.addView(save);
 
         Button exit = new Button(getContext());
-        exit.setBackground(this
-                .getResources()
-                .getDrawable(R.drawable.border)
-        );
         exit.setText(getString(R.string.exit));
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedService.getInstance(getActivity()).clear();
+                SharedService.getInstance().clear();
                 ((MainActivity) getActivity()).showMenu(false);
                 ((MainActivity) getActivity()).fragmentHistoryClear();
                 ((MainActivity) getActivity()).loadFragment("CustomerLogin");

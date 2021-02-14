@@ -22,6 +22,7 @@ import com.rental.transport.model.Parking;
 import com.rental.transport.model.Property;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
 import retrofit2.Call;
@@ -42,12 +43,12 @@ public class ParkingDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String msg = bundle.getString("name");
-//            if (msg != null) {
-//            }
-//        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String msg = bundle.getString("name");
+            if (msg != null) {
+            }
+        }
 
         View root = inflater.inflate(R.layout.parking_details, container, false);
         Parking parking = ((MainActivity) getActivity()).getParking();
@@ -58,7 +59,7 @@ public class ParkingDetails extends Fragment {
         Boolean editable = parking.getCustomer().contains(customer.getId());
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .setPropertyToTable(
                         table,
                         parking.getProperty(),
@@ -66,7 +67,7 @@ public class ParkingDetails extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -78,7 +79,7 @@ public class ParkingDetails extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -90,7 +91,7 @@ public class ParkingDetails extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -103,22 +104,17 @@ public class ParkingDetails extends Fragment {
 
         if (editable) {
             Button action = new Button(getContext());
-            action.setBackground(this
-                    .getResources()
-                    .getDrawable(R.drawable.border)
-            );
             action.setText(getString(R.string.save));
             action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     parking.setProperty(
                             PropertyService
-                                    .getInstance(getContext())
+                                    .getInstance()
                                     .getPropertyFromTable(table)
                     );
 
-                    ((MainActivity) getActivity()).showProgress(getString(R.string.parking_saving));
-
+                    ProgresService.getInstance().showProgress(getString(R.string.parking_saving));
                     NetworkService
                             .getInstance()
                             .getParkingApi()
@@ -126,14 +122,12 @@ public class ParkingDetails extends Fragment {
                             .enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
-
-                                    ((MainActivity) getActivity()).hideProgress();
+                                    ProgresService.getInstance().hideProgress();
                                 }
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
-
-                                    ((MainActivity) getActivity()).hideProgress();
+                                    ProgresService.getInstance().hideProgress();
                                     Toast
                                             .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                             .show();
@@ -147,10 +141,6 @@ public class ParkingDetails extends Fragment {
         }
 
         Button map = new Button(getContext());
-        map.setBackground(this
-                .getResources()
-                .getDrawable(R.drawable.border)
-        );
         map.setText(getString(R.string.map));
         map.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +153,7 @@ public class ParkingDetails extends Fragment {
 
         LinearLayout images = root.findViewById(R.id.parking_images);
         ImageView image = ImageService
-                .getInstance(getContext())
+                .getInstance()
                 .setImage(parking.getImage(), R.drawable.unnamed, images, editable);
 
         if (editable) {

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.SharedService;
 import com.rental.transport.validator.EmailValidator;
 import com.rental.transport.validator.IStringValidator;
@@ -50,7 +51,10 @@ public class CustomerLogin extends Fragment {
     }
 
     void login(View root, String username, String password) {
-        ((MainActivity) getActivity()).showProgress(getString(R.string.customer_loading));
+        ProgresService
+                .getInstance()
+                .showProgress(getString(R.string.customer_loading));
+
         NetworkService
                 .getInstance(username, password)
                 .getCustomerApi()
@@ -58,7 +62,10 @@ public class CustomerLogin extends Fragment {
                 .enqueue(new Callback<Customer>() {
                     @Override
                     public void onResponse(Call<Customer> call, Response<Customer> response) {
-                        ((MainActivity) getActivity()).hideProgress();
+                        ProgresService
+                                .getInstance()
+                                .hideProgress();
+
                         if (response.code() == 401) {
                             SharedService
                                     .getInstance(getActivity())
@@ -72,7 +79,7 @@ public class CustomerLogin extends Fragment {
                             CheckBox remember = root.findViewById(R.id.loginAuto);
                             if (remember.isChecked()) {
                                 SharedService
-                                        .getInstance(getActivity())
+                                        .getInstance()
                                         .save(username, password);
                             }
 
@@ -85,7 +92,9 @@ public class CustomerLogin extends Fragment {
 
                     @Override
                     public void onFailure(Call<Customer> call, Throwable t) {
-                        ((MainActivity) getActivity()).hideProgress();
+                        ProgresService
+                                .getInstance()
+                                .hideProgress();
                         Toast
                                 .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                 .show();
@@ -102,12 +111,12 @@ public class CustomerLogin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String msg = bundle.getString("name");
-//            if (msg != null) {
-//            }
-//        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String msg = bundle.getString("name");
+            if (msg != null) {
+            }
+        }
 
         View root = inflater.inflate(R.layout.customer_login, container, false);
         EditText customer = root.findViewById(R.id.loginEmail);
@@ -143,7 +152,7 @@ public class CustomerLogin extends Fragment {
                             .enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
-                                    ((MainActivity) getActivity()).hideProgress();
+                                    ProgresService.getInstance().hideProgress();
                                     if (response.isSuccessful()) {
                                         Toast
                                                 .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
@@ -158,7 +167,7 @@ public class CustomerLogin extends Fragment {
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
-                                    ((MainActivity) getActivity()).hideProgress();
+                                    ProgresService.getInstance().hideProgress();
                                     Toast
                                             .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                             .show();
@@ -175,8 +184,8 @@ public class CustomerLogin extends Fragment {
             }
         });
 
-        String savedUsername = SharedService.getInstance(getActivity()).getUsername();
-        String savedPassword = SharedService.getInstance(getActivity()).getPassword();
+        String savedUsername = SharedService.getInstance().getUsername();
+        String savedPassword = SharedService.getInstance().getPassword();
 
         if ((savedUsername != null) && (savedPassword != null))
 

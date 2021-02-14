@@ -38,6 +38,11 @@ public class ImageService {
         return mInstance;
     }
 
+    public static ImageService getInstance() {
+
+        return mInstance;
+    }
+
     private File getFile(Long id) {
         return new File(context.getCacheDir(), id.toString());
     }

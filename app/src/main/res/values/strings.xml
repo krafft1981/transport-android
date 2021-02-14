@@ -19,7 +19,9 @@
     <string name="preferred_password">password</string>
     <string name="check_email">Проверьте почту</string>
     <string name="customer_saving">Сохранение пользователя</string>
+    <string name="customer_creating">Создание пользователя</string>
     <string name="transport_saving">Сохранение транспорта</string>
+    <string name="transport_loading">Загрузка транспорта</string>
     <string name="parking_saving">Сохранение стоянки</string>
     <string name="customer_loading">Загрузка пользователя</string>
     <string name="wrong_credentials">Вход запрещён</string>

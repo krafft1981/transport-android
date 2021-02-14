@@ -1,6 +1,5 @@
 package com.rental.transport.activity;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,10 +9,12 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
+import com.rental.transport.service.ImageService;
+import com.rental.transport.service.ProgresService;
+import com.rental.transport.service.PropertyService;
+import com.rental.transport.service.SharedService;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ProgressDialog progressDialog;
 
     Fragment CustomerLogin = new CustomerLogin();
     Fragment TransportFragment = new TransportFragment();
@@ -44,26 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void showProgress(String message) {
-
-        if (progressDialog == null) {
-            try {
-                progressDialog = ProgressDialog.show(this, "", message);
-                progressDialog.setCancelable(false);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
-
-    public void hideProgress() {
-
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-    }
-
     public void showMenu(Boolean show) {
 
         int mode = show ? View.VISIBLE : View.GONE;
@@ -77,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ImageService.getInstance(this);
+        ProgresService.getInstance(this);
+        PropertyService.getInstance(this);
+        SharedService.getInstance(this);
 
         if (savedInstanceState == null) {
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

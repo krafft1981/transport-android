@@ -22,6 +22,7 @@ import com.rental.transport.model.Property;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
 import retrofit2.Call;
@@ -39,12 +40,12 @@ public class TransportDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String msg = bundle.getString("name");
-//            if (msg != null) {
-//            }
-//        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String msg = bundle.getString("name");
+            if (msg != null) {
+            }
+        }
 
         View root = inflater.inflate(R.layout.transport_details, container, false);
         Transport transport = ((MainActivity) getActivity()).getTransport();
@@ -56,7 +57,7 @@ public class TransportDetails extends Fragment {
         System.out.println(transport.getCustomer() + " " + customer.getId());
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .setPropertyToTable(
                         table,
                         transport.getProperty(),
@@ -64,7 +65,7 @@ public class TransportDetails extends Fragment {
                 );
 
         PropertyService
-                .getInstance(getContext())
+                .getInstance()
                 .addTableRow(
                         table,
                         new Property(
@@ -90,7 +91,7 @@ public class TransportDetails extends Fragment {
 
         LinearLayout images = root.findViewById(R.id.transport_images);
         ImageView image = ImageService
-                .getInstance(getContext())
+                .getInstance()
                 .setImage(transport.getImage(), R.drawable.samokat, images, editable);
 
         if (editable) {
@@ -131,11 +132,13 @@ public class TransportDetails extends Fragment {
                 public void onClick(View v) {
                     transport.setProperty(
                             PropertyService
-                                    .getInstance(getContext())
+                                    .getInstance()
                                     .getPropertyFromTable(table)
                     );
 
-                    ((MainActivity) getActivity()).showProgress(getString(R.string.transport_saving));
+                    ProgresService
+                            .getInstance()
+                            .showProgress(getString(R.string.transport_saving));
 
                     NetworkService
                             .getInstance()
@@ -144,14 +147,12 @@ public class TransportDetails extends Fragment {
                             .enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
-
-                                    ((MainActivity) getActivity()).hideProgress();
+                                    ProgresService.getInstance().hideProgress();
                                 }
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
-
-                                    ((MainActivity) getActivity()).hideProgress();
+                                    ProgresService.getInstance().hideProgress();
                                     Toast
                                             .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                             .show();

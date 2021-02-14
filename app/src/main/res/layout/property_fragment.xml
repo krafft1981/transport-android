@@ -4,4 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TableLayout
+        android:id="@+id/tableProperty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="1dp" />
+
 </TableLayout>

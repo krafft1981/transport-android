@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 import com.rental.transport.validator.EmailValidator;
 import com.rental.transport.validator.IStringValidator;
 import com.rental.transport.validator.PasswordValidator;
@@ -80,12 +81,12 @@ public class CustomerCreate extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String msg = bundle.getString("name");
-//            if (msg != null) {
-//            }
-//        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String msg = bundle.getString("name");
+            if (msg != null) {
+            }
+        }
 
         View root = inflater.inflate(R.layout.customer_create, container, false);
         root.findViewById(R.id.createButton).setOnClickListener(new View.OnClickListener() {
@@ -103,6 +104,7 @@ public class CustomerCreate extends Fragment {
                     if (isValidPassword(password)) {
                         if (isValidPhone(phone)) {
                             if (isValidFio(fio)) {
+                                ProgresService.getInstance().showProgress(getString(R.string.customer_creating));
                                 NetworkService
                                         .getInstance()
                                         .getRegistrationApi()
@@ -115,7 +117,7 @@ public class CustomerCreate extends Fragment {
                                         .enqueue(new Callback<Customer>() {
                                             @Override
                                             public void onResponse(Call<Customer> call, Response<Customer> response) {
-                                                ((MainActivity) getActivity()).hideProgress();
+                                                ProgresService.getInstance().hideProgress();
                                                 if (response.isSuccessful()) {
                                                     ((MainActivity) getActivity()).loadFragment("CustomerLogin");
                                                 }
@@ -123,7 +125,7 @@ public class CustomerCreate extends Fragment {
 
                                             @Override
                                             public void onFailure(Call<Customer> call, Throwable t) {
-                                                ((MainActivity) getActivity()).hideProgress();
+                                                ProgresService.getInstance().hideProgress();
                                                 Toast
                                                         .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                                         .show();

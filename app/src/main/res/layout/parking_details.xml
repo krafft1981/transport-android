@@ -27,24 +27,10 @@
                 android:orientation="horizontal" />
         </HorizontalScrollView>
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/propertyes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="1dp">
+            android:layout_height="match_parent" />
 
-            <TableLayout
-                android:id="@+id/tableProperty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:id="@+id/buttonLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="1dp" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

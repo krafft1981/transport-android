@@ -2,6 +2,8 @@ package com.rental.transport.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -15,6 +17,7 @@ import com.rental.transport.R;
 import com.rental.transport.adapter.ParkingGridAdapter;
 import com.rental.transport.model.Parking;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -31,8 +34,7 @@ public class ParkingFragment extends Fragment {
 
     private void loadData(GridView grid) {
 
-        ((MainActivity) getActivity()).showProgress("Загрузка стоянок");
-
+        ProgresService.getInstance().showProgress("Загрузка стоянок");
         NetworkService
                 .getInstance()
                 .getParkingApi()
@@ -41,7 +43,7 @@ public class ParkingFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<Set<Parking>> call, @NonNull Response<Set<Parking>> response) {
 
-                        ((MainActivity) getActivity()).hideProgress();
+                        ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
                             Set<Parking> parking = response.body();
                             if (parking != null) {
@@ -53,8 +55,7 @@ public class ParkingFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<Set<Parking>> call, @NonNull Throwable t) {
-
-                        ((MainActivity) getActivity()).hideProgress();
+                        ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
                                 .show();
@@ -69,15 +70,20 @@ public class ParkingFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String msg = bundle.getString("name");
-//            if (msg != null) {
-//            }
-//        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String msg = bundle.getString("name");
+            if (msg != null) {
+            }
+        }
 
         View root = inflater.inflate(R.layout.parking_fragment, container, false);
         GridView grid = root.findViewById(R.id.parking_gridview);

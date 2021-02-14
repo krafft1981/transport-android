@@ -36,6 +36,11 @@ public class PropertyService {
         return mInstance;
     }
 
+    public static PropertyService getInstance() {
+
+        return mInstance;
+    }
+
     public Property searchProperty(Set<Property> props, String name) throws IllegalArgumentException {
 
         for (Property prop : props) {

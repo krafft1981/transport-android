@@ -24,6 +24,11 @@ public class SharedService {
         return mInstance;
     }
 
+    public static SharedService getInstance() {
+
+        return mInstance;
+    }
+
     public void clear() {
 
         SharedPreferences.Editor editor = settings.edit();

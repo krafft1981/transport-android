@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.adapter.TransportGridAdapter;
 import com.rental.transport.model.Transport;
+import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
@@ -58,7 +60,6 @@ public class TransportFragment extends Fragment {
                                 .show();
                     }
                 });
-
     }
 
     @Override
@@ -70,18 +71,15 @@ public class TransportFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_menu, menu);
+
+        Toast
+                .makeText(getActivity(), "menu created", Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
 
         View root = inflater.inflate(R.layout.transport_fragment, container, false);
         GridView grid = (GridView) root.findViewById(R.id.transport_gridview);
@@ -90,9 +88,15 @@ public class TransportFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                Transport transport = (Transport) parent.getAdapter().getItem(position);
-                ((MainActivity) getActivity()).setTransport(transport);
-                ((MainActivity) getActivity()).loadFragment("TransportDetails");
+                MemoryService
+                        .getInstance()
+                        .setTransport(
+                                (Transport)parent
+                                        .getAdapter()
+                                        .getItem(position)
+                        );
+
+                FragmentService.getInstance().loadFragment("TransportDetails");
             }
         });
 

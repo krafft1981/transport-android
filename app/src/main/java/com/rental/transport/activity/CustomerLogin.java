@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
+import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.SharedService;
@@ -83,10 +85,13 @@ public class CustomerLogin extends Fragment {
                                         .save(username, password);
                             }
 
-                            Customer customer = response.body();
-                            ((MainActivity) getActivity()).setCustomer(customer);
+                            MemoryService
+                                    .getInstance()
+                                    .setCustomer(response.body());
+
                             ((MainActivity) getActivity()).showMenu(true);
-                            ((MainActivity) getActivity()).loadFragment("TransportFragment");
+                            FragmentService.getInstance().loadFragment("TransportFragment");
+
                         }
                     }
 
@@ -110,13 +115,6 @@ public class CustomerLogin extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
 
         View root = inflater.inflate(R.layout.customer_login, container, false);
         EditText customer = root.findViewById(R.id.loginEmail);
@@ -145,6 +143,7 @@ public class CustomerLogin extends Fragment {
             public void onClick(View v) {
                 if (isValidEmail(customer)) {
 
+                    ProgresService.getInstance().showProgress(getString(R.string.request));
                     NetworkService
                             .getInstance()
                             .getRegistrationApi()
@@ -180,7 +179,7 @@ public class CustomerLogin extends Fragment {
         root.findViewById(R.id.loginRegisterLink).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).loadFragment("CustomerCreate");
+                FragmentService.getInstance().loadFragment("CustomerCreate");
             }
         });
 

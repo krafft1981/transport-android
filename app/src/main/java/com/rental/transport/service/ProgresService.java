@@ -13,9 +13,9 @@ public class ProgresService {
     }
 
     public static ProgresService getInstance(Context context) {
-        if (mInstance == null) {
+
+        if (mInstance == null)
             mInstance = new ProgresService(context);
-        }
 
         return mInstance;
     }

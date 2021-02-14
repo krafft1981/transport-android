@@ -20,10 +20,14 @@ import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Parking;
 import com.rental.transport.model.Property;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.ImageService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,56 +55,17 @@ public class ParkingDetails extends Fragment {
         }
 
         View root = inflater.inflate(R.layout.parking_details, container, false);
-        Parking parking = ((MainActivity) getActivity()).getParking();
-        Customer customer = ((MainActivity) getActivity()).getCustomer();
-        TableLayout table = root.findViewById(R.id.tableProperty);
+        Parking parking = MemoryService.getInstance().getParking();
+        Customer customer = MemoryService.getInstance().getCustomer();
+        TableLayout table = root.findViewById(R.id.propertyTable);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
-
         Boolean editable = parking.getCustomer().contains(customer.getId());
-
         PropertyService
                 .getInstance()
-                .setPropertyToTable(
-                        table,
-                        parking.getProperty(),
-                        editable
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.transport),
-                                "transport_count",
-                                String.valueOf(parking.getTransport().size())
-                        ),
-                        false
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.customer),
-                                "customer_count",
-                                String.valueOf(parking.getCustomer().size())
-                        ),
-                        false
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.image),
-                                "image_count",
-                                String.valueOf(parking.getImage().size())
-                        ),
-                        false
-                );
+                .setPropertyToTable(table, new ArrayList(parking.getProperty()), editable)
+                .setPropertyToTable(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(parking.getTransport().size())))
+                .setPropertyToTable(table, new Property(getString(R.string.customer), "customer_count", String.valueOf(parking.getCustomer().size())))
+                .setPropertyToTable(table, new Property(getString(R.string.image), "image_count", String.valueOf(parking.getImage().size())));
 
         if (editable) {
             Button action = new Button(getContext());
@@ -145,7 +110,7 @@ public class ParkingDetails extends Fragment {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).loadFragment("MapFragment");
+                FragmentService.getInstance().loadFragment("MapFragment");
             }
         });
 

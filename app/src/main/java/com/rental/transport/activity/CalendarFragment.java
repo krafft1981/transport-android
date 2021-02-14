@@ -24,13 +24,6 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
-
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
         GridView grid = root.findViewById(R.id.calendar_gridview);
 

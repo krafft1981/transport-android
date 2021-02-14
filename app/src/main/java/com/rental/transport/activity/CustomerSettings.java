@@ -18,11 +18,15 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Property;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.ImageService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 import com.rental.transport.service.SharedService;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,60 +43,17 @@ public class CustomerSettings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
+        Customer customer = MemoryService.getInstance().getCustomer();
 
         View root = inflater.inflate(R.layout.customer_settings, container, false);
-        Customer customer = ((MainActivity) getActivity()).getCustomer();
-        TableLayout table = root.findViewById(R.id.tableProperty);
+        TableLayout table = root.findViewById(R.id.propertyTable);
+        PropertyService.getInstance()
+                .setPropertyToTable(table, new ArrayList(customer.getProperty()), true)
+                .setPropertyToTable(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(customer.getTransport().size())))
+                .setPropertyToTable(table, new Property(getString(R.string.parking), "parking_count", String.valueOf(customer.getParking().size())))
+                .setPropertyToTable(table, new Property(getString(R.string.image), "image_count", String.valueOf(customer.getImage().size())));
+
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
-        PropertyService
-                .getInstance()
-                .setPropertyToTable(
-                        table,
-                        customer.getProperty(),
-                        true
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.transport),
-                                "transport_count",
-                                String.valueOf(customer.getTransport().size())
-                        ),
-                        false
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.parking),
-                                "parking_count",
-                                String.valueOf(customer.getParking().size())
-                        ),
-                        false
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.image),
-                                "image_count",
-                                String.valueOf(customer.getImage().size())
-                        ),
-                        false
-                );
 
         Button save = new Button(getContext());
         save.setText(getString(R.string.save));
@@ -106,6 +67,7 @@ public class CustomerSettings extends Fragment {
                 );
 
                 ProgresService.getInstance().showProgress(getString(R.string.customer_saving));
+
                 NetworkService
                         .getInstance()
                         .getCustomerApi()
@@ -136,8 +98,9 @@ public class CustomerSettings extends Fragment {
             public void onClick(View v) {
                 SharedService.getInstance().clear();
                 ((MainActivity) getActivity()).showMenu(false);
-                ((MainActivity) getActivity()).fragmentHistoryClear();
-                ((MainActivity) getActivity()).loadFragment("CustomerLogin");
+                FragmentService.getInstance().fragmentHistoryClear();
+                FragmentService.getInstance().loadFragment("CustomerLogin");
+
             }
         });
 

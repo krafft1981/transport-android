@@ -2,26 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:icon="@drawable/search"
+        android:icon="@drawable/places_ic_search"
         android:title="@string/search"
-        app:actionLayout="@layout/simple_search_view_item"
-        app:showAsAction="always" />
-
-    <item
-        android:icon="@drawable/search"
-        android:title="@string/search"
-        app:actionLayout="@layout/simple_search_view_item"
-        app:showAsAction="always" />
-
-    <item
-        android:icon="@drawable/search"
-        android:title="@string/search"
-        app:actionLayout="@layout/simple_search_view_item"
-        app:showAsAction="always" />
-
-    <item
-        android:icon="@drawable/search"
-        android:title="@string/search"
-        app:actionLayout="@layout/simple_search_view_item"
+        app:actionLayout="@layout/search_element"
         app:showAsAction="always" />
 </menu>

@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:visibility="invisible"
         app:itemBackground="@color/gray"
         app:itemIconTint="@color/silver"
         app:itemTextColor="@color/design_default_color_background"

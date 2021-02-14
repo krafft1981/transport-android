@@ -3,6 +3,8 @@
     android:id="@+id/ParkingFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="60dp"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <SearchView
@@ -17,8 +19,6 @@
         android:id="@+id/parking_gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/background"
         android:horizontalSpacing="1dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="1dp" />

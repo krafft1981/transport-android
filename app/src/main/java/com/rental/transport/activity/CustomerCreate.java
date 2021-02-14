@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.validator.EmailValidator;
@@ -81,13 +82,6 @@ public class CustomerCreate extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
-
         View root = inflater.inflate(R.layout.customer_create, container, false);
         root.findViewById(R.id.createButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,9 +112,8 @@ public class CustomerCreate extends Fragment {
                                             @Override
                                             public void onResponse(Call<Customer> call, Response<Customer> response) {
                                                 ProgresService.getInstance().hideProgress();
-                                                if (response.isSuccessful()) {
-                                                    ((MainActivity) getActivity()).loadFragment("CustomerLogin");
-                                                }
+                                                if (response.isSuccessful())
+                                                    FragmentService.getInstance().loadFragment("CustomerLogin");
                                             }
 
                                             @Override

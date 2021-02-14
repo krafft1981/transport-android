@@ -28,9 +28,17 @@
         </HorizontalScrollView>
 
         <TableLayout
-            android:id="@+id/tableProperty"
+            android:id="@+id/propertyTable"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="1dp" />
 
     </LinearLayout>
 </ScrollView>

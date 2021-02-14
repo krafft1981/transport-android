@@ -17,9 +17,9 @@ public class SharedService {
     }
 
     public static SharedService getInstance(Activity activity) {
-        if (mInstance == null) {
+
+        if (mInstance == null)
             mInstance = new SharedService(activity);
-        }
 
         return mInstance;
     }

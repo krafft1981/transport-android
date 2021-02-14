@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.adapter.ParkingGridAdapter;
 import com.rental.transport.model.Parking;
+import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
@@ -34,7 +36,7 @@ public class ParkingFragment extends Fragment {
 
     private void loadData(GridView grid) {
 
-        ProgresService.getInstance().showProgress("Загрузка стоянок");
+        ProgresService.getInstance().showProgress(getString(R.string.parking_loading));
         NetworkService
                 .getInstance()
                 .getParkingApi()
@@ -78,13 +80,6 @@ public class ParkingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
-
         View root = inflater.inflate(R.layout.parking_fragment, container, false);
         GridView grid = root.findViewById(R.id.parking_gridview);
 
@@ -93,9 +88,11 @@ public class ParkingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                Parking parking = (Parking) parent.getAdapter().getItem(position);
-                ((MainActivity) getActivity()).setParking(parking);
-                ((MainActivity) getActivity()).loadFragment("ParkingDetails");
+                MemoryService
+                        .getInstance()
+                        .setParking((Parking) parent.getAdapter().getItem(position));
+
+                FragmentService.getInstance().loadFragment("ParkingDetails");
             }
         });
 

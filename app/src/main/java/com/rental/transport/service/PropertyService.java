@@ -1,12 +1,9 @@
 package com.rental.transport.service;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.text.InputType;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.LayoutInflater;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -16,7 +13,10 @@ import com.rental.transport.model.Property;
 import com.rental.transport.validator.IStringValidator;
 import com.rental.transport.validator.ValidatorFactory;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PropertyService {
@@ -29,9 +29,9 @@ public class PropertyService {
     }
 
     public static PropertyService getInstance(Context context) {
-        if (mInstance == null) {
+
+        if (mInstance == null)
             mInstance = new PropertyService(context);
-        }
 
         return mInstance;
     }
@@ -73,37 +73,47 @@ public class PropertyService {
 
     public void addTableRow(TableLayout table, Property property, Boolean editable) {
 
-        TableRow row = new TableRow(context);
+        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        TableRow row = (TableRow) inflater.inflate(R.layout.property_element, null);
 
-        TextView type = new TextView(context);
-        type.setText(property.getType());
-        type.setVisibility(View.GONE);
-
-        TextView logic = new TextView(context);
+        TextView logic = (TextView) row.findViewById(R.id.property_logic);
         logic.setText(property.getLogicName());
-        logic.setVisibility(View.GONE);
 
-        TextView name = new TextView(context);
+        TextView name = (TextView) row.findViewById(R.id.property_name);
         name.setText(property.getHumanName());
         name.setSingleLine(false);
 
-        EditText value = new EditText(context);
+        EditText value = (EditText) row.findViewById(R.id.property_value);
         value.setText(property.getValue());
         value.setInputType(editable ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_NULL);
         value.setSingleLine(false);
 
-        row.addView(type);
-        row.addView(logic);
-        row.addView(name);
-        row.addView(value);
-
         table.addView(row);
     }
 
-    public void setPropertyToTable(TableLayout table, Set<Property> property, Boolean editable) {
+    public class PropertyIdComparator implements Comparator<Property> {
+        @Override
+        public int compare(Property a, Property b) {
+            return a.getId().compareTo(b.getId());
+        }
+    }
 
-        for (Property prop : property)
+    public PropertyService setPropertyToTable(TableLayout table, List<Property> properties, Boolean editable) {
+
+        Collections.sort(properties, new PropertyIdComparator());
+
+        table.removeAllViews();
+        
+        for (Property prop : properties)
             addTableRow(table, prop, editable);
+
+        return this;
+    }
+
+    public PropertyService setPropertyToTable(TableLayout table, Property property) {
+
+        addTableRow(table, property, false);
+        return this;
     }
 
     public Set<Property> getPropertyFromTable(TableLayout table) {
@@ -111,33 +121,33 @@ public class PropertyService {
         Set<Property> props = new HashSet<>();
         for (int id = 0; id < table.getChildCount(); id++) {
 
-            View row = table.getChildAt(id);
-            if (row instanceof TableRow) {
-
-                TextView field0 = (TextView) ((TableRow) row).getChildAt(0);
-                TextView field1 = (TextView) ((TableRow) row).getChildAt(1);
-                TextView field2 = (TextView) ((TableRow) row).getChildAt(2);
-                TextView field3 = (TextView) ((TableRow) row).getChildAt(3);
-
-                if (!field0.getText().equals("Calculated")) {
-
-                    ValidatorFactory factory = new ValidatorFactory();
-                    IStringValidator validator = factory.getValidator(field0.getText().toString());
-                    if (validator.validate(field3.getText().toString())) {
-                        Property property = new Property(
-                                field0.getText().toString(),
-                                field1.getText().toString(),
-                                field2.getText().toString(),
-                                field3.getText().toString()
-                        );
-                        props.add(property);
-                    }
-                    else {
-                        field3.requestFocus();
-                        field3.setError(context.getString(R.string.wrong_data_entered));
-                    }
-                }
-            }
+//            View row = table.getChildAt(id);
+//            if (row instanceof TableRow) {
+//
+//                TextView field0 = (TextView) ((TableRow) row).getChildAt(0);
+//                TextView field1 = (TextView) ((TableRow) row).getChildAt(1);
+//                TextView field2 = (TextView) ((TableRow) row).getChildAt(2);
+//                TextView field3 = (TextView) ((TableRow) row).getChildAt(3);
+//
+//                if (!field0.getText().equals("Calculated")) {
+//
+//                    ValidatorFactory factory = new ValidatorFactory();
+//                    IStringValidator validator = factory.getValidator(field0.getText().toString());
+//                    if (validator.validate(field3.getText().toString())) {
+//                        Property property = new Property(
+//                                field0.getText().toString(),
+//                                field1.getText().toString(),
+//                                field2.getText().toString(),
+//                                field3.getText().toString()
+//                        );
+//                        props.add(property);
+//                    }
+//                    else {
+//                        field3.requestFocus();
+//                        field3.setError(context.getString(R.string.wrong_data_entered));
+//                    }
+//                }
+//            }
         }
 
         return props;

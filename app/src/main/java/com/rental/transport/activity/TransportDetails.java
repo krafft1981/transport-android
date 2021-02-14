@@ -20,10 +20,14 @@ import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Property;
 import com.rental.transport.model.Transport;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.ImageService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,54 +44,17 @@ public class TransportDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
-
         View root = inflater.inflate(R.layout.transport_details, container, false);
-        Transport transport = ((MainActivity) getActivity()).getTransport();
-        Customer customer = ((MainActivity) getActivity()).getCustomer();
-        TableLayout table = root.findViewById(R.id.tableProperty);
+        Transport transport = MemoryService.getInstance().getTransport();
+        Customer customer = MemoryService.getInstance().getCustomer();
+        TableLayout table = root.findViewById(R.id.propertyTable);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = transport.getCustomer().contains(customer.getId());
-
-        System.out.println(transport.getCustomer() + " " + customer.getId());
-
         PropertyService
                 .getInstance()
-                .setPropertyToTable(
-                        table,
-                        transport.getProperty(),
-                        editable
-                );
-
-        PropertyService
-                .getInstance()
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.customer),
-                                "customer_count",
-                                String.valueOf(transport.getCustomer().size())
-                        ),
-                        false
-                );
-
-        PropertyService
-                .getInstance(getContext())
-                .addTableRow(
-                        table,
-                        new Property(
-                                getString(R.string.image),
-                                "image_count",
-                                String.valueOf(transport.getImage().size()
-                                )
-                        ),
-                        false
-                );
+                .setPropertyToTable(table, new ArrayList(transport.getProperty()), editable)
+                .setPropertyToTable(table, new Property(getString(R.string.customer), "customer_count", String.valueOf(transport.getCustomer().size())))
+                .setPropertyToTable(table, new Property(getString(R.string.image), "image_count", String.valueOf(transport.getImage().size())));
 
         LinearLayout images = root.findViewById(R.id.transport_images);
         ImageView image = ImageService
@@ -110,22 +77,16 @@ public class TransportDetails extends Fragment {
         }
 
         Button action = new Button(getContext());
-        action.setBackground(this
-                .getResources()
-                .getDrawable(R.drawable.border)
-        );
-
         if (!editable) {
             action.setText(getString(R.string.toOrder));
             action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity) getActivity()).setTransport(transport);
-                    ((MainActivity) getActivity()).loadFragment("CalendarFragment");
+                    FragmentService.getInstance().loadFragment("CalendarFragment");
+
                 }
             });
-        }
-        else {
+        } else {
             action.setText(getString(R.string.save));
             action.setOnClickListener(new View.OnClickListener() {
                 @Override

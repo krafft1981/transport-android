@@ -40,4 +40,6 @@
     <string name="orders_loading">Загрузка заказов</string>
     <string name="image">Фотографий</string>
     <string name="customer">Персонал</string>
+    <string name="parking_loading">Загрузка стоянок</string>
+    <string name="request">Выполнение запроса</string>
 </resources>

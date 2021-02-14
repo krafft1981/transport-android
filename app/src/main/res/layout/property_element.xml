@@ -1,5 +1,17 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rowCustomerFio">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/property_type"
+        android:padding="1dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/property_logic"
+        android:padding="1dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/property_name"

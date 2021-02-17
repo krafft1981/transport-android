@@ -49,24 +49,24 @@ public class TransportGridAdapter extends BaseAdapter {
 
         Transport transport = data.get(id);
 
-        TextView type = (TextView) item.findViewById(R.id.transport_type);
+        TextView type = (TextView) item.findViewById(R.id.transportType);
         type.setText(transport.getType().getName());
 
-        TextView name = (TextView) item.findViewById(R.id.transport_name);
+        TextView name = (TextView) item.findViewById(R.id.transportName);
         name.setText(
                 PropertyService
                         .getInstance(context)
                         .getValue(transport.getProperty(), "name")
         );
 
-        TextView cost = (TextView) item.findViewById(R.id.transport_cost);
+        TextView cost = (TextView) item.findViewById(R.id.transportCost);
         cost.setText(
                 PropertyService
                         .getInstance(context)
                         .getValue(transport.getProperty(), "cost")
         );
 
-        ImageView image = item.findViewById(R.id.gridview_image);
+        ImageView image = item.findViewById(R.id.gridviewImage);
 
         Long maxImageId = Long.MIN_VALUE;
         for (Long imageId : transport.getImage())
@@ -75,7 +75,7 @@ public class TransportGridAdapter extends BaseAdapter {
 
         ImageService
                 .getInstance(context)
-                .setImage(maxImageId, R.drawable.samokat, image);
+                .setImage(maxImageId, R.drawable.transport, image);
 
         return item;
     }

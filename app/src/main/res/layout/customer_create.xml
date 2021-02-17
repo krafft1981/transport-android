@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/CustomerCreate"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical">
 
     <ScrollView
@@ -14,94 +14,123 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <View
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_login" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="5">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/ic_login" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"
-                android:padding="15dp">
-
-                <TableLayout
-                    android:id="@+id/tableCustomer"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TableRow android:id="@+id/rowCustomerEmail">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="@string/customer_email" />
 
-                        <TextView
-                            android:padding="1dp"
-                            android:text="@string/email" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="@string/customer_password" />
 
-                        <EditText
-                            android:id="@+id/fieldCustomerEmail"
-                            android:padding="1dp"
-                            android:text="" />
-                    </TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="@string/customer_phone" />
 
-                    <TableRow android:id="@+id/rowCustomerPassword">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="@string/customer_fio" />
+                </LinearLayout>
 
-                        <TextView
-                            android:padding="1dp"
-                            android:text="@string/password" />
-
-                        <EditText
-                            android:id="@+id/fieldCustomerPassword"
-                            android:padding="1dp"
-                            android:text="" />
-                    </TableRow>
-
-                    <TableRow android:id="@+id/rowCustomerPhone">
-
-                        <TextView
-                            android:padding="1dp"
-                            android:text="@string/customer_phone" />
-
-                        <EditText
-                            android:id="@+id/fieldCustomerPhone"
-                            android:padding="1dp"
-                            android:text="" />
-                    </TableRow>
-
-                    <TableRow android:id="@+id/rowCustomerFio">
-
-                        <TextView
-                            android:padding="1dp"
-                            android:text="@string/customer_fio" />
-
-                        <EditText
-                            android:id="@+id/fieldCustomerFio"
-                            android:padding="1dp"
-                            android:text="" />
-                    </TableRow>
-                </TableLayout>
-
-                <Button
-                    android:id="@+id/createButton"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tableCustomer"
-                    android:text="@string/create"
-                    android:textAllCaps="false" />
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="-" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="-" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="-" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="-" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/fieldCustomerEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/fieldCustomerPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="" />
+
+
+                    <EditText
+                        android:id="@+id/fieldCustomerPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/fieldCustomerFio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="1dp"
+                        android:text="" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/createButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/create"
+                android:textAllCaps="false" />
+
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

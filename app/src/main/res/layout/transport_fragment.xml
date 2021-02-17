@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/TransportFragment"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="60dp"
     android:background="@drawable/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <SearchView
-        android:id="@+id/searchView"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="Поиск"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="bottom|right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:fabSize="mini"
+        app:backgroundTint="@color/blue"
+        android:layout_margin="16dp" />
 
     <GridView
         android:id="@+id/transport_gridview"
@@ -23,4 +26,4 @@
         android:numColumns="auto_fit"
         android:verticalSpacing="1dp" />
 
-</LinearLayout>
+</RelativeLayout>

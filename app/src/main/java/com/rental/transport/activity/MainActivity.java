@@ -9,11 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.ImageService;
-import com.rental.transport.service.ProgresService;
-import com.rental.transport.service.PropertyService;
-import com.rental.transport.service.SharedService;
-import com.rental.transport.service.SoundService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,15 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageService.getInstance(this);
-        ProgresService.getInstance(this);
-        PropertyService.getInstance(this);
-        SharedService.getInstance(this);
-        SoundService.getInstance(this);
-        FragmentService.getInstance(this);
-
         if (savedInstanceState == null) {
-
             BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
             bottomNavigationView.setOnNavigationItemSelectedListener(
                     new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -47,27 +34,27 @@ public class MainActivity extends AppCompatActivity {
                         public boolean onNavigationItemSelected(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.transport_menu: {
-                                    FragmentService.getInstance().loadFragment("TransportFragment");
+                                    FragmentService.getInstance().loadFragment(null, "TransportFragment");
                                     break;
                                 }
 
                                 case R.id.orders_menu: {
-                                    FragmentService.getInstance().loadFragment("OrdersFragment");
+                                    FragmentService.getInstance().loadFragment(null, "OrdersFragment");
                                     break;
                                 }
 
                                 case R.id.calendar_menu: {
-                                    FragmentService.getInstance().loadFragment("CalendarFragment");
+                                    FragmentService.getInstance().loadFragment(null, "CalendarFragment");
                                     break;
                                 }
 
                                 case R.id.parking_menu: {
-                                    FragmentService.getInstance().loadFragment("ParkingFragment");
+                                    FragmentService.getInstance().loadFragment(null, "ParkingFragment");
                                     break;
                                 }
 
                                 case R.id.account_menu: {
-                                    FragmentService.getInstance().loadFragment("CustomerSettings");
+                                    FragmentService.getInstance().loadFragment(null, "CustomerSettings");
                                     break;
                                 }
                             }
@@ -76,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-            FragmentService.getInstance().loadFragment("CustomerLogin");
+            FragmentService.getInstance().loadFragment(null, "CustomerLogin");
         }
     }
 }

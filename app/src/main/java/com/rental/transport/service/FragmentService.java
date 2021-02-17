@@ -21,10 +21,8 @@ public class FragmentService {
 
     private static FragmentService mInstance;
     private HashMap<String, Fragment> frags = new HashMap<>();
-    private AppCompatActivity activity;
 
-    private FragmentService(AppCompatActivity activity) {
-        this.activity = activity;
+    private FragmentService() {
         frags.put("CustomerLogin", new CustomerLogin());
         frags.put("CustomerSettings", new CustomerSettings());
         frags.put("TransportFragment", new TransportFragment());
@@ -35,24 +33,17 @@ public class FragmentService {
         frags.put("CalendarFragment", new CalendarFragment());
         frags.put("ParkingDetails", new ParkingDetails());
         frags.put("TransportDetails", new TransportDetails());
-
-        fragmentHistoryClear();
-    }
-
-    public static FragmentService getInstance(AppCompatActivity activity) {
-
-        if (mInstance == null)
-            mInstance = new FragmentService(activity);
-
-        return mInstance;
     }
 
     public static FragmentService getInstance() {
 
+        if (mInstance == null)
+            mInstance = new FragmentService();
+
         return mInstance;
     }
 
-    public void fragmentHistoryClear() {
+    public void fragmentHistoryClear(AppCompatActivity activity) {
 
         activity.getSupportFragmentManager()
                 .beginTransaction()
@@ -60,7 +51,7 @@ public class FragmentService {
                 .commit();
     }
 
-    public void loadFragment(String name) {
+    public void loadFragment(AppCompatActivity activity, String name) {
 
         activity.getSupportFragmentManager()
                 .beginTransaction()

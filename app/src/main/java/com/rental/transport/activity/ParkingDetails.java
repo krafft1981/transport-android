@@ -19,15 +19,12 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Parking;
-import com.rental.transport.model.Property;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,12 +57,12 @@ public class ParkingDetails extends Fragment {
         TableLayout table = root.findViewById(R.id.propertyTable);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = parking.getCustomer().contains(customer.getId());
-        PropertyService
-                .getInstance()
-                .setPropertyToTable(table, new ArrayList(parking.getProperty()), editable)
-                .setPropertyToTable(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(parking.getTransport().size())))
-                .setPropertyToTable(table, new Property(getString(R.string.customer), "customer_count", String.valueOf(parking.getCustomer().size())))
-                .setPropertyToTable(table, new Property(getString(R.string.image), "image_count", String.valueOf(parking.getImage().size())));
+//        PropertyService
+//                .getInstance()
+//                .setPropertyToView(table, new ArrayList(parking.getProperty()), editable)
+//                .setPropertyToView(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(parking.getTransport().size())))
+//                .setPropertyToView(table, new Property(getString(R.string.customer), "customer_count", String.valueOf(parking.getCustomer().size())))
+//                .setPropertyToView(table, new Property(getString(R.string.image), "image_count", String.valueOf(parking.getImage().size())));
 
         if (editable) {
             Button action = new Button(getContext());
@@ -116,7 +113,7 @@ public class ParkingDetails extends Fragment {
 
         buttonLayout.addView(map);
 
-        LinearLayout images = root.findViewById(R.id.parking_images);
+        LinearLayout images = root.findViewById(R.id.parkingImages);
         ImageView image = ImageService
                 .getInstance()
                 .setImage(parking.getImage(), R.drawable.unnamed, images, editable);
@@ -140,7 +137,7 @@ public class ParkingDetails extends Fragment {
         Point point = new Point();
         display.getRealSize(point);
 
-        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScrol);
+        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScroll);
         scrollView.setClipToPadding(false);
         android.view.ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
         layoutParams.height = ((point.y / 3) * 2);

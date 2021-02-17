@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ParkingElement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="1dp">
 
     <ImageView
-        android:id="@+id/gridview_image"
+        android:id="@+id/gridviewImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/parking_name"
+        android:id="@+id/parkingName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Яхт клуб Надежда"
+        android:text="Прокат кайтов"
         android:textSize="14sp"
         android:textStyle="normal|italic|bold" />
 
     <TextView
-        android:id="@+id/parking_address"
+        android:id="@+id/parkingAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

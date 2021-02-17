@@ -11,27 +11,28 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
+import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Customer;
-import com.rental.transport.model.Property;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.service.PropertyService;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.app.Activity.RESULT_OK;
 
 public class TransportDetails extends Fragment {
 
@@ -47,19 +48,24 @@ public class TransportDetails extends Fragment {
         View root = inflater.inflate(R.layout.transport_details, container, false);
         Transport transport = MemoryService.getInstance().getTransport();
         Customer customer = MemoryService.getInstance().getCustomer();
-        TableLayout table = root.findViewById(R.id.propertyTable);
+        ListView listView = root.findViewById(R.id.propertyTable);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = transport.getCustomer().contains(customer.getId());
-        PropertyService
-                .getInstance()
-                .setPropertyToTable(table, new ArrayList(transport.getProperty()), editable)
-                .setPropertyToTable(table, new Property(getString(R.string.customer), "customer_count", String.valueOf(transport.getCustomer().size())))
-                .setPropertyToTable(table, new Property(getString(R.string.image), "image_count", String.valueOf(transport.getImage().size())));
 
-        LinearLayout images = root.findViewById(R.id.transport_images);
+        ArrayList propertyList = new ArrayList(transport.getProperty());
+
+        PropertyListAdapter adapter = new PropertyListAdapter(getContext(), propertyList);
+
+//        PropertyService
+//                .getInstance()
+//                .setPropertyToList(listView, new ArrayList(transport.getProperty()), editable)
+//                .setPropertyToList(listView, new Property(getString(R.string.customer), "customer_count", String.valueOf(transport.getCustomer().size())))
+//                .setPropertyToList(listView, new Property(getString(R.string.image), "image_count", String.valueOf(transport.getImage().size())));
+
+        LinearLayout images = root.findViewById(R.id.transportImages);
         ImageView image = ImageService
                 .getInstance()
-                .setImage(transport.getImage(), R.drawable.samokat, images, editable);
+                .setImage(transport.getImage(), R.drawable.transport, images, editable);
 
         if (editable) {
             image.setOnClickListener(new View.OnClickListener() {
@@ -91,11 +97,11 @@ public class TransportDetails extends Fragment {
             action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    transport.setProperty(
-                            PropertyService
-                                    .getInstance()
-                                    .getPropertyFromTable(table)
-                    );
+//                    transport.setProperty(
+//                            PropertyService
+//                                    .getInstance()
+//                                    .getPropertyFromTable(view)
+//                    );
 
                     ProgresService
                             .getInstance()
@@ -129,9 +135,9 @@ public class TransportDetails extends Fragment {
         Point size = new Point();
         display.getRealSize(size);
 
-        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScrol);
+        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScroll);
         scrollView.setClipToPadding(false);
-        android.view.ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
         layoutParams.height = ((size.y / 3) * 2);
         scrollView.setLayoutParams(layoutParams);
 
@@ -141,8 +147,20 @@ public class TransportDetails extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Toast
-                .makeText(getContext(), "Картинка выбрана", Toast.LENGTH_LONG)
-                .show();
+        switch(requestCode) {
+            case 0:
+                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    imageview.setImageURI(selectedImage);
+                }
+
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    imageview.setImageURI(selectedImage);
+                }
+                break;
+        }
     }
 }

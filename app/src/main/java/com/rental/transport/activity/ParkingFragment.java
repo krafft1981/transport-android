@@ -73,7 +73,7 @@ public class ParkingFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu, menu);
+        inflater.inflate(R.menu.search_transport_menu, menu);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ParkingFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.parking_fragment, container, false);
-        GridView grid = root.findViewById(R.id.parking_gridview);
+        GridView grid = root.findViewById(R.id.parkingGridView);
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
-import com.rental.transport.model.Property;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
@@ -25,8 +24,6 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 import com.rental.transport.service.SharedService;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,11 +44,11 @@ public class CustomerSettings extends Fragment {
 
         View root = inflater.inflate(R.layout.customer_settings, container, false);
         TableLayout table = root.findViewById(R.id.propertyTable);
-        PropertyService.getInstance()
-                .setPropertyToTable(table, new ArrayList(customer.getProperty()), true)
-                .setPropertyToTable(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(customer.getTransport().size())))
-                .setPropertyToTable(table, new Property(getString(R.string.parking), "parking_count", String.valueOf(customer.getParking().size())))
-                .setPropertyToTable(table, new Property(getString(R.string.image), "image_count", String.valueOf(customer.getImage().size())));
+//        PropertyService.getInstance()
+//                .setPropertyToView(table, new ArrayList(customer.getProperty()), true)
+//                .setPropertyToView(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(customer.getTransport().size())))
+//                .setPropertyToView(table, new Property(getString(R.string.parking), "parking_count", String.valueOf(customer.getParking().size())))
+//                .setPropertyToView(table, new Property(getString(R.string.image), "image_count", String.valueOf(customer.getImage().size())));
 
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
 
@@ -106,7 +103,7 @@ public class CustomerSettings extends Fragment {
 
         buttonLayout.addView(exit);
 
-        LinearLayout images = root.findViewById(R.id.customer_images);
+        LinearLayout images = root.findViewById(R.id.customerImages);
         ImageService
                 .getInstance(getContext())
                 .setImage(customer.getImage(), R.drawable.unnamed, images, true)
@@ -127,7 +124,7 @@ public class CustomerSettings extends Fragment {
         Point size = new Point();
         display.getRealSize(size);
 
-        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScrol);
+        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScroll);
         scrollView.setClipToPadding(false);
         android.view.ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
         layoutParams.height = size.y / 2;

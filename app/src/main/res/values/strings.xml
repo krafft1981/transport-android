@@ -9,8 +9,8 @@
     <string name="message">Сообщения</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
-    <string name="password">password</string>
-    <string name="email">email</string>
+    <string name="customer_password">Пароль</string>
+    <string name="customer_email">email</string>
     <string name="autologin">Автовход</string>
     <string name="forgot_password">Забыли пароль</string>
     <string name="login">Войти</string>
@@ -29,7 +29,7 @@
     <string name="boolean_property_value_no">Нет</string>
     <string name="events_loading">Загрузка событий</string>
     <string name="customer_phone">Телефон</string>
-    <string name="customer_fio">Фамилия Имя Отчество</string>
+    <string name="customer_fio">Имя</string>
     <string name="create">Создать</string>
     <string name="save">Сохранить</string>
     <string name="exit">Выйти</string>
@@ -42,4 +42,6 @@
     <string name="customer">Персонал</string>
     <string name="parking_loading">Загрузка стоянок</string>
     <string name="request">Выполнение запроса</string>
+    <string name="calendar_loading">Загрузка событий</string>
+    <string name="noOrder">Отгул</string>
 </resources>

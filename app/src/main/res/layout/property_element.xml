@@ -1,24 +1,36 @@
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
+    android:gravity="center">
 
     <TextView
-        android:id="@+id/property_type"
+        android:id="@+id/propertyType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:padding="1dp"
+        android:text="Calculated"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/property_logic"
+        android:id="@+id/propertyLogic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:padding="1dp"
+        android:text="uncknown"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/property_name"
-        android:padding="1dp" />
+        android:id="@+id/propertyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="1dp"
+        android:text="Количество зерна" />
 
     <EditText
-        android:id="@+id/property_value"
+        android:id="@+id/propertyValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:padding="1dp"
-        android:text="" />
-</TableRow>
+        android:text="28 тонн" />
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -70,8 +71,7 @@ public class TransportFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu, menu);
-
+        inflater.inflate(R.menu.search_transport_menu, menu);
         Toast
                 .makeText(getActivity(), "menu created", Toast.LENGTH_LONG)
                 .show();
@@ -82,19 +82,17 @@ public class TransportFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.transport_fragment, container, false);
-        GridView grid = (GridView) root.findViewById(R.id.transport_gridview);
+        GridView grid = root.findViewById(R.id.transport_gridview);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                MemoryService
-                        .getInstance()
-                        .setTransport(
-                                (Transport)parent
-                                        .getAdapter()
-                                        .getItem(position)
-                        );
+                MemoryService.getInstance().setTransport(
+                        (Transport) parent
+                                .getAdapter()
+                                .getItem(position)
+                );
 
                 FragmentService.getInstance().loadFragment("TransportDetails");
             }
@@ -115,5 +113,12 @@ public class TransportFragment extends Fragment {
 
         loadData(grid);
         return root;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        super.onOptionsItemSelected(item);
+        return false;
     }
 }

@@ -4,28 +4,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 public class ProgresService {
-    private Context context;
     private static ProgresService mInstance;
     private ProgressDialog progressDialog;
 
-    public ProgresService(Context context) {
-        this.context = context;
-    }
-
-    public static ProgresService getInstance(Context context) {
-
-        if (mInstance == null)
-            mInstance = new ProgresService(context);
-
-        return mInstance;
-    }
+    public ProgresService() {}
 
     public static ProgresService getInstance() {
 
+        if (mInstance == null)
+            mInstance = new ProgresService();
+
         return mInstance;
     }
 
-    public void showProgress(String message) {
+    public void showProgress(Context context, String message) {
 
         if (progressDialog == null) {
             try {

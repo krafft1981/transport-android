@@ -55,7 +55,7 @@ public class CustomerLogin extends Fragment {
     void login(View root, String username, String password) {
         ProgresService
                 .getInstance()
-                .showProgress(getString(R.string.customer_loading));
+                .showProgress(getActivity(), getString(R.string.customer_loading));
 
         NetworkService
                 .getInstance(username, password)
@@ -70,7 +70,7 @@ public class CustomerLogin extends Fragment {
 
                         if (response.code() == 401) {
                             SharedService
-                                    .getInstance(getActivity())
+                                    .getInstance()
                                     .clear();
                             Toast
                                     .makeText(getContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG)
@@ -82,7 +82,7 @@ public class CustomerLogin extends Fragment {
                             if (remember.isChecked()) {
                                 SharedService
                                         .getInstance()
-                                        .save(username, password);
+                                        .save(getActivity(), username, password);
                             }
 
                             MemoryService
@@ -90,7 +90,7 @@ public class CustomerLogin extends Fragment {
                                     .setCustomer(response.body());
 
                             ((MainActivity) getActivity()).showMenu(true);
-                            FragmentService.getInstance().loadFragment("TransportFragment");
+                            FragmentService.getInstance().loadFragment(getActivity(), "TransportFragment");
 
                         }
                     }
@@ -143,7 +143,10 @@ public class CustomerLogin extends Fragment {
             public void onClick(View v) {
                 if (isValidEmail(customer)) {
 
-                    ProgresService.getInstance().showProgress(getString(R.string.request));
+                    ProgresService.
+                            getInstance()
+                            .showProgress(getActivity(), getString(R.string.request));
+
                     NetworkService
                             .getInstance()
                             .getRegistrationApi()
@@ -179,12 +182,14 @@ public class CustomerLogin extends Fragment {
         root.findViewById(R.id.loginRegisterLink).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentService.getInstance().loadFragment("CustomerCreate");
+                FragmentService
+                        .getInstance()
+                        .loadFragment(getActivity(), "CustomerCreate");
             }
         });
 
-        String savedUsername = SharedService.getInstance().getUsername();
-        String savedPassword = SharedService.getInstance().getPassword();
+        String savedUsername = SharedService.getInstance().getUsername(getActivity());
+        String savedPassword = SharedService.getInstance().getPassword(getActivity());
 
         if ((savedUsername != null) && (savedPassword != null))
 

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -22,7 +22,6 @@ import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.service.PropertyService;
 import com.rental.transport.service.SharedService;
 
 import retrofit2.Call;
@@ -43,7 +42,7 @@ public class CustomerSettings extends Fragment {
         Customer customer = MemoryService.getInstance().getCustomer();
 
         View root = inflater.inflate(R.layout.customer_settings, container, false);
-        TableLayout table = root.findViewById(R.id.propertyTable);
+        ListView table = root.findViewById(R.id.propertyTable);
 //        PropertyService.getInstance()
 //                .setPropertyToView(table, new ArrayList(customer.getProperty()), true)
 //                .setPropertyToView(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(customer.getTransport().size())))
@@ -57,13 +56,15 @@ public class CustomerSettings extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customer.setProperty(
-                        PropertyService
-                                .getInstance()
-                                .getPropertyFromTable(table)
-                );
+//                customer.setProperty(
+//                        PropertyService
+//                                .getInstance()
+//                                .getPropertyFromTable(table)
+//                );
 
-                ProgresService.getInstance().showProgress(getString(R.string.customer_saving));
+                ProgresService
+                        .getInstance()
+                        .showProgress(getActivity(), getString(R.string.customer_saving));
 
                 NetworkService
                         .getInstance()
@@ -95,8 +96,8 @@ public class CustomerSettings extends Fragment {
             public void onClick(View v) {
                 SharedService.getInstance().clear();
                 ((MainActivity) getActivity()).showMenu(false);
-                FragmentService.getInstance().fragmentHistoryClear();
-                FragmentService.getInstance().loadFragment("CustomerLogin");
+                FragmentService.getInstance().fragmentHistoryClear(getActivity());
+                FragmentService.getInstance().loadFragment(getActivity(), "CustomerLogin");
 
             }
         });

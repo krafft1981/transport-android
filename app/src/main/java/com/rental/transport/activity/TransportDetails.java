@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -51,9 +52,7 @@ public class TransportDetails extends Fragment {
         ListView listView = root.findViewById(R.id.propertyTable);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = transport.getCustomer().contains(customer.getId());
-
         ArrayList propertyList = new ArrayList(transport.getProperty());
-
         PropertyListAdapter adapter = new PropertyListAdapter(getContext(), propertyList);
 
 //        PropertyService
@@ -88,7 +87,9 @@ public class TransportDetails extends Fragment {
             action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentService.getInstance().loadFragment("CalendarFragment");
+                    FragmentService
+                            .getInstance()
+                            .loadFragment(getActivity(), "CalendarFragment");
 
                 }
             });
@@ -105,7 +106,7 @@ public class TransportDetails extends Fragment {
 
                     ProgresService
                             .getInstance()
-                            .showProgress(getString(R.string.transport_saving));
+                            .showProgress(getContext(), getString(R.string.transport_saving));
 
                     NetworkService
                             .getInstance()
@@ -147,16 +148,16 @@ public class TransportDetails extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        switch(requestCode) {
+        switch (requestCode) {
             case 0:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
 //                    Uri selectedImage = imageReturnedIntent.getData();
 //                    imageview.setImageURI(selectedImage);
                 }
 
                 break;
             case 1:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
 //                    Uri selectedImage = imageReturnedIntent.getData();
 //                    imageview.setImageURI(selectedImage);
                 }

@@ -5,7 +5,7 @@
     android:layout_marginBottom="60dp"
     android:background="@drawable/background">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -28,6 +28,7 @@
 
         <ListView
             android:id="@+id/propertyTable"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -39,5 +40,23 @@
             android:gravity="center"
             android:padding="1dp" />
 
-    </LinearLayout>
+        <GridView
+            android:id="@+id/transport_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="1dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="1dp"
+            android:scrollbars="none"/>
+
+        <GridView
+            android:id="@+id/customer_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="1dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="1dp"
+            android:scrollbars="none"/>
+
+    </RelativeLayout>
 </ScrollView>

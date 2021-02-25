@@ -43,7 +43,10 @@ public class CalendarFragment extends Fragment {
 
         frame.removeAllViews();
 
-        ProgresService.getInstance().showProgress(getString(R.string.calendar_loading));
+        ProgresService
+                .getInstance()
+                .showProgress(getActivity(), getString(R.string.calendar_loading));
+
         Long days[] = {day.getTime()};
         NetworkService
                 .getInstance()

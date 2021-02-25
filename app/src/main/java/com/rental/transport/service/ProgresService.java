@@ -7,7 +7,8 @@ public class ProgresService {
     private static ProgresService mInstance;
     private ProgressDialog progressDialog;
 
-    public ProgresService() {}
+    public ProgresService() {
+    }
 
     public static ProgresService getInstance() {
 

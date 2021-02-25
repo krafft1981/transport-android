@@ -36,7 +36,7 @@ public class ParkingFragment extends Fragment {
 
     private void loadData(GridView grid) {
 
-        ProgresService.getInstance().showProgress(getString(R.string.parking_loading));
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.parking_loading));
         NetworkService
                 .getInstance()
                 .getParkingApi()
@@ -68,12 +68,6 @@ public class ParkingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_transport_menu, menu);
     }
 
     @Override
@@ -82,7 +76,13 @@ public class ParkingFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.parking_fragment, container, false);
         GridView grid = root.findViewById(R.id.parkingGridView);
-
+//        root.findViewById(R.id.floating_action_button).setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                FragmentService
+//                        .getInstance()
+//                        .loadFragment(getActivity(), "ParkingDetails");
+//            }
+//        });
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -92,7 +92,9 @@ public class ParkingFragment extends Fragment {
                         .getInstance()
                         .setParking((Parking) parent.getAdapter().getItem(position));
 
-                FragmentService.getInstance().loadFragment("ParkingDetails");
+                FragmentService
+                        .getInstance()
+                        .loadFragment(getActivity(), "ParkingDetails");
             }
         });
 

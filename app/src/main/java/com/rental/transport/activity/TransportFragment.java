@@ -37,7 +37,10 @@ public class TransportFragment extends Fragment {
 
     private void loadData(GridView grid) {
 
-        ProgresService.getInstance().showProgress(getString(R.string.transport_loading));
+        ProgresService
+                .getInstance()
+                .showProgress(getContext(), getString(R.string.transport_loading));
+
         NetworkService
                 .getInstance()
                 .getTransportApi()
@@ -66,15 +69,6 @@ public class TransportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_transport_menu, menu);
-        Toast
-                .makeText(getActivity(), "menu created", Toast.LENGTH_LONG)
-                .show();
     }
 
     @Override
@@ -83,6 +77,7 @@ public class TransportFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.transport_fragment, container, false);
         GridView grid = root.findViewById(R.id.transport_gridview);
+
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -94,7 +89,9 @@ public class TransportFragment extends Fragment {
                                 .getItem(position)
                 );
 
-                FragmentService.getInstance().loadFragment("TransportDetails");
+                FragmentService
+                        .getInstance()
+                        .loadFragment(getActivity(), "TransportDetails");
             }
         });
 
@@ -113,12 +110,5 @@ public class TransportFragment extends Fragment {
 
         loadData(grid);
         return root;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        super.onOptionsItemSelected(item);
-        return false;
     }
 }

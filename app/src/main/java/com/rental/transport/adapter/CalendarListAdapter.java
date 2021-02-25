@@ -29,9 +29,9 @@ public class CalendarListAdapter extends BaseAdapter {
     }
 
     public class ViewHolder {
-        TextView startAt;
-        TextView stopAt;
-        TextView order;
+//        TextView startAt;
+//        TextView stopAt;
+//        TextView order;
     }
 
     @Override
@@ -57,9 +57,9 @@ public class CalendarListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.calendar_element, parent, false);
             holder = new ViewHolder();
-            holder.order = convertView.findViewById(R.id.calendarDetails);
-            holder.startAt = convertView.findViewById(R.id.calendarStartAt);
-            holder.stopAt = convertView.findViewById(R.id.calendarStopAt);
+//            holder.order = convertView.findViewById(R.id.calendarDetails);
+//            holder.startAt = convertView.findViewById(R.id.calendarStartAt);
+//            holder.stopAt = convertView.findViewById(R.id.calendarStopAt);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -67,9 +67,9 @@ public class CalendarListAdapter extends BaseAdapter {
 
         Calendar calendar = data.get(position);
 
-        holder.order.setText(calendar.getOrder() == null ? context.getString(R.string.noOrder) : calendar.getOrder().toString());
-        holder.startAt.setText(DateFormat.format(format, calendar.getStartAt()));
-        holder.stopAt.setText(DateFormat.format(format, calendar.getStopAt()));
+//        holder.order.setText(calendar.getOrder() == null ? context.getString(R.string.noOrder) : calendar.getOrder().toString());
+//        holder.startAt.setText(DateFormat.format(format, calendar.getStartAt()));
+//        holder.stopAt.setText(DateFormat.format(format, calendar.getStopAt()));
 
 //        holder.startAt.setText(calendar.getStartAt().toString());
 //        holder.stopAt.setText(calendar.getStopAt().toString());

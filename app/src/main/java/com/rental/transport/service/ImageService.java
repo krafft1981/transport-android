@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Image;
@@ -142,7 +140,7 @@ public class ImageService {
             setImage(id, defaultImage, layout);
 
         if (editable) {
-            ImageView image = setImageFromResource(R.drawable.plus);
+            ImageView image = setImageFromResource(R.drawable.add);
             image.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT

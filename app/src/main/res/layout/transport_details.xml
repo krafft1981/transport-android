@@ -10,6 +10,24 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageSwitcher
+            android:id="@+id/imageSwitcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/unnamed"/>
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/unnamed"/>
+        </ImageSwitcher>
+
         <HorizontalScrollView
             android:id="@+id/horizontalScroll"
             android:layout_width="match_parent"

@@ -44,4 +44,6 @@
     <string name="request">Выполнение запроса</string>
     <string name="calendar_loading">Загрузка событий</string>
     <string name="noOrder">Отгул</string>
+    <string name="calendar_begin">Начало</string>
+    <string name="calendar_end">Конец</string>
 </resources>

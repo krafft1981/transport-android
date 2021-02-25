@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/transport_menu"
-        android:icon="@drawable/transport"
+        android:icon="@drawable/icon_transport"
         android:title="@string/transport"/>
 
     <item android:id="@+id/orders_menu"
-        android:icon="@drawable/order"
+        android:icon="@drawable/icon_order"
         android:title="@string/orders" />
 
     <item android:id="@+id/calendar_menu"
@@ -12,10 +12,10 @@
         android:title="@string/calendar"/>
 
     <item android:id="@+id/parking_menu"
-        android:icon="@drawable/parking"
+        android:icon="@drawable/icon_parking"
         android:title="@string/parking"/>
 
     <item android:id="@+id/account_menu"
-        android:icon="@drawable/user"
+        android:icon="@drawable/icon_user"
         android:title="@string/account"/>
 </menu>

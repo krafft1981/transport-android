@@ -9,6 +9,8 @@
         android:id="@+id/gridviewImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/transport"
         android:layout_gravity="center" />
 
     <LinearLayout

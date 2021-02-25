@@ -38,7 +38,9 @@ public class OrdersFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.order_fragment, container, false);
         ListView orderList = root.findViewById(R.id.orders_list);
-        ProgresService.getInstance().showProgress(getString(R.string.orders_loading));
+        ProgresService
+                .getInstance()
+                .showProgress(getActivity(), getString(R.string.orders_loading));
         NetworkService
                 .getInstance()
                 .getOrderApi()

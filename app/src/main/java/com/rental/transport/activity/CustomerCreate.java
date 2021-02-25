@@ -87,47 +87,47 @@ public class CustomerCreate extends Fragment {
             @Override
             public void onClick(View v) {
 
-                TableLayout table   = root.findViewById(R.id.tableCustomer);
+//                TableLayout table   = root.findViewById(R.id.tableCustomer);
+//
+//                EditText customer   = ((TableRow)table.findViewById(R.id.rowCustomerEmail)).findViewById(R.id.fieldCustomerEmail);
+//                EditText password   = ((TableRow)table.findViewById(R.id.rowCustomerPassword)).findViewById(R.id.fieldCustomerPassword);
+//                EditText phone      = ((TableRow)table.findViewById(R.id.rowCustomerPhone)).findViewById(R.id.fieldCustomerPhone);
+//                EditText fio        = ((TableRow)table.findViewById(R.id.rowCustomerFio)).findViewById(R.id.fieldCustomerFio);
 
-                EditText customer   = ((TableRow)table.findViewById(R.id.rowCustomerEmail)).findViewById(R.id.fieldCustomerEmail);
-                EditText password   = ((TableRow)table.findViewById(R.id.rowCustomerPassword)).findViewById(R.id.fieldCustomerPassword);
-                EditText phone      = ((TableRow)table.findViewById(R.id.rowCustomerPhone)).findViewById(R.id.fieldCustomerPhone);
-                EditText fio        = ((TableRow)table.findViewById(R.id.rowCustomerFio)).findViewById(R.id.fieldCustomerFio);
-
-                if (isValidEmail(customer)) {
-                    if (isValidPassword(password)) {
-                        if (isValidPhone(phone)) {
-                            if (isValidFio(fio)) {
-                                ProgresService.getInstance().showProgress(getString(R.string.customer_creating));
-                                NetworkService
-                                        .getInstance()
-                                        .getRegistrationApi()
-                                        .doPostRegistration(
-                                                customer.getText().toString(),
-                                                password.getText().toString(),
-                                                phone.getText().toString(),
-                                                fio.getText().toString()
-                                        )
-                                        .enqueue(new Callback<Customer>() {
-                                            @Override
-                                            public void onResponse(Call<Customer> call, Response<Customer> response) {
-                                                ProgresService.getInstance().hideProgress();
-                                                if (response.isSuccessful())
-                                                    FragmentService.getInstance().loadFragment("CustomerLogin");
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<Customer> call, Throwable t) {
-                                                ProgresService.getInstance().hideProgress();
-                                                Toast
-                                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
-                                                        .show();
-                                            }
-                                        });
-                            }
-                        }
-                    }
-                }
+//                if (isValidEmail(customer)) {
+//                    if (isValidPassword(password)) {
+//                        if (isValidPhone(phone)) {
+//                            if (isValidFio(fio)) {
+//                                ProgresService.getInstance().showProgress(getString(R.string.customer_creating));
+//                                NetworkService
+//                                        .getInstance()
+//                                        .getRegistrationApi()
+//                                        .doPostRegistration(
+//                                                customer.getText().toString(),
+//                                                password.getText().toString(),
+//                                                phone.getText().toString(),
+//                                                fio.getText().toString()
+//                                        )
+//                                        .enqueue(new Callback<Customer>() {
+//                                            @Override
+//                                            public void onResponse(Call<Customer> call, Response<Customer> response) {
+//                                                ProgresService.getInstance().hideProgress();
+//                                                if (response.isSuccessful())
+//                                                    FragmentService.getInstance().loadFragment("CustomerLogin");
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(Call<Customer> call, Throwable t) {
+//                                                ProgresService.getInstance().hideProgress();
+//                                                Toast
+//                                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+//                                                        .show();
+//                                            }
+//                                        });
+//                            }
+//                        }
+//                    }
+//                }
             }
         });
         return root;

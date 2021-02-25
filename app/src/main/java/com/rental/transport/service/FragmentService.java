@@ -1,7 +1,7 @@
 package com.rental.transport.service;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.rental.transport.R;
 import com.rental.transport.activity.CalendarFragment;
@@ -43,7 +43,7 @@ public class FragmentService {
         return mInstance;
     }
 
-    public void fragmentHistoryClear(AppCompatActivity activity) {
+    public void fragmentHistoryClear(FragmentActivity activity) {
 
         activity.getSupportFragmentManager()
                 .beginTransaction()
@@ -51,7 +51,7 @@ public class FragmentService {
                 .commit();
     }
 
-    public void loadFragment(AppCompatActivity activity, String name) {
+    public void loadFragment(FragmentActivity activity, String name) {
 
         activity.getSupportFragmentManager()
                 .beginTransaction()

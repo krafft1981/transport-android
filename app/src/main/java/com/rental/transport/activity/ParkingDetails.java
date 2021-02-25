@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
@@ -44,17 +45,10 @@ public class ParkingDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String msg = bundle.getString("name");
-            if (msg != null) {
-            }
-        }
-
         View root = inflater.inflate(R.layout.parking_details, container, false);
         Parking parking = MemoryService.getInstance().getParking();
         Customer customer = MemoryService.getInstance().getCustomer();
-        TableLayout table = root.findViewById(R.id.propertyTable);
+        ListView table = root.findViewById(R.id.propertyTable);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = parking.getCustomer().contains(customer.getId());
 //        PropertyService
@@ -70,13 +64,16 @@ public class ParkingDetails extends Fragment {
             action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parking.setProperty(
-                            PropertyService
-                                    .getInstance()
-                                    .getPropertyFromTable(table)
-                    );
+//                    parking.setProperty(
+//                            PropertyService
+//                                    .getInstance()
+//                                    .getPropertyFromTable(table)
+//                    );
 
-                    ProgresService.getInstance().showProgress(getString(R.string.parking_saving));
+                    ProgresService
+                            .getInstance()
+                            .showProgress(getContext(), getString(R.string.parking_saving));
+
                     NetworkService
                             .getInstance()
                             .getParkingApi()
@@ -107,7 +104,9 @@ public class ParkingDetails extends Fragment {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentService.getInstance().loadFragment("MapFragment");
+                FragmentService
+                        .getInstance()
+                        .loadFragment(getActivity(), "MapFragment");
             }
         });
 

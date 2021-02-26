@@ -20,22 +20,15 @@ import java.util.Set;
 
 public class PropertyService {
 
-    private Context context;
     private static PropertyService mInstance;
 
-    public PropertyService(Context context) {
-        this.context = context;
-    }
-
-    public static PropertyService getInstance(Context context) {
-
-        if (mInstance == null)
-            mInstance = new PropertyService(context);
-
-        return mInstance;
+    public PropertyService() {
     }
 
     public static PropertyService getInstance() {
+
+        if (mInstance == null)
+            mInstance = new PropertyService();
 
         return mInstance;
     }
@@ -72,22 +65,22 @@ public class PropertyService {
 
     public void addTableRow(TableLayout table, Property property, Boolean editable) {
 
-        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        TableRow row = (TableRow) inflater.inflate(R.layout.property_element, null);
-
-        TextView logic = (TextView) row.findViewById(R.id.propertyLogic);
-        logic.setText(property.getLogicName());
-
-        TextView name = (TextView) row.findViewById(R.id.propertyName);
-        name.setText(property.getHumanName());
-        name.setSingleLine(false);
-
-        EditText value = (EditText) row.findViewById(R.id.propertyValue);
-        value.setText(property.getValue());
-        value.setInputType(editable ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_NULL);
-        value.setSingleLine(false);
-
-        table.addView(row);
+//        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        TableRow row = (TableRow) inflater.inflate(R.layout.property_element, null);
+//
+//        TextView logic = (TextView) row.findViewById(R.id.propertyLogic);
+//        logic.setText(property.getLogicName());
+//
+//        TextView name = (TextView) row.findViewById(R.id.propertyName);
+//        name.setText(property.getHumanName());
+//        name.setSingleLine(false);
+//
+//        EditText value = (EditText) row.findViewById(R.id.propertyValue);
+//        value.setText(property.getValue());
+//        value.setInputType(editable ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_NULL);
+//        value.setSingleLine(false);
+//
+//        table.addView(row);
     }
 
     public PropertyService setPropertyToList(ListView listView, List<Property> properties, Boolean editable) {

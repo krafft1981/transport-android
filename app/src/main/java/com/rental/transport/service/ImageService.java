@@ -21,27 +21,21 @@ import retrofit2.Response;
 
 public class ImageService {
 
-    private Context context;
     private static ImageService mInstance;
 
-    private ImageService(Context context) {
-        this.context = context;
-    }
+    private ImageService() {
 
-    public static ImageService getInstance(Context context) {
-
-        if (mInstance == null)
-            mInstance = new ImageService(context);
-
-        return mInstance;
     }
 
     public static ImageService getInstance() {
 
+        if (mInstance == null)
+            mInstance = new ImageService();
+
         return mInstance;
     }
 
-    private File getFile(Long id) {
+    private File getFile(Context context, Long id) {
         return new File(context.getCacheDir(), id.toString());
     }
 
@@ -51,9 +45,9 @@ public class ImageService {
         image.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
-    private Boolean setImageFromCache(Long id, ImageView image) {
+    private Boolean setImageFromCache(Context context, Long id, ImageView image) {
 
-        File file = getFile(id);
+        File file = getFile(context, id);
         if (!file.exists())
             return false;
 
@@ -63,11 +57,11 @@ public class ImageService {
         return true;
     }
 
-    private void setImageAndCache(Long id, String data, ImageView image) {
+    private void setImageAndCache(Context context, Long id, String data, ImageView image) {
 
         byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
         try {
-            File file = getFile(id);
+            File file = getFile(context, id);
             FileOutputStream out = new FileOutputStream(file);
             out.write(decodedString, 0, decodedString.length);
         } catch (Exception e) {
@@ -79,7 +73,7 @@ public class ImageService {
         setImageProperty(image);
     }
 
-    private ImageView setImageFromResource(Integer resource) {
+    private ImageView setImageFromResource(Context context, Integer resource) {
 
         ImageView image = new ImageView(context);
         image.setImageResource(resource);
@@ -87,11 +81,11 @@ public class ImageService {
         return image;
     }
 
-    private void setImage(Long id, int defaultImage, LinearLayout layout) {
+    private void setImage(Context context, Long id, int defaultImage, LinearLayout layout) {
 
         ImageView image = new ImageView(context);
 
-        if (setImageFromCache(id, image)) {
+        if (setImageFromCache(context, id, image)) {
             image.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -109,7 +103,7 @@ public class ImageService {
                             if (response.isSuccessful()) {
                                 String base64String = response.body().getData();
 
-                                setImageAndCache(id, base64String, image);
+                                setImageAndCache(context, id, base64String, image);
                                 image.setLayoutParams(new LinearLayout.LayoutParams(
                                         ViewGroup.LayoutParams.MATCH_PARENT,
                                         ViewGroup.LayoutParams.MATCH_PARENT
@@ -122,7 +116,7 @@ public class ImageService {
                         @Override
                         public void onFailure(Call<Image> call, Throwable t) {
 
-                            ImageView image = setImageFromResource(defaultImage);
+                            ImageView image = setImageFromResource(context, defaultImage);
                             image.setLayoutParams(new LinearLayout.LayoutParams(
                                     ViewGroup.LayoutParams.MATCH_PARENT,
                                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -134,13 +128,13 @@ public class ImageService {
     }
 
 
-    public ImageView setImage(Set<Long> ids, int defaultImage, LinearLayout layout, Boolean editable) {
+    public ImageView setImage(Context context, Set<Long> ids, int defaultImage, LinearLayout layout, Boolean editable) {
 
         for (Long id : ids)
-            setImage(id, defaultImage, layout);
+            setImage(context, id, defaultImage, layout);
 
         if (editable) {
-            ImageView image = setImageFromResource(R.drawable.add);
+            ImageView image = setImageFromResource(context, R.drawable.add);
             image.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -153,7 +147,7 @@ public class ImageService {
         return null;
     }
 
-    public void setImage(Long id, int defaultImage, ImageView image) {
+    public void setImage(Context context, Long id, int defaultImage, ImageView image) {
 
         if (id == Long.MIN_VALUE) {
             image.setImageResource(defaultImage);
@@ -161,7 +155,7 @@ public class ImageService {
             return;
         }
 
-        if (setImageFromCache(id, image)) {
+        if (setImageFromCache(context, id, image)) {
 
             image.invalidate();
         }
@@ -175,7 +169,7 @@ public class ImageService {
                         public void onResponse(Call<Image> call, Response<Image> response) {
                             if (response.isSuccessful()) {
                                 String base64String = response.body().getData();
-                                setImageAndCache(id, base64String, image);
+                                setImageAndCache(context, id, base64String, image);
                                 image.invalidate();
                             }
                         }

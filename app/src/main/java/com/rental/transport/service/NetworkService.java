@@ -28,7 +28,7 @@ public class NetworkService {
     private Retrofit mRetrofit;
     private Retrofit mRetrofitDidest;
 
-    public static NetworkService getInstance(String account, String password) {
+    public NetworkService getInstance(String account, String password) {
         mInstance = new NetworkService(account, password);
         return mInstance;
     }

@@ -42,10 +42,10 @@ public class ImageService {
     private void setImageProperty(ImageView image) {
 
         image.setAdjustViewBounds(true);
-        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        image.setScaleType(ImageView.ScaleType.FIT_XY);
     }
 
-    private Boolean setImageFromCache(Context context, Long id, ImageView image) {
+    public Boolean setImageFromCache(Context context, Long id, ImageView image) {
 
         File file = getFile(context, id);
         if (!file.exists())
@@ -57,7 +57,7 @@ public class ImageService {
         return true;
     }
 
-    private void setImageAndCache(Context context, Long id, String data, ImageView image) {
+    public void setImageAndCache(Context context, Long id, String data, ImageView image) {
 
         byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
         try {
@@ -93,37 +93,37 @@ public class ImageService {
             layout.addView(image);
             layout.invalidate();
         } else {
-            NetworkService
-                    .getInstance()
-                    .getImageApi()
-                    .doGetImage(id)
-                    .enqueue(new Callback<Image>() {
-                        @Override
-                        public void onResponse(Call<Image> call, Response<Image> response) {
-                            if (response.isSuccessful()) {
-                                String base64String = response.body().getData();
-
-                                setImageAndCache(context, id, base64String, image);
-                                image.setLayoutParams(new LinearLayout.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.MATCH_PARENT
-                                ));
-                                layout.addView(image);
-                                layout.invalidate();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Image> call, Throwable t) {
-
-                            ImageView image = setImageFromResource(context, defaultImage);
-                            image.setLayoutParams(new LinearLayout.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.MATCH_PARENT
-                            ));
-                            layout.addView(image);
-                        }
-                    });
+//            NetworkService
+//                    .getInstance()
+//                    .getImageApi()
+//                    .doGetImage(id)
+//                    .enqueue(new Callback<Image>() {
+//                        @Override
+//                        public void onResponse(Call<Image> call, Response<Image> response) {
+//                            if (response.isSuccessful()) {
+//                                String base64String = response.body().getData();
+//
+//                                setImageAndCache(context, id, base64String, image);
+//                                image.setLayoutParams(new LinearLayout.LayoutParams(
+//                                        ViewGroup.LayoutParams.MATCH_PARENT,
+//                                        ViewGroup.LayoutParams.MATCH_PARENT
+//                                ));
+//                                layout.addView(image);
+//                                layout.invalidate();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Image> call, Throwable t) {
+//
+//                            ImageView image = setImageFromResource(context, defaultImage);
+//                            image.setLayoutParams(new LinearLayout.LayoutParams(
+//                                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                                    ViewGroup.LayoutParams.MATCH_PARENT
+//                            ));
+//                            layout.addView(image);
+//                        }
+//                    });
         }
     }
 
@@ -160,26 +160,26 @@ public class ImageService {
             image.invalidate();
         }
         else {
-            NetworkService
-                    .getInstance()
-                    .getImageApi()
-                    .doGetImage(id)
-                    .enqueue(new Callback<Image>() {
-                        @Override
-                        public void onResponse(Call<Image> call, Response<Image> response) {
-                            if (response.isSuccessful()) {
-                                String base64String = response.body().getData();
-                                setImageAndCache(context, id, base64String, image);
-                                image.invalidate();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Image> call, Throwable t) {
-                            image.setImageResource(defaultImage);
-                            image.invalidate();
-                        }
-                    });
+//            NetworkService
+//                    .getInstance()
+//                    .getImageApi()
+//                    .doGetImage(id)
+//                    .enqueue(new Callback<Image>() {
+//                        @Override
+//                        public void onResponse(Call<Image> call, Response<Image> response) {
+//                            if (response.isSuccessful()) {
+//                                String base64String = response.body().getData();
+//                                setImageAndCache(context, id, base64String, image);
+//                                image.invalidate();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Image> call, Throwable t) {
+//                            image.setImageResource(defaultImage);
+//                            image.invalidate();
+//                        }
+//                    });
         }
     }
 }

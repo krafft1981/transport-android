@@ -1,15 +1,8 @@
 package com.rental.transport.service;
 
-import android.content.Context;
-import android.text.InputType;
-import android.view.LayoutInflater;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
-import com.rental.transport.R;
 import com.rental.transport.model.Property;
 import com.rental.transport.validator.IStringValidator;
 import com.rental.transport.validator.ValidatorFactory;
@@ -63,7 +56,7 @@ public class PropertyService {
         return factory.getValidator(prop.getType());
     }
 
-    public void addTableRow(TableLayout table, Property property, Boolean editable) {
+    public void addTableRow(ListView list, Property property, Boolean editable) {
 
 //        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        TableRow row = (TableRow) inflater.inflate(R.layout.property_element, null);
@@ -80,7 +73,7 @@ public class PropertyService {
 //        value.setInputType(editable ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_NULL);
 //        value.setSingleLine(false);
 //
-//        table.addView(row);
+//        list.addView(row);
     }
 
     public PropertyService setPropertyToList(ListView listView, List<Property> properties, Boolean editable) {
@@ -95,7 +88,7 @@ public class PropertyService {
 
     public PropertyService setPropertyToView(TableLayout table, Property property) {
 
-        addTableRow(table, property, false);
+//        addTableRow(table, property, false);
         return this;
     }
 

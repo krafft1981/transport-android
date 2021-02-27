@@ -48,19 +48,19 @@ public class ParkingGridAdapter extends BaseAdapter {
         View item = inflater.inflate(R.layout.parking_element, null);
 
         Parking parking = data.get(id);
-        TextView name = item.findViewById(R.id.parkingName);
-        name.setText(
-                PropertyService
-                        .getInstance(context)
-                        .getValue(parking.getProperty(), "name")
-        );
+//        TextView name = item.findViewById(R.id.parkingName);
+//        name.setText(
+//                PropertyService
+//                        .getInstance(context)
+//                        .getValue(parking.getProperty(), "name")
+//        );
 
-        TextView address = item.findViewById(R.id.parkingAddress);
-        address.setText(
-                PropertyService
-                        .getInstance(context)
-                        .getValue(parking.getProperty(), "address")
-        );
+//        TextView address = item.findViewById(R.id.parkingAddress);
+//        address.setText(
+//                PropertyService
+//                        .getInstance(context)
+//                        .getValue(parking.getProperty(), "address")
+//        );
 
         ImageView image = item.findViewById(R.id.gridviewImage);
 
@@ -70,9 +70,9 @@ public class ParkingGridAdapter extends BaseAdapter {
                 maxImageId = imageId;
 
 
-        ImageService
-                .getInstance(context)
-                .setImage(maxImageId, R.drawable.unnamed, image);
+//        ImageService
+//                .getInstance(context)
+//                .setImage(maxImageId, R.drawable.unnamed, image);
 
         return item;
     }

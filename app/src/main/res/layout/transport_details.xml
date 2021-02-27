@@ -5,57 +5,33 @@
     android:layout_marginBottom="60dp"
     android:background="@drawable/background">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <ImageSwitcher
             android:id="@+id/imageSwitcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/unnamed"/>
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/unnamed"/>
-        </ImageSwitcher>
-
-        <HorizontalScrollView
-            android:id="@+id/horizontalScroll"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_centerHorizontal="true"
-            android:fillViewport="true"
-            android:scaleType="center"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:id="@+id/transportImages"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            />
 
         <ListView
             android:id="@+id/propertyTable"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageSwitcher"
+            android:scrollbars="none"/>
 
         <LinearLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_below="@id/propertyTable"
             android:gravity="center"
+            android:orientation="horizontal"
             android:padding="1dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </ScrollView>

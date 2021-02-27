@@ -104,22 +104,22 @@ public class CustomerSettings extends Fragment {
 
         buttonLayout.addView(exit);
 
-        LinearLayout images = root.findViewById(R.id.customerImages);
-        ImageService
-                .getInstance(getContext())
-                .setImage(customer.getImage(), R.drawable.unnamed, images, true)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        try {
-//                            Intent i = new Intent(Intent.ACTION_PICK,
-//                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                            startActivityForResult(i, ((MainActivity) getActivity()).RESULT_LOAD_IMAGE);
-//                        } catch (Exception exp) {
-//
-//                        }
-                    }
-                });
+//        LinearLayout images = root.findViewById(R.id.customerImages);
+//        ImageService
+//                .getInstance(getContext())
+//                .setImage(customer.getImage(), R.drawable.unnamed, images, true)
+//                .setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+////                        try {
+////                            Intent i = new Intent(Intent.ACTION_PICK,
+////                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+////                            startActivityForResult(i, ((MainActivity) getActivity()).RESULT_LOAD_IMAGE);
+////                        } catch (Exception exp) {
+////
+////                        }
+//                    }
+//                });
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();

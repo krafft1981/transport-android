@@ -112,25 +112,25 @@ public class ParkingDetails extends Fragment {
 
         buttonLayout.addView(map);
 
-        LinearLayout images = root.findViewById(R.id.parkingImages);
-        ImageView image = ImageService
-                .getInstance()
-                .setImage(parking.getImage(), R.drawable.unnamed, images, editable);
-
-        if (editable) {
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-//                    try {
-//                        Intent i = new Intent(Intent.ACTION_PICK,
-//                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                        startActivityForResult(i, ((MainActivity) getActivity()).RESULT_LOAD_IMAGE);
-//                    } catch (Exception exp) {
+//        LinearLayout images = root.findViewById(R.id.parkingImages);
+//        ImageView image = ImageService
+//                .getInstance()
+//                .setImage(parking.getImage(), R.drawable.unnamed, images, editable);
 //
-//                    }
-                }
-            });
-        }
+//        if (editable) {
+//            image.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+////                    try {
+////                        Intent i = new Intent(Intent.ACTION_PICK,
+////                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+////                        startActivityForResult(i, ((MainActivity) getActivity()).RESULT_LOAD_IMAGE);
+////                    } catch (Exception exp) {
+////
+////                    }
+//                }
+//            });
+//        }
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point point = new Point();

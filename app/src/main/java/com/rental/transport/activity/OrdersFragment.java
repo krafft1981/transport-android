@@ -19,6 +19,7 @@ import com.rental.transport.service.ProgresService;
 
 import java.security.spec.ECField;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -45,22 +46,19 @@ public class OrdersFragment extends Fragment {
                 .getInstance()
                 .getOrderApi()
                 .doGetCustomerOrders()
-                .enqueue(new Callback<Set<Order>>() {
+                .enqueue(new Callback<List<Order>>() {
                     @Override
-                    public void onResponse(Call<Set<Order>> call, Response<Set<Order>> response) {
+                    public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
 
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            Set<Order> orders = response.body();
-                            if (orders != null) {
-                                OrderListAdapter adapter = new OrderListAdapter(getActivity(), new ArrayList(orders));
-                                orderList.setAdapter(adapter);
-                            }
+                            OrderListAdapter adapter = new OrderListAdapter(getActivity(), response.body());
+                            orderList.setAdapter(adapter);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Set<Order>> call, Throwable t) {
+                    public void onFailure(Call<List<Order>> call, Throwable t) {
 
                         ProgresService.getInstance().hideProgress();
                         Toast

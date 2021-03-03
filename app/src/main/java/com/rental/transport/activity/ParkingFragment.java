@@ -2,8 +2,6 @@ package com.rental.transport.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -22,6 +20,7 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -34,29 +33,25 @@ public class ParkingFragment extends Fragment {
     private Integer page = 0;
     private Integer size = 100;
 
-    private void loadData(GridView grid) {
+    private void loadParking(GridView grid) {
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.parking_loading));
         NetworkService
                 .getInstance()
                 .getParkingApi()
                 .doGetParkingList(page, size)
-                .enqueue(new Callback<Set<Parking>>() {
+                .enqueue(new Callback<List<Parking>>() {
                     @Override
-                    public void onResponse(@NonNull Call<Set<Parking>> call, @NonNull Response<Set<Parking>> response) {
-
+                    public void onResponse(@NonNull Call<List<Parking>> call, @NonNull Response<List<Parking>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            Set<Parking> parking = response.body();
-                            if (parking != null) {
-                                ParkingGridAdapter adapter = new ParkingGridAdapter(getActivity(), new ArrayList<>(parking));
-                                grid.setAdapter(adapter);
-                            }
+                            ParkingGridAdapter adapter = new ParkingGridAdapter(getActivity(), response.body());
+                            grid.setAdapter(adapter);
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<Set<Parking>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<List<Parking>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -76,42 +71,28 @@ public class ParkingFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.parking_fragment, container, false);
         GridView grid = root.findViewById(R.id.parkingGridView);
-//        root.findViewById(R.id.floating_action_button).setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                FragmentService
-//                        .getInstance()
-//                        .loadFragment(getActivity(), "ParkingDetails");
-//            }
-//        });
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        grid.setOnItemClickListener((parent, v, position, id) -> {
+            MemoryService
+                    .getInstance()
+                    .setParking((Parking) parent.getAdapter().getItem(position));
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                MemoryService
-                        .getInstance()
-                        .setParking((Parking) parent.getAdapter().getItem(position));
-
-                FragmentService
-                        .getInstance()
-                        .loadFragment(getActivity(), "ParkingDetails");
-            }
+            FragmentService
+                    .getInstance()
+                    .load(getActivity(), "ParkingDetails");
         });
 
         grid.setOnScrollListener(new AbsListView.OnScrollListener() {
-
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
 
             }
-
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
             }
         });
 
-        loadData(grid);
+        loadParking(grid);
         return root;
     }
 }

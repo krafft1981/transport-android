@@ -2,7 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Customer;
 
-import java.util.Set;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,14 +25,14 @@ public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
     @GET("/customer/list")
-    public Call<Set<Customer>> doGetPagesCustomerRequest(
+    public Call<List<Customer>> doGetPagesCustomerRequest(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/customer")
-    public Call<Set<Customer>> doGetCount();
+    public Call<List<Customer>> doGetCount();
 
     @Headers("Content-Type: application/json")
     @GET("/customer")

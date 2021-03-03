@@ -11,17 +11,19 @@ import android.widget.TextView;
 import com.rental.transport.R;
 import com.rental.transport.model.Property;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PropertyListAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Property> data;
+    private List<Property> data;
+    private Boolean editable;
 
-    public PropertyListAdapter(Context context, ArrayList<Property> data) {
+    public PropertyListAdapter(Context context, List<Property> data, Boolean editable) {
 
         this.context = context;
         this.data = data;
+        this.editable = editable;
     }
 
     public class ViewHolder {
@@ -59,10 +61,12 @@ public class PropertyListAdapter extends BaseAdapter {
             holder.logic = convertView.findViewById(R.id.propertyLogic);
             holder.name = convertView.findViewById(R.id.propertyName);
             holder.value = convertView.findViewById(R.id.propertyValue);
+            if (!editable) {
+                holder.value.setKeyListener(null);
+            }
 
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (PropertyListAdapter.ViewHolder) convertView.getTag();
         }
 

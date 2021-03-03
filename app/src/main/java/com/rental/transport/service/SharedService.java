@@ -38,15 +38,15 @@ public class SharedService {
         editor.commit();
     }
 
-    public String getUsername(FragmentActivity activity) {
-
+    public void setValue(FragmentActivity activity, String key, String value) {
         settings = activity.getPreferences(activity.MODE_PRIVATE);
-        return settings.getString(activity.getString(R.string.preferred_username), null);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(key, value);
+        editor.commit();
     }
 
-    public String getPassword(FragmentActivity activity) {
-
+    public String getValue(FragmentActivity activity, String key) {
         settings = activity.getPreferences(activity.MODE_PRIVATE);
-        return settings.getString(activity.getString(R.string.preferred_password), null);
+        return settings.getString(key, null);
     }
 }

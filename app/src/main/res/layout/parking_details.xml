@@ -5,58 +5,36 @@
     android:layout_marginBottom="60dp"
     android:background="@drawable/background">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScroll"
+        <com.rental.transport.views.MyGallery
+            android:id="@+id/gallery"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_centerHorizontal="true"
-            android:fillViewport="true"
-            android:scaleType="center"
-            android:scrollbars="none">
-
-            <LinearLayout
-                android:id="@+id/parkingImages"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-
-        <ListView
-            android:id="@+id/propertyTable"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:animationDuration="1000"
+            android:padding="1dp"
+            android:spacing="5dp" />
 
         <LinearLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
+            android:orientation="horizontal"
             android:padding="1dp" />
 
-        <GridView
-            android:id="@+id/transport_gridview"
+        <com.rental.transport.views.MyListView
+            android:id="@+id/property"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:horizontalSpacing="1dp"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="1dp"
-            android:scrollbars="none"/>
+            android:layout_height="wrap_content" />
 
-        <GridView
-            android:id="@+id/customer_gridview"
+        <com.rental.transport.views.MyListView
+            android:id="@+id/transport"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:horizontalSpacing="1dp"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="1dp"
-            android:scrollbars="none"/>
+            android:layout_height="wrap_content" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

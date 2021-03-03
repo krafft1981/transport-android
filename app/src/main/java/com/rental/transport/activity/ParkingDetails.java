@@ -1,40 +1,66 @@
 package com.rental.transport.activity;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
+import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
+import com.rental.transport.adapter.ParkingGalleryAdapter;
+import com.rental.transport.adapter.PropertyListAdapter;
+import com.rental.transport.adapter.TransportListAdapter;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Parking;
+import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
+import java.util.List;
+
+import lombok.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ParkingDetails extends Fragment {
 
-    private Integer page = 0;
-    private Integer size = 100;
+    private void loadTransport(ListView listView, Long parkingId) {
+
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_loading));
+        NetworkService
+                .getInstance()
+                .getTransportApi()
+                .doGetParkingTransport(parkingId)
+                .enqueue(new Callback<List<Transport>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful()) {
+                            listView.setAdapter(new TransportListAdapter(getActivity(), response.body()));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Transport>> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,108 +74,31 @@ public class ParkingDetails extends Fragment {
         View root = inflater.inflate(R.layout.parking_details, container, false);
         Parking parking = MemoryService.getInstance().getParking();
         Customer customer = MemoryService.getInstance().getCustomer();
-        ListView table = root.findViewById(R.id.propertyTable);
+        ListView listView = root.findViewById(R.id.property);
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = parking.getCustomer().contains(customer.getId());
-//        PropertyService
-//                .getInstance()
-//                .setPropertyToView(table, new ArrayList(parking.getProperty()), editable)
-//                .setPropertyToView(table, new Property(getString(R.string.transport), "transport_count", String.valueOf(parking.getTransport().size())))
-//                .setPropertyToView(table, new Property(getString(R.string.customer), "customer_count", String.valueOf(parking.getCustomer().size())))
-//                .setPropertyToView(table, new Property(getString(R.string.image), "image_count", String.valueOf(parking.getImage().size())));
 
-        if (editable) {
-            Button action = new Button(getContext());
-            action.setText(getString(R.string.save));
-            action.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    parking.setProperty(
-//                            PropertyService
-//                                    .getInstance()
-//                                    .getPropertyFromTable(table)
-//                    );
+        Gallery gallery = root.findViewById(R.id.gallery);
+        gallery.setAdapter(new ParkingGalleryAdapter(getContext(), parking.getImage()));
+        gallery.setOnItemClickListener((parent, view, position, id) -> {
+            MemoryService.getInstance().setImageId(parking.getImage().get(position));
+            FragmentService
+                    .getInstance()
+                    .load(getActivity(), "PictureFragment");
+        });
 
-                    ProgresService
-                            .getInstance()
-                            .showProgress(getContext(), getString(R.string.parking_saving));
+        loadTransport(root.findViewById(R.id.transport), parking.getId());
 
-                    NetworkService
-                            .getInstance()
-                            .getParkingApi()
-                            .doPutParking(parking)
-                            .enqueue(new Callback<Void>() {
-                                @Override
-                                public void onResponse(Call<Void> call, Response<Void> response) {
-                                    ProgresService.getInstance().hideProgress();
-                                }
-
-                                @Override
-                                public void onFailure(Call<Void> call, Throwable t) {
-                                    ProgresService.getInstance().hideProgress();
-                                    Toast
-                                            .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                            });
-
-                }
-            });
-
-            buttonLayout.addView(action);
-        }
+        PropertyListAdapter adapter = new PropertyListAdapter(getContext(), parking.getProperty(), editable);
+        listView.setAdapter(adapter);
 
         Button map = new Button(getContext());
         map.setText(getString(R.string.map));
-        map.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentService
-                        .getInstance()
-                        .loadFragment(getActivity(), "MapFragment");
-            }
-        });
-
+        map.setOnClickListener(v -> FragmentService
+                .getInstance()
+                .load(getActivity(), "MapFragment"));
         buttonLayout.addView(map);
 
-//        LinearLayout images = root.findViewById(R.id.parkingImages);
-//        ImageView image = ImageService
-//                .getInstance()
-//                .setImage(parking.getImage(), R.drawable.unnamed, images, editable);
-//
-//        if (editable) {
-//            image.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    try {
-////                        Intent i = new Intent(Intent.ACTION_PICK,
-////                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-////                        startActivityForResult(i, ((MainActivity) getActivity()).RESULT_LOAD_IMAGE);
-////                    } catch (Exception exp) {
-////
-////                    }
-//                }
-//            });
-//        }
-
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point point = new Point();
-        display.getRealSize(point);
-
-        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScroll);
-        scrollView.setClipToPadding(false);
-        android.view.ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
-        layoutParams.height = ((point.y / 3) * 2);
-        scrollView.setLayoutParams(layoutParams);
-
         return root;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        Toast
-                .makeText(getContext(), "Картинка выбрана", Toast.LENGTH_LONG)
-                .show();
     }
 }

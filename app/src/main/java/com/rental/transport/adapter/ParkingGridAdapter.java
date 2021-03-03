@@ -13,14 +13,14 @@ import com.rental.transport.model.Parking;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.PropertyService;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ParkingGridAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Parking> data;
+    private List<Parking> data;
 
-    public ParkingGridAdapter(Context context, ArrayList<Parking> data) {
+    public ParkingGridAdapter(Context context, List<Parking> data) {
 
         this.context = context;
         this.data = data;
@@ -48,31 +48,24 @@ public class ParkingGridAdapter extends BaseAdapter {
         View item = inflater.inflate(R.layout.parking_element, null);
 
         Parking parking = data.get(id);
-//        TextView name = item.findViewById(R.id.parkingName);
-//        name.setText(
-//                PropertyService
-//                        .getInstance(context)
-//                        .getValue(parking.getProperty(), "name")
-//        );
+        TextView name = item.findViewById(R.id.parkingName);
+        name.setText(
+                PropertyService
+                        .getInstance()
+                        .getValue(parking.getProperty(), "name")
+        );
 
-//        TextView address = item.findViewById(R.id.parkingAddress);
-//        address.setText(
-//                PropertyService
-//                        .getInstance(context)
-//                        .getValue(parking.getProperty(), "address")
-//        );
+        TextView address = item.findViewById(R.id.parkingAddress);
+        address.setText(
+                PropertyService
+                        .getInstance()
+                        .getValue(parking.getProperty(), "address")
+        );
 
         ImageView image = item.findViewById(R.id.gridviewImage);
-
-        Long maxImageId = Long.MIN_VALUE;
-        for (Long imageId : parking.getImage())
-            if (maxImageId < imageId)
-                maxImageId = imageId;
-
-
-//        ImageService
-//                .getInstance(context)
-//                .setImage(maxImageId, R.drawable.unnamed, image);
+        ImageService
+                .getInstance()
+                .setImage(context, parking.getImage(), R.drawable.unnamed, image);
 
         return item;
     }

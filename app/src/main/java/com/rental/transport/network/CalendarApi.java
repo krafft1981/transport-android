@@ -1,7 +1,9 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Calendar;
-import java.util.Set;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -17,14 +19,14 @@ public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/transport")
-    public Call<Set<Calendar>> doGetTransportCalendar(
+    public Call<List<Calendar>> doGetTransportCalendar(
             @Query("days") Long[] days,
             @Query("transport_id") Long transportId
     );
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/customer")
-    public Call<Set<Calendar>> doGetCustomerCalendar(
+    public Call<List<Calendar>> doGetCustomerCalendar(
             @Query("days") Long[] days
     );
 

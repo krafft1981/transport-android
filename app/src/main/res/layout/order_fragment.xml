@@ -6,15 +6,7 @@
     android:background="@drawable/background"
     android:orientation="vertical">
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:queryHint="Поиск"
-        android:visibility="visible" />
-
-    <ListView
+    <com.rental.transport.views.MyListView
         android:id="@+id/orders_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

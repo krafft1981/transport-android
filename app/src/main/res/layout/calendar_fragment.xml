@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/calendarControls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -42,18 +43,19 @@
     <FrameLayout
         android:id="@+id/calendarBody"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/calendarControls" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        app:fabSize="mini"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/blue"
-        android:layout_margin="16dp" />
+        app:fabSize="mini" />
 
 </RelativeLayout>

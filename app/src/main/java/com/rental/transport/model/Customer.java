@@ -2,8 +2,8 @@ package com.rental.transport.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 
@@ -17,11 +17,11 @@ public class Customer {
     @SerializedName("send_email")
     private Boolean sendEmail;
     @SerializedName("property")
-    private Set<Property> property = new HashSet<>();
+    private List<Property> property = new ArrayList<>();
     @SerializedName("image")
-    private Set<Long> image = new HashSet<>();
+    private List<Long> image = new ArrayList<>();
     @SerializedName("transport")
-    private Set<Long> transport = new HashSet<>();
+    private List<Long> transport = new ArrayList<>();
     @SerializedName("parking")
-    private Set<Long> parking = new HashSet<>();
+    private List<Long> parking = new ArrayList<>();
 }

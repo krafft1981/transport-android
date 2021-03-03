@@ -1,9 +1,15 @@
 package com.rental.transport.service;
 
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.rental.transport.R;
+import com.rental.transport.activity.CalendarCreate;
 import com.rental.transport.activity.CalendarFragment;
 import com.rental.transport.activity.CustomerCreate;
 import com.rental.transport.activity.CustomerLogin;
@@ -12,6 +18,7 @@ import com.rental.transport.activity.MapFragment;
 import com.rental.transport.activity.OrdersFragment;
 import com.rental.transport.activity.ParkingDetails;
 import com.rental.transport.activity.ParkingFragment;
+import com.rental.transport.activity.PictureFragment;
 import com.rental.transport.activity.TransportDetails;
 import com.rental.transport.activity.TransportFragment;
 
@@ -33,6 +40,8 @@ public class FragmentService {
         frags.put("CalendarFragment", new CalendarFragment());
         frags.put("ParkingDetails", new ParkingDetails());
         frags.put("TransportDetails", new TransportDetails());
+        frags.put("PictureFragment", new PictureFragment());
+        frags.put("CalendarCreate", new CalendarCreate());
     }
 
     public static FragmentService getInstance() {
@@ -45,13 +54,14 @@ public class FragmentService {
 
     public void fragmentHistoryClear(FragmentActivity activity) {
 
-        activity.getSupportFragmentManager()
+        activity
+                .getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack(null)
                 .commit();
     }
 
-    public void loadFragment(FragmentActivity activity, String name) {
+    public void load(FragmentActivity activity, String name) {
 
         activity.getSupportFragmentManager()
                 .beginTransaction()

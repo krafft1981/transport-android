@@ -5,33 +5,31 @@
     android:layout_marginBottom="60dp"
     android:background="@drawable/background">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageSwitcher
-            android:id="@+id/imageSwitcher"
+        <com.rental.transport.views.MyGallery
+            android:id="@+id/gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            />
-
-        <ListView
-            android:id="@+id/propertyTable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageSwitcher"
-            android:scrollbars="none"/>
+            android:animationDuration="1000"
+            android:padding="1dp"
+            android:spacing="5dp" />
 
         <LinearLayout
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/propertyTable"
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="1dp" />
 
-    </RelativeLayout>
+        <com.rental.transport.views.MyListView
+            android:id="@+id/property"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </ScrollView>

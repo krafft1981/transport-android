@@ -5,19 +5,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Transport;
+import com.rental.transport.service.ImageService;
+import com.rental.transport.service.PropertyService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TransportGridAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Transport> data;
+    private List<Transport> data;
 
-    public TransportGridAdapter(Context context, ArrayList<Transport> data) {
+    public TransportGridAdapter(Context context, List<Transport> data) {
 
         this.context = context;
         this.data = data;
@@ -49,30 +53,24 @@ public class TransportGridAdapter extends BaseAdapter {
         TextView type = (TextView) item.findViewById(R.id.transportType);
         type.setText(transport.getType().getName());
 
-//        TextView name = (TextView) item.findViewById(R.id.transportName);
-//        name.setText(
-//                PropertyService
-//                        .getInstance(context)
-//                        .getValue(transport.getProperty(), "name")
-//        );
-//
-//        TextView cost = (TextView) item.findViewById(R.id.transportCost);
-//        cost.setText(
-//                PropertyService
-//                        .getInstance(context)
-//                        .getValue(transport.getProperty(), "cost")
-//        );
+        TextView name = (TextView) item.findViewById(R.id.transportName);
+        name.setText(
+                PropertyService
+                        .getInstance()
+                        .getValue(transport.getProperty(), "name")
+        );
 
-//        ImageView image = item.findViewById(R.id.gridviewImage);
+        TextView cost = (TextView) item.findViewById(R.id.transportCost);
+        cost.setText(
+                PropertyService
+                        .getInstance()
+                        .getValue(transport.getProperty(), "cost")
+        );
 
-//        Long maxImageId = Long.MIN_VALUE;
-//        for (Long imageId : transport.getImage())
-//            if (maxImageId < imageId)
-//                maxImageId = imageId;
-
-//        ImageService
-//                .getInstance(context)
-//                .setImage(maxImageId, R.drawable.transport, image);
+        ImageView image = item.findViewById(R.id.gridviewImage);
+        ImageService
+                .getInstance()
+                .setImage(context, transport.getImage(), R.drawable.transport, image);
 
         return item;
     }

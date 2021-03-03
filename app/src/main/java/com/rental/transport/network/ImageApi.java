@@ -2,7 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Image;
 
-import java.util.Set;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -41,7 +41,7 @@ public interface ImageApi {
 
     @Headers("Content-Type: application/json")
     @GET("/image/list")
-    public Call<Set<Long>> doGetImageList(
+    public Call<List<Long>> doGetImageList(
             @Query("page") Integer page,
             @Query("size") Integer size
     );

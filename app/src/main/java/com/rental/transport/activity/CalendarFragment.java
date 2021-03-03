@@ -1,7 +1,6 @@
 package com.rental.transport.activity;
 
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +14,16 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.adapter.CalendarListAdapter;
+import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Set;
+import java.util.List;
 import java.util.TimeZone;
 
 import retrofit2.Call;
@@ -31,8 +32,8 @@ import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
 
-    private String format = "d MMMM yyyy";
     private Date currentDate = Calendar.getInstance().getTime();
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("d MMMM yyyy");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,21 +53,19 @@ public class CalendarFragment extends Fragment {
                 .getInstance()
                 .getCalendarApi()
                 .doGetCustomerCalendar(days)
-                .enqueue(new Callback<Set<com.rental.transport.model.Calendar>>() {
+                .enqueue(new Callback<List<com.rental.transport.model.Calendar>>() {
                     @Override
-                    public void onResponse(Call<Set<com.rental.transport.model.Calendar>> call, Response<Set<com.rental.transport.model.Calendar>> response) {
+                    public void onResponse(Call<List<com.rental.transport.model.Calendar>> call, Response<List<com.rental.transport.model.Calendar>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            Set<com.rental.transport.model.Calendar> data = response.body();
-                            CalendarListAdapter adapter = new CalendarListAdapter(getActivity(), new ArrayList(data));
                             ListView listView = new ListView(getContext());
-                            listView.setAdapter(adapter);
+                            listView.setAdapter(new CalendarListAdapter(getActivity(), response.body()));
                             frame.addView(listView);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Set<com.rental.transport.model.Calendar>> call, Throwable t) {
+                    public void onFailure(Call<List<com.rental.transport.model.Calendar>> call, Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
@@ -78,6 +77,8 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
         FrameLayout frame = root.findViewById(R.id.calendarBody);
@@ -92,50 +93,49 @@ public class CalendarFragment extends Fragment {
         calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
         currentDate = calendar.getTime();
 
-        date.setText(DateFormat.format(format, currentDate));
+        date.setText(dateFormatter.format(currentDate));
 
-        root.findViewById(R.id.calendarLeft).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-                calendar.setTime(currentDate);
-                calendar.add(Calendar.DATE, -1);
-                currentDate = calendar.getTime();
-                date.setText(DateFormat.format(format, currentDate));
-                showDayEvents(frame, currentDate);
-            }
+        root.findViewById(R.id.calendarLeft).setOnClickListener(v -> {
+            Calendar calendar12 = new GregorianCalendar();
+            calendar12.setTimeZone(TimeZone.getTimeZone("UTC"));
+            calendar12.setTime(currentDate);
+            calendar12.add(Calendar.DATE, -1);
+            currentDate = calendar12.getTime();
+            date.setText(dateFormatter.format(currentDate));
+            showDayEvents(frame, currentDate);
         });
 
-        root.findViewById(R.id.calendarRight).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = new GregorianCalendar();
-                calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-                calendar.setTime(currentDate);
-                calendar.add(Calendar.DATE, 1);
-                currentDate = calendar.getTime();
-                date.setText(DateFormat.format(format, currentDate));
-                showDayEvents(frame, currentDate);
-            }
+        root.findViewById(R.id.calendarRight).setOnClickListener(v -> {
+            Calendar calendar1 = new GregorianCalendar();
+            calendar1.setTimeZone(TimeZone.getTimeZone("UTC"));
+            calendar1.setTime(currentDate);
+            calendar1.add(Calendar.DATE, 1);
+            currentDate = calendar1.getTime();
+            date.setText(dateFormatter.format(currentDate));
+            showDayEvents(frame, currentDate);
         });
 
-        root.findViewById(R.id.calendarDay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                frame.removeAllViews();
-                CalendarView calendarView = new CalendarView(getContext());
-                calendarView.setDate(currentDate.getTime());
-                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                    @Override
-                    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                        currentDate = new Date(year - 1900, month, dayOfMonth);
-                        date.setText(DateFormat.format(format, currentDate));
-                        showDayEvents(frame, currentDate);
-                    }
-                });
-                frame.addView(calendarView);
-            }
+        root.findViewById(R.id.calendarDay).setOnClickListener(v -> {
+            frame.removeAllViews();
+            CalendarView cv = new CalendarView(getContext());
+            cv.setDate(currentDate.getTime());
+            cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+                currentDate = new Date(year - 1900, month, dayOfMonth);
+                date.setText(dateFormatter.format(currentDate));
+                showDayEvents(frame, currentDate);
+            });
+            frame.addView(cv);
+        });
+
+        root.findViewById(R.id.floating_action_button).setOnClickListener(v -> {
+
+            MemoryService
+                    .getInstance()
+                    .getProperty().put("useTransport", "no");
+
+            FragmentService
+                    .getInstance()
+                    .load(getActivity(), "CalendarCreate");
         });
 
         showDayEvents(frame, currentDate);

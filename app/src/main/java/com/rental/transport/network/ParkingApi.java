@@ -2,7 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Parking;
 
-import java.util.Set;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,7 +28,7 @@ public interface ParkingApi {
     );
 
     @GET("/parking/list")
-    public Call<Set<Parking>> doGetParkingList(
+    public Call<List<Parking>> doGetParkingList(
             @Query("page") Integer page,
             @Query("size") Integer size);
 

@@ -2,7 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Transport;
 
-import java.util.Set;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,13 +22,13 @@ public interface TransportApi {
     );
 
     @GET("/transport/list")
-    public Call<Set<Transport>> doGetTransportList(
+    public Call<List<Transport>> doGetTransportList(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @GET("/transport/list/type")
-    public Call<Set<Transport>> goGetTransportTyped(
+    public Call<List<Transport>> goGetTransportTyped(
             @Query("type") Long type,
             @Query("page") Integer page,
             @Query("size") Integer size
@@ -50,10 +50,10 @@ public interface TransportApi {
     public Call<Long> doGetTransportCount();
 
     @GET("/transport/parking")
-    public Call<Set<Transport>> doGetParkingTransport(
+    public Call<List<Transport>> doGetParkingTransport(
             @Query("parking_id") Long parkingId
     );
 
     @GET("/transport/my")
-    public Call<Set<Transport>> doGetMyTransport();
+    public Call<List<Transport>> doGetMyTransport();
 }

@@ -7,6 +7,7 @@ import com.rental.transport.model.Property;
 import com.rental.transport.validator.IStringValidator;
 import com.rental.transport.validator.ValidatorFactory;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,7 @@ public class PropertyService {
         return mInstance;
     }
 
-    public Property searchProperty(Set<Property> props, String name) throws IllegalArgumentException {
+    public Property searchProperty(List<Property> props, String name) throws IllegalArgumentException {
 
         for (Property prop : props) {
             if (prop.getLogicName().equals(name)) {
@@ -37,59 +38,23 @@ public class PropertyService {
         throw new IllegalArgumentException("Property '" + name + "' not found");
     }
 
-    public String getValue(Set<Property> props, String name) throws IllegalArgumentException {
+    public String getValue(List<Property> props, String name) throws IllegalArgumentException {
 
         Property prop = searchProperty(props, name);
         return prop.getValue();
     }
 
-    public void setValue(Set<Property> props, String name, String value) throws IllegalArgumentException {
+    public void setValue(List<Property> props, String name, String value) throws IllegalArgumentException {
 
         Property prop = searchProperty(props, name);
         prop.setValue(value);
     }
 
-    public IStringValidator getValidator(Set<Property> props, String name) throws IllegalArgumentException {
+    public IStringValidator getValidator(List<Property> props, String name) throws IllegalArgumentException {
 
         Property prop = searchProperty(props, name);
         ValidatorFactory factory = new ValidatorFactory();
         return factory.getValidator(prop.getType());
-    }
-
-    public void addTableRow(ListView list, Property property, Boolean editable) {
-
-//        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        TableRow row = (TableRow) inflater.inflate(R.layout.property_element, null);
-//
-//        TextView logic = (TextView) row.findViewById(R.id.propertyLogic);
-//        logic.setText(property.getLogicName());
-//
-//        TextView name = (TextView) row.findViewById(R.id.propertyName);
-//        name.setText(property.getHumanName());
-//        name.setSingleLine(false);
-//
-//        EditText value = (EditText) row.findViewById(R.id.propertyValue);
-//        value.setText(property.getValue());
-//        value.setInputType(editable ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_NULL);
-//        value.setSingleLine(false);
-//
-//        list.addView(row);
-    }
-
-    public PropertyService setPropertyToList(ListView listView, List<Property> properties, Boolean editable) {
-
-//        table.removeAllViews();
-//
-//        for (Property prop : properties)
-//            addTableRow(table, prop, editable);
-
-        return this;
-    }
-
-    public PropertyService setPropertyToView(TableLayout table, Property property) {
-
-//        addTableRow(table, property, false);
-        return this;
     }
 
     public Set<Property> getPropertyFromTable(TableLayout table) {
@@ -127,5 +92,9 @@ public class PropertyService {
         }
 
         return props;
+    }
+
+    public List<Property> getProperty(ListView listView) {
+        return new ArrayList<>();
     }
 }

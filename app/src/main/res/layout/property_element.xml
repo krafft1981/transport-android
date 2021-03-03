@@ -30,7 +30,8 @@
         android:id="@+id/propertyValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="1dp"
+        android:layout_marginLeft="5dp"
+        android:inputType="textMultiLine|textNoSuggestions"
         android:text="28 тонн" />
 
 </LinearLayout>

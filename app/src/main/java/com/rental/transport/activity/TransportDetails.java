@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageSwitcher;
-import android.widget.ImageView;
-import android.widget.ViewSwitcher;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.Gallery;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
+import com.rental.transport.adapter.PropertyListAdapter;
+import com.rental.transport.adapter.TransportGalleryAdapter;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Transport;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 
 public class TransportDetails extends Fragment {
@@ -32,136 +36,38 @@ public class TransportDetails extends Fragment {
         Transport transport = MemoryService.getInstance().getTransport();
         Customer customer = MemoryService.getInstance().getCustomer();
 
-        Boolean editable = transport.getCustomer().contains(customer.getId());
-
-        ImageSwitcher switcher = root.findViewById(R.id.imageSwitcher);
-        switcher.setImageResource(R.drawable.unnamed);
-        switcher.setInAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left));
-        switcher.setOutAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_out_right));
-        switcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                ImageView myView = new ImageView(getContext());
-                myView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                myView.setLayoutParams(
-                        new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                );
-                return myView;
-            }
+        Gallery gallery = root.findViewById(R.id.gallery);
+        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
+        gallery.setOnItemClickListener((parent, view, position, id) -> {
+            MemoryService.getInstance().setImageId(transport.getImage().get(position));
+            FragmentService
+                    .getInstance()
+                    .load(getActivity(), "PictureFragment");
         });
 
-//        ArrayList propertyList = new ArrayList(transport.getProperty());
+        Boolean editable = transport.getCustomer().contains(customer.getId());
 
-//        PropertyListAdapter adapter = new PropertyListAdapter(getContext(), propertyList);
+        ListView listView = root.findViewById(R.id.property);
+        LinearLayout linearLayout = root.findViewById(R.id.buttonLayout);
 
-//        PropertyService
-//                .getInstance()
-//                .setPropertyToList(listView, new ArrayList(transport.getProperty()), editable)
-//                .setPropertyToList(listView, new Property(getString(R.string.customer), "customer_count", String.valueOf(transport.getCustomer().size())))
-//                .setPropertyToList(listView, new Property(getString(R.string.image), "image_count", String.valueOf(transport.getImage().size())));
+        PropertyListAdapter adapter = new PropertyListAdapter(getContext(), transport.getProperty(), editable);
+        listView.setAdapter(adapter);
 
-//        LinearLayout images = root.findViewById(R.id.transportImages);
-//        ImageView image = ImageService
-//                .getInstance()
-//                .setImage(transport.getImage(), R.drawable.transport, images, editable);
-//
-//        if (editable) {
-//            image.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    try {
-////                        Intent i = new Intent(Intent.ACTION_PICK,
-////                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-////                        startActivityForResult(i, ((MainActivity) getActivity()).RESULT_LOAD_IMAGE);
-////                    } catch (Exception exp) {
-////
-////                    }
-//                }
-//            });
-//        }
+        if (!editable) {
+            Button action = new Button(getContext());
+            action.setText(getString(R.string.toOrder));
+            action.setOnClickListener(v -> {
+                MemoryService
+                        .getInstance()
+                        .getProperty().put("useTransport", "yes");
 
-//        Button action = new Button(getContext());
-//        if (!editable) {
-//            action.setText(getString(R.string.toOrder));
-//            action.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    FragmentService
-//                            .getInstance()
-//                            .loadFragment(getActivity(), "CalendarFragment");
-//
-//                }
-//            });
-//        }
-//        else {
-//            action.setText(getString(R.string.save));
-//            action.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-////                    transport.setProperty(
-////                            PropertyService
-////                                    .getInstance()
-////                                    .getPropertyFromTable(view)
-////                    );
-//
-//                    ProgresService
-//                            .getInstance()
-//                            .showProgress(getContext(), getString(R.string.transport_saving));
-//
-//                    NetworkService
-//                            .getInstance()
-//                            .getTransportApi()
-//                            .doPutTransport(transport)
-//                            .enqueue(new Callback<Void>() {
-//                                @Override
-//                                public void onResponse(Call<Void> call, Response<Void> response) {
-//                                    ProgresService.getInstance().hideProgress();
-//                                }
-//
-//                                @Override
-//                                public void onFailure(Call<Void> call, Throwable t) {
-//                                    ProgresService.getInstance().hideProgress();
-//                                    Toast
-//                                            .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
-//                                            .show();
-//                                }
-//                            });
-//                }
-//            });
-//        }
-//
-//        buttonLayout.addView(action);
-
-//        Display display = getActivity().getWindowManager().getDefaultDisplay();
-//        Point size = new Point();
-//        display.getRealSize(size);
-//
-//        HorizontalScrollView scrollView = root.findViewById(R.id.horizontalScroll);
-//        scrollView.setClipToPadding(false);
-//        ViewGroup.LayoutParams layoutParams = scrollView.getLayoutParams();
-//        layoutParams.height = ((size.y / 3) * 2);
-//        scrollView.setLayoutParams(layoutParams);
+                FragmentService
+                        .getInstance()
+                        .load(getActivity(), "CalendarCreate");
+            });
+            linearLayout.addView(action);
+        }
 
         return root;
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        super.onActivityResult(requestCode, resultCode, intent);
-//        switch (requestCode) {
-//            case 0:
-//                if (resultCode == RESULT_OK) {
-////                    Uri selectedImage = imageReturnedIntent.getData();
-////                    imageview.setImageURI(selectedImage);
-//                }
-//
-//                break;
-//            case 1:
-//                if (resultCode == RESULT_OK) {
-////                    Uri selectedImage = imageReturnedIntent.getData();
-////                    imageview.setImageURI(selectedImage);
-//                }
-//                break;
-//        }
-//    }
 }

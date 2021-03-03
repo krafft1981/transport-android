@@ -2,7 +2,9 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Order;
-import java.util.Set;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -20,28 +22,28 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @GET("/order/page")
-    public Call <Set<Order>> doGetPagesOrderRequest(
+    public Call <List<Order>> doGetPagesOrderRequest(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/time")
-    public Call <Set<Order>> doGetTimesOrderRequest(
+    public Call <List<Order>> doGetTimesOrderRequest(
             @Query("calendar_id") Long[] calendarIds
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/request")
-    public Call<Set<Long>> doGetOrderRequest();
+    public Call<List<Long>> doGetOrderRequest();
 
     @Headers("Content-Type: application/json")
     @GET("/order/client")
-    public Call<Set<Order>> doGetCustomerOrders();
+    public Call<List<Order>> doGetCustomerOrders();
 
     @Headers("Content-Type: application/json")
     @POST("/order/confirm")
-    public Call<Set<Customer>> doPostConfirmOrderRequest(
+    public Call<List<Customer>> doPostConfirmOrderRequest(
             @Query("order_id") Long id
     );
 

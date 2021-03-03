@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 
 public class MainActivity extends FragmentActivity {
 
@@ -17,6 +18,11 @@ public class MainActivity extends FragmentActivity {
         int mode = show ? View.VISIBLE : View.GONE;
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setVisibility(mode);
+        if (!show) {
+            MemoryService
+                    .getInstance()
+                    .setCustomer(null);
+        }
     }
 
     @Override
@@ -24,49 +30,48 @@ public class MainActivity extends FragmentActivity {
 
         setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         FragmentActivity activity = this;
 
-        if (savedInstanceState == null) {
-            BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setOnNavigationItemSelectedListener(
-                    new BottomNavigationView.OnNavigationItemSelectedListener() {
-                        @Override
-                        public boolean onNavigationItemSelected(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.transport_menu: {
-                                    FragmentService.getInstance().loadFragment(activity, "TransportFragment");
-                                    break;
-                                }
-
-                                case R.id.orders_menu: {
-                                    FragmentService.getInstance().loadFragment(activity, "OrdersFragment");
-                                    break;
-                                }
-
-                                case R.id.calendar_menu: {
-                                    FragmentService.getInstance().loadFragment(activity, "CalendarFragment");
-                                    break;
-                                }
-
-                                case R.id.parking_menu: {
-                                    FragmentService.getInstance().loadFragment(activity, "ParkingFragment");
-                                    break;
-                                }
-
-                                case R.id.account_menu: {
-                                    FragmentService.getInstance().loadFragment(activity, "CustomerSettings");
-                                    break;
-                                }
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.transport_menu: {
+                                FragmentService.getInstance().load(activity, "TransportFragment");
+                                break;
                             }
 
-                            return true;
-                        }
-                    });
+                            case R.id.orders_menu: {
+                                FragmentService.getInstance().load(activity, "OrdersFragment");
+                                break;
+                            }
 
-            FragmentService.getInstance().loadFragment(activity, "CustomerLogin");
+                            case R.id.calendar_menu: {
+                                FragmentService.getInstance().load(activity, "CalendarFragment");
+                                break;
+                            }
+
+                            case R.id.parking_menu: {
+                                FragmentService.getInstance().load(activity, "ParkingFragment");
+                                break;
+                            }
+
+                            case R.id.account_menu: {
+                                FragmentService.getInstance().load(activity, "CustomerSettings");
+                                break;
+                            }
+                        }
+
+                        return true;
+                    }
+                });
+
+        if (savedInstanceState == null) {
+            FragmentService.getInstance().load(activity, "CustomerLogin");
         }
     }
 }

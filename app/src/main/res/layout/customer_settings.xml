@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="60dp"
     android:background="@drawable/background">
 
@@ -12,25 +11,16 @@
         android:orientation="vertical"
         android:padding="1dp">
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScroll"
+        <com.rental.transport.views.MyGallery
+            android:id="@+id/gallery"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_centerHorizontal="true"
-            android:fillViewport="true"
-            android:scaleType="center"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:animationDuration="1000"
+            android:padding="1dp"
+            android:spacing="5dp" />
 
-            <LinearLayout
-                android:id="@+id/customerImages"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-
-        </HorizontalScrollView>
-
-        <ListView
-            android:id="@+id/propertyTable"
+        <com.rental.transport.views.MyListView
+            android:id="@+id/property"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -38,52 +28,52 @@
             android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
+            android:orientation="horizontal"
             android:padding="1dp" />
 
         <!--    https://habr.com/ru/company/nix/blog/369097/-->
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_help"
-            />
+        <!--        <android.support.design.widget.FloatingActionButton-->
+        <!--            android:id="@+id/fab"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|end"-->
+        <!--            android:layout_margin="@dimen/fab_margin"-->
+        <!--            android:src="@android:drawable/ic_menu_help"-->
+        <!--            />-->
 
-<!--        <android.support.design.widget.FloatingActionButton-->
-<!--            android:id="@+id/fab_1"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|end"-->
-<!--            android:layout_margin="@dimen/fab_margin"-->
-<!--            android:src="@android:drawable/ic_menu_compass"-->
-<!--            android:visibility="visible"-->
-<!--            app:backgroundTint="@color/blue"-->
-<!--            app:fabSize="mini" />-->
+        <!--        <android.support.design.widget.FloatingActionButton-->
+        <!--            android:id="@+id/fab_1"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|end"-->
+        <!--            android:layout_margin="@dimen/fab_margin"-->
+        <!--            android:src="@android:drawable/ic_menu_compass"-->
+        <!--            android:visibility="visible"-->
+        <!--            app:backgroundTint="@color/blue"-->
+        <!--            app:fabSize="mini" />-->
 
-<!--        <android.support.design.widget.FloatingActionButton-->
-<!--            android:id="@+id/fab_2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|end"-->
-<!--            android:layout_margin="@dimen/fab_margin"-->
-<!--            android:src="@android:drawable/ic_menu_myplaces"-->
-<!--            android:visibility="visible"-->
-<!--            app:backgroundTint="@color/blue"-->
-<!--            app:fabSize="mini" />-->
+        <!--        <android.support.design.widget.FloatingActionButton-->
+        <!--            android:id="@+id/fab_2"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|end"-->
+        <!--            android:layout_margin="@dimen/fab_margin"-->
+        <!--            android:src="@android:drawable/ic_menu_myplaces"-->
+        <!--            android:visibility="visible"-->
+        <!--            app:backgroundTint="@color/blue"-->
+        <!--            app:fabSize="mini" />-->
 
-<!--        <android.support.design.widget.FloatingActionButton-->
-<!--            android:id="@+id/fab_3"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|end"-->
-<!--            android:layout_margin="@dimen/fab_margin"-->
-<!--            android:src="@android:drawable/ic_menu_share"-->
-<!--            android:visibility="visible"-->
-<!--            app:backgroundTint="@color/blue"-->
-<!--            app:fabSize="mini" />-->
+        <!--        <android.support.design.widget.FloatingActionButton-->
+        <!--            android:id="@+id/fab_3"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|end"-->
+        <!--            android:layout_margin="@dimen/fab_margin"-->
+        <!--            android:src="@android:drawable/ic_menu_share"-->
+        <!--            android:visibility="visible"-->
+        <!--            app:backgroundTint="@color/blue"-->
+        <!--            app:fabSize="mini" />-->
     </LinearLayout>
 </ScrollView>

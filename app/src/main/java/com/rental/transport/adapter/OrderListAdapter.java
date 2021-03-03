@@ -9,15 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rental.transport.R;
+import com.rental.transport.model.Order;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderListAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<ViewHolder> data;
+    private List<Order> data;
 
-    public OrderListAdapter(Context context, ArrayList<ViewHolder> data) {
+    public OrderListAdapter(Context context, List<Order> data) {
 
         this.context = context;
         this.data = data;

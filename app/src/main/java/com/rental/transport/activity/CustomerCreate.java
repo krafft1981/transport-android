@@ -83,9 +83,7 @@ public class CustomerCreate extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.customer_create, container, false);
-        root.findViewById(R.id.createButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        root.findViewById(R.id.createButton).setOnClickListener(v -> {
 
 //                TableLayout table   = root.findViewById(R.id.tableCustomer);
 //
@@ -128,7 +126,6 @@ public class CustomerCreate extends Fragment {
 //                        }
 //                    }
 //                }
-            }
         });
         return root;
     }

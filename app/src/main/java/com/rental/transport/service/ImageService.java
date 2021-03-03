@@ -4,16 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.rental.transport.R;
 import com.rental.transport.model.Image;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Set;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,7 +21,6 @@ public class ImageService {
     private static ImageService mInstance;
 
     private ImageService() {
-
     }
 
     public static ImageService getInstance() {
@@ -35,19 +31,19 @@ public class ImageService {
         return mInstance;
     }
 
-    private File getFile(Context context, Long id) {
-        return new File(context.getCacheDir(), id.toString());
+    private File getFile(Context context, Long imageId) {
+        return new File(context.getCacheDir(), imageId.toString());
     }
 
     private void setImageProperty(ImageView image) {
 
         image.setAdjustViewBounds(true);
-        image.setScaleType(ImageView.ScaleType.FIT_XY);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
-    public Boolean setImageFromCache(Context context, Long id, ImageView image) {
+    private Boolean setImageFromCache(Context context, Long imageId, ImageView image) {
 
-        File file = getFile(context, id);
+        File file = getFile(context, imageId);
         if (!file.exists())
             return false;
 
@@ -57,11 +53,11 @@ public class ImageService {
         return true;
     }
 
-    public void setImageAndCache(Context context, Long id, String data, ImageView image) {
+    private void setImageAndCache(Context context, Long imageId, String data, ImageView image) {
 
         byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
         try {
-            File file = getFile(context, id);
+            File file = getFile(context, imageId);
             FileOutputStream out = new FileOutputStream(file);
             out.write(decodedString, 0, decodedString.length);
         } catch (Exception e) {
@@ -73,113 +69,58 @@ public class ImageService {
         setImageProperty(image);
     }
 
-    private ImageView setImageFromResource(Context context, Integer resource) {
+    public void setImage(Context context, Long imageId, int defaultImage, ImageView image) {
 
-        ImageView image = new ImageView(context);
-        image.setImageResource(resource);
-        setImageProperty(image);
-        return image;
-    }
-
-    private void setImage(Context context, Long id, int defaultImage, LinearLayout layout) {
-
-        ImageView image = new ImageView(context);
-
-        if (setImageFromCache(context, id, image)) {
-            image.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-            ));
-            layout.addView(image);
-            layout.invalidate();
-        } else {
-//            NetworkService
-//                    .getInstance()
-//                    .getImageApi()
-//                    .doGetImage(id)
-//                    .enqueue(new Callback<Image>() {
-//                        @Override
-//                        public void onResponse(Call<Image> call, Response<Image> response) {
-//                            if (response.isSuccessful()) {
-//                                String base64String = response.body().getData();
-//
-//                                setImageAndCache(context, id, base64String, image);
-//                                image.setLayoutParams(new LinearLayout.LayoutParams(
-//                                        ViewGroup.LayoutParams.MATCH_PARENT,
-//                                        ViewGroup.LayoutParams.MATCH_PARENT
-//                                ));
-//                                layout.addView(image);
-//                                layout.invalidate();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Image> call, Throwable t) {
-//
-//                            ImageView image = setImageFromResource(context, defaultImage);
-//                            image.setLayoutParams(new LinearLayout.LayoutParams(
-//                                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                                    ViewGroup.LayoutParams.MATCH_PARENT
-//                            ));
-//                            layout.addView(image);
-//                        }
-//                    });
-        }
-    }
-
-
-    public ImageView setImage(Context context, Set<Long> ids, int defaultImage, LinearLayout layout, Boolean editable) {
-
-        for (Long id : ids)
-            setImage(context, id, defaultImage, layout);
-
-        if (editable) {
-            ImageView image = setImageFromResource(context, R.drawable.add);
-            image.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-            ));
-
-            layout.addView(image);
-            return image;
-        }
-
-        return null;
-    }
-
-    public void setImage(Context context, Long id, int defaultImage, ImageView image) {
-
-        if (id == Long.MIN_VALUE) {
+        if (imageId == Long.MIN_VALUE) {
+            setImageProperty(image);
             image.setImageResource(defaultImage);
             image.invalidate();
             return;
         }
 
-        if (setImageFromCache(context, id, image)) {
+        if (!setImageFromCache(context, imageId, image)) {
+            NetworkService
+                    .getInstance()
+                    .getImageApi()
+                    .doGetImage(imageId)
+                    .enqueue(new Callback<Image>() {
+                        @Override
+                        public void onResponse(Call<Image> call, Response<Image> response) {
+                            if (response.isSuccessful()) {
+                                String base64String = response.body().getData();
+                                setImageAndCache(context, imageId, base64String, image);
+                                image.invalidate();
+                            }
+                        }
 
-            image.invalidate();
+                        @Override
+                        public void onFailure(Call<Image> call, Throwable t) {
+                            image.setImageResource(defaultImage);
+                            image.invalidate();
+                        }
+                    });
         }
-        else {
-//            NetworkService
-//                    .getInstance()
-//                    .getImageApi()
-//                    .doGetImage(id)
-//                    .enqueue(new Callback<Image>() {
-//                        @Override
-//                        public void onResponse(Call<Image> call, Response<Image> response) {
-//                            if (response.isSuccessful()) {
-//                                String base64String = response.body().getData();
-//                                setImageAndCache(context, id, base64String, image);
-//                                image.invalidate();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Image> call, Throwable t) {
-//                            image.setImageResource(defaultImage);
-//                            image.invalidate();
-//                        }
-//                    });
+    }
+
+    public void setImage(Context context, List<Long> images, int defaultImage, ImageView image) {
+
+        Long imageId = Long.MIN_VALUE;
+        for (Long id : images) {
+            if (imageId < id)
+                imageId = id;
+        }
+
+        setImage(context, imageId, defaultImage, image);
+    }
+
+    public void setImage(Context context, List<Long> images, Integer index, int defaultImage, ImageView image) {
+
+        if (images.size() > index) {
+            Long imageId = images.get(index);
+            setImage(context, imageId, defaultImage, image);
+        } else {
+            image.setImageResource(defaultImage);
+            image.invalidate();
         }
     }
 }

@@ -72,8 +72,8 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ListView
-                android:id="@+id/propertyTable"
+            <com.rental.transport.views.MyListView
+                android:id="@+id/property"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

@@ -64,14 +64,10 @@ public class CustomerLogin extends Fragment {
                 .enqueue(new Callback<Customer>() {
                     @Override
                     public void onResponse(Call<Customer> call, Response<Customer> response) {
-                        ProgresService
-                                .getInstance()
-                                .hideProgress();
+                        ProgresService.getInstance().hideProgress();
 
                         if (response.code() == 401) {
-                            SharedService
-                                    .getInstance()
-                                    .clear();
+                            SharedService.getInstance().clear();
                             Toast
                                     .makeText(getContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG)
                                     .show();
@@ -80,26 +76,19 @@ public class CustomerLogin extends Fragment {
                         if (response.isSuccessful()) {
                             CheckBox remember = root.findViewById(R.id.loginAuto);
                             if (remember.isChecked()) {
-                                SharedService
-                                        .getInstance()
-                                        .save(getActivity(), username, password);
+                                SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_username), username);
+                                SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                             }
-
-                            MemoryService
-                                    .getInstance()
-                                    .setCustomer(response.body());
-
+                            MemoryService.getInstance().setCustomer(response.body());
                             ((MainActivity) getActivity()).showMenu(true);
-                            FragmentService.getInstance().loadFragment(getActivity(), "TransportFragment");
-
+                            FragmentService.getInstance().load(getActivity(), "TransportFragment");
+                            remember.clearFocus();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Customer> call, Throwable t) {
-                        ProgresService
-                                .getInstance()
-                                .hideProgress();
+                        ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
                                 .show();
@@ -126,70 +115,58 @@ public class CustomerLogin extends Fragment {
         TextView loginRegisterLink = root.findViewById(R.id.loginRegisterLink);
         loginRegisterLink.setPaintFlags(loginRegisterLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        root.findViewById(R.id.loginButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidEmail(customer) && isValidPassword(password)) {
-                    login(root,
-                            customer.getText().toString(),
-                            password.getText().toString()
-                    );
-                }
+        root.findViewById(R.id.loginButton).setOnClickListener(v -> {
+            if (isValidEmail(customer) && isValidPassword(password)) {
+                login(root,
+                        customer.getText().toString(),
+                        password.getText().toString()
+                );
             }
         });
 
-        root.findViewById(R.id.loginForgotPasswordLink).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidEmail(customer)) {
+        root.findViewById(R.id.loginForgotPasswordLink).setOnClickListener(v -> {
+            if (isValidEmail(customer)) {
 
-                    ProgresService.
-                            getInstance()
-                            .showProgress(getActivity(), getString(R.string.request));
+                ProgresService.
+                        getInstance()
+                        .showProgress(getActivity(), getString(R.string.request));
 
-                    NetworkService
-                            .getInstance()
-                            .getRegistrationApi()
-                            .doPostEmailRegistration(customer.getText().toString())
-                            .enqueue(new Callback<Void>() {
-                                @Override
-                                public void onResponse(Call<Void> call, Response<Void> response) {
-                                    ProgresService.getInstance().hideProgress();
-                                    if (response.isSuccessful()) {
-                                        Toast
-                                                .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
-                                                .show();
-                                    }
-                                    else {
-                                        Toast
-                                                .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
-                                                .show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<Void> call, Throwable t) {
-                                    ProgresService.getInstance().hideProgress();
+                NetworkService
+                        .getInstance()
+                        .getRegistrationApi()
+                        .doPostEmailRegistration(customer.getText().toString())
+                        .enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                ProgresService.getInstance().hideProgress();
+                                if (response.isSuccessful()) {
                                     Toast
-                                            .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+                                            .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
+                                            .show();
+                                } else {
+                                    Toast
+                                            .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
                                             .show();
                                 }
-                            });
-                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                ProgresService.getInstance().hideProgress();
+                                Toast
+                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
             }
         });
 
-        root.findViewById(R.id.loginRegisterLink).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentService
-                        .getInstance()
-                        .loadFragment(getActivity(), "CustomerCreate");
-            }
-        });
+        root.findViewById(R.id.loginRegisterLink).setOnClickListener(v -> FragmentService
+                .getInstance()
+                .load(getActivity(), "CustomerCreate"));
 
-        String savedUsername = SharedService.getInstance().getUsername(getActivity());
-        String savedPassword = SharedService.getInstance().getPassword(getActivity());
+        String savedUsername = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_username));
+        String savedPassword = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_password));
 
         if ((savedUsername != null) && (savedPassword != null))
 
@@ -198,6 +175,7 @@ public class CustomerLogin extends Fragment {
                     savedPassword
             );
 
+        ((MainActivity) getActivity()).showMenu(false);
         return root;
     }
 }

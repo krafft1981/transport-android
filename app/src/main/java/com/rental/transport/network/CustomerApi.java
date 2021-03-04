@@ -14,10 +14,6 @@ import retrofit2.http.Query;
 public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
-    @GET("/customer/count")
-    public Call<Long> doGetCountCustomerRequest();
-
-    @Headers("Content-Type: application/json")
     @PUT("/customer")
     public Call<Void> doPutUpdateCustomerRequest(
             @Body Customer customer

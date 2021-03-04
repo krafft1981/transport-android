@@ -15,15 +15,16 @@ public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/transport")
-    public Call<List<Calendar>> doGetTransportCalendar(
-            @Query("days") Long[] days,
-            @Query("transport_id") Long transportId
+    public Call<List<Calendar>> doGetCustomerTransportCalendar(
+            @Query("transport_id") Long transportId,
+            @Query("customer_id") Long customerId,
+            @Query("day") Long day
     );
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/customer")
     public Call<List<Calendar>> doGetCustomerCalendar(
-            @Query("days") Long[] days
+            @Query("day") Long day
     );
 
     @Headers("Content-Type: application/json")

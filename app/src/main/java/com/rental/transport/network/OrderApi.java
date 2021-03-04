@@ -15,8 +15,9 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @POST("/order")
-    public Call<Long> doPostOrderRequest(
+    public Call<Void> doPostOrderRequest(
             @Query("transport_id") Long transportId,
+            @Query("day") Long day,
             @Query("start_at") Long startAt,
             @Query("stop_at") Long stopAt
     );

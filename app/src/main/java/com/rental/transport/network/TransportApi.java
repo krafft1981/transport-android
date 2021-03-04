@@ -46,9 +46,6 @@ public interface TransportApi {
             @Body Transport transport
     );
 
-    @GET("/transport/count")
-    public Call<Long> doGetTransportCount();
-
     @GET("/transport/parking")
     public Call<List<Transport>> doGetParkingTransport(
             @Query("parking_id") Long parkingId

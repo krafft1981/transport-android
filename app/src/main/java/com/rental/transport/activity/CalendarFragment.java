@@ -49,11 +49,10 @@ public class CalendarFragment extends Fragment {
                 .getInstance()
                 .showProgress(getActivity(), getString(R.string.calendar_loading));
 
-        Long days[] = {day.getTime()};
         NetworkService
                 .getInstance()
                 .getCalendarApi()
-                .doGetCustomerCalendar(days)
+                .doGetCustomerCalendar(day.getTime())
                 .enqueue(new Callback<List<com.rental.transport.model.Calendar>>() {
                     @Override
                     public void onResponse(Call<List<com.rental.transport.model.Calendar>> call, Response<List<com.rental.transport.model.Calendar>> response) {
@@ -121,6 +120,8 @@ public class CalendarFragment extends Fragment {
         root.findViewById(R.id.calendarDay).setOnClickListener(v -> {
             frame.removeAllViews();
             CalendarView cv = new CalendarView(getContext());
+            cv.setDateTextAppearance(android.R.style.TextAppearance_DeviceDefault_Medium);
+            cv.setWeekDayTextAppearance(android.R.style.TextAppearance_DeviceDefault_Medium);
             cv.setDate(currentDate.getTime());
             cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
                 currentDate = new Date(year - 1900, month, dayOfMonth + 1);

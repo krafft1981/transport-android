@@ -21,7 +21,4 @@ public interface TypeApi {
     public Call<Long> doPostType(
             @Query("name") Integer name
     );
-
-    @GET("/type/count")
-    public Call<Long> doGetTypeCount();
 }

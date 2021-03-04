@@ -1,70 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp"
-    android:background="@drawable/background"
-    android:orientation="vertical"
-    android:padding="1dp">
+    android:background="@drawable/background">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="1dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:text="Создание"
-            android:textSize="14sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/calendarType"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:text="Создание"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/calendarType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="1dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:padding="1dp"
-            android:textSize="14sp" />
+            android:dateTextAppearance="@android:style/TextAppearance.Medium"
+            android:selectedWeekBackgroundColor="#ff0000"
+            android:weekDayTextAppearance="@android:style/TextAppearance.Medium"
+            android:weekNumberColor="#0000ff"
+            android:weekSeparatorLineColor="#00ff00" />
+
+        <FrameLayout
+            android:id="@+id/timeShow"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+            android:id="@+id/rangeSeekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <!--    https://metanit.com/java/android/4.7.php-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Создать" />
+
+            <Button
+                android:id="@+id/buttonCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Отменить" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:selectedWeekBackgroundColor="#ff0000"
-        android:weekNumberColor="#0000ff"
-        android:weekSeparatorLineColor="#00ff00" />
-
-    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-        android:id="@+id/rangeSeekbar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
-    <!--    https://metanit.com/java/android/4.7.php-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/buttonOk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Создать" />
-
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Отменить" />
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

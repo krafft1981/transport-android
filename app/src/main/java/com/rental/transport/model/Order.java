@@ -3,8 +3,7 @@ package com.rental.transport.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import lombok.Data;
 
@@ -18,15 +17,15 @@ public class Order {
     @SerializedName("transport")
     private Transport transport;
     @SerializedName("property")
-    private Set<Property> property = new HashSet<>();
+    private List<Property> property = new ArrayList<>();
     @SerializedName("driver")
-    private Set<Customer> driver = new HashSet<>();
+    private List<Customer> driver = new ArrayList<>();
     @SerializedName("event")
-    private Set<Calendar> calendar = new HashSet<>();
+    private List<Calendar> calendar = new ArrayList<>();
     @SerializedName("message")
-    private Set<Message> message = new HashSet<>();
+    private List<Message> message = new ArrayList<>();
     @SerializedName("created_at")
-    private Integer createdAt;
+    private Long createdAt;
     @SerializedName("state")
     private String state;
 }

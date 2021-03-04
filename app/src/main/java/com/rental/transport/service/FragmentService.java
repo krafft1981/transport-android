@@ -25,18 +25,18 @@ public class FragmentService {
     private HashMap<String, Fragment> frags = new HashMap<>();
 
     private FragmentService() {
-        frags.put("CustomerLogin", new CustomerLogin());
-        frags.put("CustomerSettings", new CustomerSettings());
-        frags.put("TransportFragment", new TransportFragment());
-        frags.put("OrdersFragment", new OrdersFragment());
-        frags.put("ParkingFragment", new ParkingFragment());
-        frags.put("MapFragment", new MapFragment());
-        frags.put("CustomerCreate", new CustomerCreate());
-        frags.put("CalendarFragment", new CalendarFragment());
-        frags.put("ParkingDetails", new ParkingDetails());
-        frags.put("TransportDetails", new TransportDetails());
-        frags.put("PictureFragment", new PictureFragment());
-        frags.put("CalendarCreate", new CalendarCreate());
+        frags.put("CustomerLogin",	new CustomerLogin()	);
+        frags.put("CustomerSettings",	new CustomerSettings()	);
+        frags.put("TransportFragment",	new TransportFragment()	);
+        frags.put("OrdersFragment",	new OrdersFragment()	);
+        frags.put("ParkingFragment",	new ParkingFragment()	);
+        frags.put("MapFragment",	new MapFragment()	);
+        frags.put("CustomerCreate",	new CustomerCreate()	);
+        frags.put("CalendarFragment",	new CalendarFragment()	);
+        frags.put("ParkingDetails",	new ParkingDetails()	);
+        frags.put("TransportDetails",	new TransportDetails()	);
+        frags.put("PictureFragment",	new PictureFragment()	);
+        frags.put("CalendarCreate",	new CalendarCreate()	);
     }
 
     public static FragmentService getInstance() {
@@ -67,8 +67,5 @@ public class FragmentService {
                 .replace(R.id.main_activity_container, frags.get(name), name)
                 .addToBackStack(name)
                 .commit();
-    }
-
-    public void back(FragmentActivity activity) {
     }
 }

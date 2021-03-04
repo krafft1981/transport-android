@@ -14,7 +14,6 @@
             android:id="@+id/gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animationDuration="1000"
             android:padding="1dp"
             android:spacing="5dp" />
 

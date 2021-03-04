@@ -40,12 +40,6 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/calendarBody"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/calendarControls" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
@@ -58,4 +52,9 @@
         app:backgroundTint="@color/blue"
         app:fabSize="mini" />
 
+    <FrameLayout
+        android:id="@+id/calendarBody"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/calendarControls" />
 </RelativeLayout>

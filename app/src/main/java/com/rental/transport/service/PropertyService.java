@@ -1,16 +1,18 @@
 package com.rental.transport.service;
 
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TableLayout;
+import android.widget.TextView;
 
+import com.rental.transport.R;
+import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Property;
 import com.rental.transport.validator.IStringValidator;
 import com.rental.transport.validator.ValidatorFactory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PropertyService {
 
@@ -57,44 +59,9 @@ public class PropertyService {
         return factory.getValidator(prop.getType());
     }
 
-    public Set<Property> getPropertyFromTable(TableLayout table) {
+    public List<Property> getPropertyFromList(ListView listView) {
 
-        Set<Property> props = new HashSet<>();
-        for (int id = 0; id < table.getChildCount(); id++) {
-
-//            View row = table.getChildAt(id);
-//            if (row instanceof TableRow) {
-//
-//                TextView field0 = (TextView) ((TableRow) row).getChildAt(0);
-//                TextView field1 = (TextView) ((TableRow) row).getChildAt(1);
-//                TextView field2 = (TextView) ((TableRow) row).getChildAt(2);
-//                TextView field3 = (TextView) ((TableRow) row).getChildAt(3);
-//
-//                if (!field0.getText().equals("Calculated")) {
-//
-//                    ValidatorFactory factory = new ValidatorFactory();
-//                    IStringValidator validator = factory.getValidator(field0.getText().toString());
-//                    if (validator.validate(field3.getText().toString())) {
-//                        Property property = new Property(
-//                                field0.getText().toString(),
-//                                field1.getText().toString(),
-//                                field2.getText().toString(),
-//                                field3.getText().toString()
-//                        );
-//                        props.add(property);
-//                    }
-//                    else {
-//                        field3.requestFocus();
-//                        field3.setError(context.getString(R.string.wrong_data_entered));
-//                    }
-//                }
-//            }
-        }
-
-        return props;
-    }
-
-    public List<Property> getProperty(ListView listView) {
-        return new ArrayList<>();
+        PropertyListAdapter adapter = (PropertyListAdapter)listView.getAdapter();
+        return adapter.getdata();
     }
 }

@@ -30,7 +30,7 @@ public class MemoryService {
 
     @Getter
     @Setter
-    private Map property = new HashMap<String, String>();
+    private Map<String, String> property = new HashMap<String, String>();
 
     private static MemoryService mInstance;
 

@@ -41,8 +41,6 @@ public class CalendarListAdapter extends BaseAdapter {
                 return p1.getStartAt().compareTo(p2.getStartAt());
             }
         });
-
-//        insert free records between busy
     }
 
     public class ViewHolder {
@@ -103,7 +101,7 @@ public class CalendarListAdapter extends BaseAdapter {
 
         Long orderId = calendar.getOrder();
         if (orderId != null) {
-            convertView.setBackgroundColor(Color.CYAN);
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.gray));
 
         }
 

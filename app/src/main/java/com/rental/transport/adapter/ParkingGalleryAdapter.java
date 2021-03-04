@@ -44,6 +44,10 @@ public class ParkingGalleryAdapter extends BaseAdapter {
         ImageService
                 .getInstance()
                 .setImage(context, data, position, R.drawable.unnamed, image);
+
+        image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        image.setAdjustViewBounds(true);
+
         return image;
     }
 }

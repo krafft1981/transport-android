@@ -1,13 +1,8 @@
 package com.rental.transport.service;
 
-import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.rental.transport.R;
 import com.rental.transport.activity.CalendarCreate;
 import com.rental.transport.activity.CalendarFragment;

@@ -5,15 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rental.transport.R;
-import com.rental.transport.model.Property;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.ImageService;
+import com.rental.transport.service.PropertyService;
 
 import java.util.List;
 
@@ -70,13 +68,23 @@ public class TransportListAdapter extends BaseAdapter {
 
         Transport transport = data.get(position);
 
+        holder.type.setText(transport.getType().getName());
+        holder.name.setText(
+                PropertyService
+                        .getInstance()
+                        .getValue(transport.getProperty(), "name")
+        );
+
+        holder.cost.setText(
+                PropertyService
+                        .getInstance()
+                        .getValue(transport.getProperty(), "cost")
+        );
+
+
         ImageService
                 .getInstance()
                 .setImage(context, transport.getImage(), position, R.drawable.transport, holder.image);
-
-        holder.type.setText(transport.getType().getName());
-        holder.name.setText("Название");
-        holder.cost.setText("1800");
 
         return convertView;
     }

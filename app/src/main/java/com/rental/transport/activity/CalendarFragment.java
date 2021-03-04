@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.adapter.CalendarListAdapter;
 import com.rental.transport.service.FragmentService;
@@ -102,6 +103,7 @@ public class CalendarFragment extends Fragment {
             calendar12.add(Calendar.DATE, -1);
             currentDate = calendar12.getTime();
             date.setText(dateFormatter.format(currentDate));
+
             showDayEvents(frame, currentDate);
         });
 
@@ -112,6 +114,7 @@ public class CalendarFragment extends Fragment {
             calendar1.add(Calendar.DATE, 1);
             currentDate = calendar1.getTime();
             date.setText(dateFormatter.format(currentDate));
+
             showDayEvents(frame, currentDate);
         });
 
@@ -120,14 +123,15 @@ public class CalendarFragment extends Fragment {
             CalendarView cv = new CalendarView(getContext());
             cv.setDate(currentDate.getTime());
             cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                currentDate = new Date(year - 1900, month, dayOfMonth);
+                currentDate = new Date(year - 1900, month, dayOfMonth + 1);
                 date.setText(dateFormatter.format(currentDate));
                 showDayEvents(frame, currentDate);
             });
             frame.addView(cv);
         });
 
-        root.findViewById(R.id.floating_action_button).setOnClickListener(v -> {
+        FloatingActionButton fab = root.findViewById(R.id.floating_action_button);
+        fab.setOnClickListener(v -> {
 
             MemoryService
                     .getInstance()
@@ -136,6 +140,8 @@ public class CalendarFragment extends Fragment {
             FragmentService
                     .getInstance()
                     .load(getActivity(), "CalendarCreate");
+
+            showDayEvents(frame, currentDate);
         });
 
         showDayEvents(frame, currentDate);

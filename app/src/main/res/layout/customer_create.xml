@@ -22,14 +22,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -37,11 +38,73 @@
                         android:padding="1dp"
                         android:text="@string/customer_email" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/fieldCustomerEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="введите почту"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:padding="1dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="1dp"
                         android:text="@string/customer_password" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/fieldCustomerPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="введите пароль"
+                        android:inputType="textMultiLine|textNoSuggestions|textPassword"
+                        android:padding="1dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -49,79 +112,59 @@
                         android:padding="1dp"
                         android:text="@string/customer_phone" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/fieldCustomerPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="введите номер сотового"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:padding="1dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="1dp"
                         android:text="@string/customer_fio" />
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:text="-" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:text="-" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:text="-" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:text="-" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/fieldCustomerEmail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="1dp"
-                        android:text="" />
-
-                    <EditText
-                        android:id="@+id/fieldCustomerPassword"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:hint="@string/customer_password"
-                        android:inputType="textPassword"
-                        android:padding="1dp"
-                        android:text="" />
-
-
-                    <EditText
-                        android:id="@+id/fieldCustomerPhone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:text="" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/fieldCustomerFio"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:text="" />
-
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="введите как вас зовут"
+                        android:inputType="textMultiLine|textNoSuggestions"
+                        android:padding="1dp" />
                 </LinearLayout>
             </LinearLayout>
 

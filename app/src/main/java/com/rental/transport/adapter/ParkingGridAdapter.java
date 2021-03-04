@@ -26,6 +26,12 @@ public class ParkingGridAdapter extends BaseAdapter {
         this.data = data;
     }
 
+    public class ViewHolder {
+        ImageView image;
+        TextView name;
+        TextView address;
+    }
+
     @Override
     public int getCount() {
         return data.size();
@@ -42,31 +48,40 @@ public class ParkingGridAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int id, View view, ViewGroup viewGroup) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View item = inflater.inflate(R.layout.parking_element, null);
+        ParkingGridAdapter.ViewHolder holder;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.parking_element, parent, false);
+            holder = new ParkingGridAdapter.ViewHolder();
 
-        Parking parking = data.get(id);
-        TextView name = item.findViewById(R.id.parkingName);
-        name.setText(
+            holder.image = convertView.findViewById(R.id.gridviewImage);
+            holder.name = convertView.findViewById(R.id.parkingName);
+            holder.address = convertView.findViewById(R.id.parkingAddress);
+            convertView.setTag(holder);
+        } else {
+            holder = (ParkingGridAdapter.ViewHolder) convertView.getTag();
+        }
+
+        Parking parking = data.get(position);
+
+        holder.name.setText(
                 PropertyService
                         .getInstance()
                         .getValue(parking.getProperty(), "name")
         );
 
-        TextView address = item.findViewById(R.id.parkingAddress);
-        address.setText(
+        holder.address.setText(
                 PropertyService
                         .getInstance()
                         .getValue(parking.getProperty(), "address")
         );
 
-        ImageView image = item.findViewById(R.id.gridviewImage);
         ImageService
                 .getInstance()
-                .setImage(context, parking.getImage(), R.drawable.unnamed, image);
+                .setImage(context, parking.getImage(), position, R.drawable.transport, holder.image);
 
-        return item;
+        return convertView;
     }
 }

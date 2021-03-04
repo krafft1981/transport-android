@@ -14,7 +14,6 @@
             android:id="@+id/gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animationDuration="1000"
             android:padding="1dp"
             android:spacing="5dp" />
 
@@ -30,6 +29,22 @@
             android:id="@+id/property"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="bold"
+            android:gravity="center"
+            android:text="Транспорт на стоянке"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <com.rental.transport.views.MyListView
             android:id="@+id/transport"

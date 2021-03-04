@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="1dp">
@@ -17,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="№ сверху"
+            android:text="№"
             android:textSize="14sp"
             android:textStyle="normal|bold" />
     </LinearLayout>
@@ -25,9 +26,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginLeft="5dp"
         android:layout_weight=".4"
-        android:layout_gravity="center"
         android:orientation="vertical">
 
         <TextView

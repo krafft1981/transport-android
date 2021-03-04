@@ -1,6 +1,5 @@
 package com.rental.transport.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,7 +86,21 @@ public class ParkingDetails extends Fragment {
                     .load(getActivity(), "PictureFragment");
         });
 
-        loadTransport(root.findViewById(R.id.transport), parking.getId());
+        ListView transportList = root.findViewById(R.id.transport);
+        loadTransport(transportList, parking.getId());
+        transportList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MemoryService.getInstance().setTransport(
+                        (Transport) parent
+                                .getAdapter()
+                                .getItem(position)
+                );
+
+                FragmentService
+                        .getInstance()
+                        .load(getActivity(), "TransportDetails");
+            }
+        });
 
         PropertyListAdapter adapter = new PropertyListAdapter(getContext(), parking.getProperty(), editable);
         listView.setAdapter(adapter);
@@ -97,6 +110,40 @@ public class ParkingDetails extends Fragment {
         map.setOnClickListener(v -> FragmentService
                 .getInstance()
                 .load(getActivity(), "MapFragment"));
+
+        if (editable) {
+            Button action = new Button(getContext());
+            action.setText(getString(R.string.save));
+            action.setOnClickListener(v -> {
+
+                parking.setProperty(
+                        PropertyService
+                                .getInstance()
+                                .getPropertyFromList(listView)
+                );
+
+                ProgresService.getInstance().showProgress(getContext(), getString(R.string.parking_saving));
+                NetworkService
+                        .getInstance()
+                        .getParkingApi()
+                        .doPutParking(parking)
+                        .enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                ProgresService.getInstance().hideProgress();
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                ProgresService.getInstance().hideProgress();
+                                Toast
+                                        .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
+            });
+            buttonLayout.addView(action);
+        }
         buttonLayout.addView(map);
 
         return root;

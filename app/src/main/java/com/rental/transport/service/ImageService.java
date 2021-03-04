@@ -35,12 +35,6 @@ public class ImageService {
         return new File(context.getCacheDir(), imageId.toString());
     }
 
-    private void setImageProperty(ImageView image) {
-
-        image.setAdjustViewBounds(true);
-        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    }
-
     private Boolean setImageFromCache(Context context, Long imageId, ImageView image) {
 
         File file = getFile(context, imageId);
@@ -49,7 +43,6 @@ public class ImageService {
 
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
         image.setImageBitmap(bitmap);
-        setImageProperty(image);
         return true;
     }
 
@@ -66,13 +59,11 @@ public class ImageService {
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         image.setImageBitmap(bitmap);
-        setImageProperty(image);
     }
 
     public void setImage(Context context, Long imageId, int defaultImage, ImageView image) {
 
         if (imageId == Long.MIN_VALUE) {
-            setImageProperty(image);
             image.setImageResource(defaultImage);
             image.invalidate();
             return;

@@ -7,137 +7,44 @@
     android:orientation="vertical"
     android:padding="1dp">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="1dp"
-        android:text="Добавление события"
-        android:textSize="14sp" />
-
-    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-        android:id="@+id/rangeSeekbar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="00:00"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:text="Создание"
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/calendarType"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="02:00"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:padding="1dp"
             android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="04:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="06:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="08:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="10:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="12:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="14:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="16:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="18:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="20:00"
-            android:textSize="14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:rotation="-90"
-            android:text="22:00"
-            android:textSize="14sp" />
-
     </LinearLayout>
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:selectedWeekBackgroundColor="#ff0000"
+        android:weekNumberColor="#0000ff"
+        android:weekSeparatorLineColor="#00ff00" />
+
+    <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
+        android:id="@+id/rangeSeekbar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
 
     <!--    https://metanit.com/java/android/4.7.php-->
 

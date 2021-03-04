@@ -68,4 +68,7 @@ public class FragmentService {
                 .addToBackStack(name)
                 .commit();
     }
+
+    public void back(FragmentActivity activity) {
+    }
 }

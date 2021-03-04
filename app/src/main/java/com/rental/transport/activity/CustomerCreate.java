@@ -129,7 +129,6 @@ public class CustomerCreate extends Fragment {
                                     .show();
                         }
                     });
-
         });
 
         return root;

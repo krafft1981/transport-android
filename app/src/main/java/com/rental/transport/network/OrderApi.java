@@ -17,19 +17,20 @@ public interface OrderApi {
     @POST("/order")
     public Call<Long> doPostOrderRequest(
             @Query("transport_id") Long transportId,
-            @Query("calendar_id") Long[] calendarIds
+            @Query("start_at") Long startAt,
+            @Query("stop_at") Long stopAt
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/page")
-    public Call <List<Order>> doGetPagesOrderRequest(
+    public Call<List<Order>> doGetPagesOrderRequest(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/time")
-    public Call <List<Order>> doGetTimesOrderRequest(
+    public Call<List<Order>> doGetTimesOrderRequest(
             @Query("calendar_id") Long[] calendarIds
     );
 

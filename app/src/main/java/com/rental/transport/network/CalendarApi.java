@@ -14,10 +14,6 @@ import retrofit2.http.Query;
 public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
-    @GET("/calendar/count")
-    public Call<Long> doGetCountRequest();
-
-    @Headers("Content-Type: application/json")
     @GET("/calendar/transport")
     public Call<List<Calendar>> doGetTransportCalendar(
             @Query("days") Long[] days,
@@ -33,15 +29,16 @@ public interface CalendarApi {
     @Headers("Content-Type: application/json")
     @PUT("/calendar")
     public Call<Void> doPutOutRequest(
-            @Query("day") Integer day,
-            @Query("start") Integer start,
-            @Query("stop") Integer stop
+            @Query("day") Long day,
+            @Query("start") Long start,
+            @Query("stop") Long stop
     );
 
     @Headers("Content-Type: application/json")
     @DELETE("/calendar")
     public Call<Void> doDeleteOutRequest(
-            @Query("start") Integer start,
-            @Query("stop") Integer stop
+            @Query("day") Long day,
+            @Query("start") Long start,
+            @Query("stop") Long stop
     );
 }

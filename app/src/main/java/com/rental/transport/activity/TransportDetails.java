@@ -39,8 +39,7 @@ public class TransportDetails extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.transport_details, container, false);
 
@@ -51,30 +50,19 @@ public class TransportDetails extends Fragment {
         gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(transport.getImage().get(position));
-            FragmentService
-                    .getInstance()
-                    .load(getActivity(), "PictureFragment");
+            FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
         Boolean editable = transport.getCustomer().contains(customer.getId());
 
         ListView listView = root.findViewById(R.id.property);
         LinearLayout linearLayout = root.findViewById(R.id.buttonLayout);
-
-        PropertyListAdapter adapter = new PropertyListAdapter(getContext(), transport.getProperty(), editable);
-        listView.setAdapter(adapter);
-
+        listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), editable));
         Button action = new Button(getContext());
         if (editable) {
             action.setText(getString(R.string.save));
             action.setOnClickListener(v -> {
-
-                transport.setProperty(
-                        PropertyService
-                        .getInstance()
-                        .getPropertyFromList(listView)
-                );
-
+                transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
                 ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                 NetworkService
                         .getInstance()
@@ -95,22 +83,15 @@ public class TransportDetails extends Fragment {
                             }
                         });
             });
-        }
-        else {
+        } else {
             action.setText(getString(R.string.toOrder));
             action.setOnClickListener(v -> {
-                MemoryService
-                        .getInstance()
-                        .getProperty().put("useTransport", "yes");
-
-                FragmentService
-                        .getInstance()
-                        .load(getActivity(), "CalendarCreate");
+                MemoryService.getInstance().getProperty().put("useTransport", "yes");
+                FragmentService.getInstance().load(getActivity(), "CalendarCreate");
             });
         }
 
         linearLayout.addView(action);
-
         return root;
     }
 }

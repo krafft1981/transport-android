@@ -20,7 +20,7 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.views.FreeTime;
+import com.rental.transport.views.RectangleView;
 
 import java.util.Date;
 import java.util.List;
@@ -41,16 +41,25 @@ public class CalendarCreate extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void buildTimeLines(FrameLayout timeShow) {
+    private void drawTimeLine(FrameLayout timeShow, List<Calendar> data) {
+
+        timeShow.removeAllViews();
+        View rectangle = new RectangleView(getContext(), Color.GREEN);
+        ViewGroup.LayoutParams params = rectangle.getLayoutParams();
+        params.height = 50;
+        params.width = 100;
+        rectangle.setLayoutParams(params);
+        timeShow.addView(rectangle);
+        timeShow.invalidate();
+    }
+
+    private void refreshViews(FrameLayout timeShow) {
 
         Customer customer = MemoryService.getInstance().getCustomer();
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
 
-        if (MemoryService
-                .getInstance()
-                .getProperty().get("useTransport").equals("no")) {
-
+        if (!makeOrder) {
             NetworkService
                     .getInstance()
                     .getCalendarApi()
@@ -59,11 +68,8 @@ public class CalendarCreate extends Fragment {
                         @Override
                         public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
                             ProgresService.getInstance().hideProgress();
-//                            if (response.isSuccessful()) {
-                                timeShow.removeAllViews();
-                                timeShow.addView(new FreeTime(getContext(), response.body(), Color.RED, Color.GREEN));
-                                timeShow.invalidate();
-//                            }
+                            if (response.isSuccessful())
+                                drawTimeLine(timeShow, response.body());
                         }
 
                         @Override
@@ -85,11 +91,8 @@ public class CalendarCreate extends Fragment {
                         @Override
                         public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
                             ProgresService.getInstance().hideProgress();
-//                            if (response.isSuccessful()) {
-                                timeShow.removeAllViews();
-                                timeShow.addView(new FreeTime(getContext(), response.body(), Color.RED, Color.GREEN));
-                                timeShow.invalidate();
-//                            }
+                            if (response.isSuccessful())
+                                drawTimeLine(timeShow, response.body());
                         }
 
                         @Override
@@ -119,7 +122,7 @@ public class CalendarCreate extends Fragment {
         CalendarView calendarView = root.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             currentDate = new Date(year - 1900, month, dayOfMonth + 1).getTime();
-            buildTimeLines(timeShow);
+            refreshViews(timeShow);
         });
 
         root.findViewById(R.id.buttonOk).setOnClickListener(v -> {
@@ -135,9 +138,8 @@ public class CalendarCreate extends Fragment {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 ProgresService.getInstance().hideProgress();
-//                                if (response.isSuccessful()) {
-                                    buildTimeLines(timeShow);
-//                                }
+                                if (response.isSuccessful())
+                                    refreshViews(timeShow);
                             }
 
                             @Override
@@ -158,9 +160,8 @@ public class CalendarCreate extends Fragment {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 ProgresService.getInstance().hideProgress();
-//                                if (response.isSuccessful()) {
-                                    buildTimeLines(timeShow);
-//                                }
+                                if (response.isSuccessful())
+                                    refreshViews(timeShow);
                             }
 
                             @Override
@@ -186,7 +187,7 @@ public class CalendarCreate extends Fragment {
                         .load(getActivity(), "CalendarFragment");
         });
 
-        buildTimeLines(timeShow);
+        refreshViews(timeShow);
         return root;
     }
 }

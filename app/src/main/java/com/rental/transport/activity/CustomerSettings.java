@@ -50,9 +50,7 @@ public class CustomerSettings extends Fragment {
         gallery.setAdapter(new ParkingGalleryAdapter(getContext(), customer.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(customer.getImage().get(position));
-            FragmentService
-                    .getInstance()
-                    .load(getActivity(), "PictureFragment");
+            FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
         LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
@@ -67,13 +65,7 @@ public class CustomerSettings extends Fragment {
         Button action = new Button(getContext());
         action.setText(getString(R.string.save));
         action.setOnClickListener(v -> {
-
-            customer.setProperty(
-                    PropertyService
-                            .getInstance()
-                            .getPropertyFromList(listView)
-            );
-
+            customer.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService
                     .getInstance()

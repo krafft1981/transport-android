@@ -46,7 +46,7 @@
         <FrameLayout
             android:id="@+id/timeShow"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="200dp" />
 
         <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
             android:id="@+id/rangeSeekbar"

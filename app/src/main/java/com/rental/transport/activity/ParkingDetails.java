@@ -46,9 +46,8 @@ public class ParkingDetails extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful())
                             listView.setAdapter(new TransportListAdapter(getActivity(), response.body()));
-                        }
                     }
 
                     @Override
@@ -90,15 +89,8 @@ public class ParkingDetails extends Fragment {
         loadTransport(transportList, parking.getId());
         transportList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MemoryService.getInstance().setTransport(
-                        (Transport) parent
-                                .getAdapter()
-                                .getItem(position)
-                );
-
-                FragmentService
-                        .getInstance()
-                        .load(getActivity(), "TransportDetails");
+                MemoryService.getInstance().setTransport((Transport) parent.getAdapter().getItem(position));
+                FragmentService.getInstance().load(getActivity(), "TransportDetails");
             }
         });
 
@@ -107,21 +99,13 @@ public class ParkingDetails extends Fragment {
 
         Button map = new Button(getContext());
         map.setText(getString(R.string.map));
-        map.setOnClickListener(v -> FragmentService
-                .getInstance()
-                .load(getActivity(), "MapFragment"));
+        map.setOnClickListener(v -> FragmentService.getInstance().load(getActivity(), "MapFragment"));
 
         if (editable) {
             Button action = new Button(getContext());
             action.setText(getString(R.string.save));
             action.setOnClickListener(v -> {
-
-                parking.setProperty(
-                        PropertyService
-                                .getInstance()
-                                .getPropertyFromList(listView)
-                );
-
+                parking.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
                 ProgresService.getInstance().showProgress(getContext(), getString(R.string.parking_saving));
                 NetworkService
                         .getInstance()
@@ -145,7 +129,6 @@ public class ParkingDetails extends Fragment {
             buttonLayout.addView(action);
         }
         buttonLayout.addView(map);
-
         return root;
     }
 }

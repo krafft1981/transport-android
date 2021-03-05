@@ -44,10 +44,8 @@ public class ParkingFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<List<Parking>> call, @NonNull Response<List<Parking>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            ParkingGridAdapter adapter = new ParkingGridAdapter(getActivity(), response.body());
-                            grid.setAdapter(adapter);
-                        }
+                        if (response.isSuccessful())
+                            grid.setAdapter(new ParkingGridAdapter(getActivity(), response.body()));
                     }
 
                     @Override
@@ -72,13 +70,8 @@ public class ParkingFragment extends Fragment {
         View root = inflater.inflate(R.layout.parking_fragment, container, false);
         GridView grid = root.findViewById(R.id.parkingGridView);
         grid.setOnItemClickListener((parent, v, position, id) -> {
-            MemoryService
-                    .getInstance()
-                    .setParking((Parking) parent.getAdapter().getItem(position));
-
-            FragmentService
-                    .getInstance()
-                    .load(getActivity(), "ParkingDetails");
+            MemoryService.getInstance().setParking((Parking) parent.getAdapter().getItem(position));
+            FragmentService.getInstance().load(getActivity(), "ParkingDetails");
         });
 
         grid.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -86,6 +79,7 @@ public class ParkingFragment extends Fragment {
             public void onScrollStateChanged(AbsListView absListView, int i) {
 
             }
+
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 

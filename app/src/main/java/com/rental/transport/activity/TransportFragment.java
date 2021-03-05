@@ -42,11 +42,8 @@ public class TransportFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            List<Transport> transport = response.body();
-                            TransportGridAdapter adapter = new TransportGridAdapter(getActivity(), transport);
-                            grid.setAdapter(adapter);
-                        }
+                        if (response.isSuccessful())
+                            grid.setAdapter(new TransportGridAdapter(getActivity(), response.body()));
                     }
 
                     @Override
@@ -65,23 +62,14 @@ public class TransportFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.transport_fragment, container, false);
         GridView grid = root.findViewById(R.id.gridview);
 
         grid.setOnItemClickListener((parent, v, position, id) -> {
-
-            MemoryService.getInstance().setTransport(
-                    (Transport) parent
-                            .getAdapter()
-                            .getItem(position)
-            );
-
-            FragmentService
-                    .getInstance()
-                    .load(getActivity(), "TransportDetails");
+            MemoryService.getInstance().setTransport((Transport) parent.getAdapter().getItem(position));
+            FragmentService.getInstance().load(getActivity(), "TransportDetails");
         });
 
         grid.setOnScrollListener(new AbsListView.OnScrollListener() {

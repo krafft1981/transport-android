@@ -51,10 +51,8 @@ public class OrdersFragment extends Fragment {
                     public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
 
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            OrderListAdapter adapter = new OrderListAdapter(getActivity(), response.body());
-                            orderList.setAdapter(adapter);
-                        }
+                        if (response.isSuccessful())
+                            orderList.setAdapter(new OrderListAdapter(getActivity(), response.body()));
                     }
 
                     @Override

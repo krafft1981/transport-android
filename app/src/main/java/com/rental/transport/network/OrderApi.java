@@ -30,18 +30,15 @@ public interface OrderApi {
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/order/time")
-    public Call<List<Order>> doGetTimesOrderRequest(
-            @Query("calendar_id") Long[] calendarIds
-    );
-
-    @Headers("Content-Type: application/json")
     @GET("/order/request")
     public Call<List<Long>> doGetOrderRequest();
 
     @Headers("Content-Type: application/json")
     @GET("/order/client")
-    public Call<List<Order>> doGetCustomerOrders();
+    public Call<List<Order>> doGetCustomerOrders(
+            @Query("page") Integer page,
+            @Query("size") Integer size
+    );
 
     @Headers("Content-Type: application/json")
     @POST("/order/confirm")

@@ -1,79 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp"
     android:background="@drawable/background">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="1dp">
-
-        <com.rental.transport.views.MyGallery
-            android:id="@+id/gallery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animationDuration="1000"
-            android:padding="1dp"
-            android:spacing="5dp" />
-
-        <com.rental.transport.views.MyListView
-            android:id="@+id/property"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/buttonLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="1dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="1dp">
 
-        <!--    https://habr.com/ru/company/nix/blog/369097/-->
+            <com.rental.transport.views.MyGallery
+                android:id="@+id/gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animationDuration="1000"
+                android:padding="1dp"
+                android:spacing="5dp" />
 
-        <!--        <android.support.design.widget.FloatingActionButton-->
-        <!--            android:id="@+id/fab"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="bottom|end"-->
-        <!--            android:layout_margin="@dimen/fab_margin"-->
-        <!--            android:src="@android:drawable/ic_menu_help"-->
-        <!--            />-->
+            <com.rental.transport.views.MyListView
+                android:id="@+id/property"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!--        <android.support.design.widget.FloatingActionButton-->
-        <!--            android:id="@+id/fab_1"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="bottom|end"-->
-        <!--            android:layout_margin="@dimen/fab_margin"-->
-        <!--            android:src="@android:drawable/ic_menu_compass"-->
-        <!--            android:visibility="visible"-->
-        <!--            app:backgroundTint="@color/blue"-->
-        <!--            app:fabSize="mini" />-->
+        </LinearLayout>
+    </ScrollView>
 
-        <!--        <android.support.design.widget.FloatingActionButton-->
-        <!--            android:id="@+id/fab_2"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="bottom|end"-->
-        <!--            android:layout_margin="@dimen/fab_margin"-->
-        <!--            android:src="@android:drawable/ic_menu_myplaces"-->
-        <!--            android:visibility="visible"-->
-        <!--            app:backgroundTint="@color/blue"-->
-        <!--            app:fabSize="mini" />-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_menu_compass"
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
 
-        <!--        <android.support.design.widget.FloatingActionButton-->
-        <!--            android:id="@+id/fab_3"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="bottom|end"-->
-        <!--            android:layout_margin="@dimen/fab_margin"-->
-        <!--            android:src="@android:drawable/ic_menu_share"-->
-        <!--            android:visibility="visible"-->
-        <!--            app:backgroundTint="@color/blue"-->
-        <!--            app:fabSize="mini" />-->
-    </LinearLayout>
-</ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_menu_save"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_exit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_lock_power_off"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+</RelativeLayout>

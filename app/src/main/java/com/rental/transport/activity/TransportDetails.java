@@ -4,27 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Gallery;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.adapter.TransportGalleryAdapter;
 import com.rental.transport.model.Customer;
-import com.rental.transport.model.Property;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
-
-import java.util.List;
 
 import lombok.NonNull;
 import retrofit2.Call;
@@ -56,12 +52,16 @@ public class TransportDetails extends Fragment {
         Boolean editable = transport.getCustomer().contains(customer.getId());
 
         ListView listView = root.findViewById(R.id.property);
-        LinearLayout linearLayout = root.findViewById(R.id.buttonLayout);
         listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), editable));
-        Button action = new Button(getContext());
-        if (editable) {
-            action.setText(getString(R.string.save));
-            action.setOnClickListener(v -> {
+
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        if (editable)
+            fab.setImageResource(android.R.drawable.ic_menu_save);
+        else
+            fab.setImageResource(android.R.drawable.ic_menu_today);
+
+        fab.setOnClickListener(view -> {
+            if (editable) {
                 transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
                 ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                 NetworkService
@@ -82,16 +82,12 @@ public class TransportDetails extends Fragment {
                                         .show();
                             }
                         });
-            });
-        } else {
-            action.setText(getString(R.string.toOrder));
-            action.setOnClickListener(v -> {
+            } else {
                 MemoryService.getInstance().getProperty().put("useTransport", "yes");
                 FragmentService.getInstance().load(getActivity(), "CalendarCreate");
-            });
-        }
+            }
+        });
 
-        linearLayout.addView(action);
         return root;
     }
 }

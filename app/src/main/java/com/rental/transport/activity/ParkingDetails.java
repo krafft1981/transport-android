@@ -4,15 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
+import android.view.animation.AnimationUtils;
 import android.widget.Gallery;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.adapter.ParkingGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
@@ -25,6 +24,7 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
+import com.rental.transport.views.FabExpander;
 
 import java.util.List;
 
@@ -34,6 +34,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ParkingDetails extends Fragment {
+
+    private FabExpander expander_add;
+    private FabExpander expander_sub;
+    private FabExpander expander_save;
+
+    private boolean fabStatus;
 
     private void loadTransport(ListView listView, Long parkingId) {
 
@@ -69,42 +75,70 @@ public class ParkingDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        fabStatus = false;
+
         View root = inflater.inflate(R.layout.parking_details, container, false);
         Parking parking = MemoryService.getInstance().getParking();
         Customer customer = MemoryService.getInstance().getCustomer();
         ListView listView = root.findViewById(R.id.property);
-        LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
         Boolean editable = parking.getCustomer().contains(customer.getId());
 
         Gallery gallery = root.findViewById(R.id.gallery);
         gallery.setAdapter(new ParkingGalleryAdapter(getContext(), parking.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(parking.getImage().get(position));
-            FragmentService
-                    .getInstance()
-                    .load(getActivity(), "PictureFragment");
+            FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
         ListView transportList = root.findViewById(R.id.transport);
         loadTransport(transportList, parking.getId());
-        transportList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MemoryService.getInstance().setTransport((Transport) parent.getAdapter().getItem(position));
-                FragmentService.getInstance().load(getActivity(), "TransportDetails");
-            }
+        transportList.setOnItemClickListener((parent, view, position, id) -> {
+            MemoryService.getInstance().setTransport((Transport) parent.getAdapter().getItem(position));
+            FragmentService.getInstance().load(getActivity(), "TransportDetails");
         });
 
-        PropertyListAdapter adapter = new PropertyListAdapter(getContext(), parking.getProperty(), editable);
-        listView.setAdapter(adapter);
-
-        Button map = new Button(getContext());
-        map.setText(getString(R.string.map));
-        map.setOnClickListener(v -> FragmentService.getInstance().load(getActivity(), "MapFragment"));
+        listView.setAdapter(new PropertyListAdapter(getContext(), parking.getProperty(), editable));
+        root.findViewById(R.id.buttonMap).setOnClickListener(v -> FragmentService.getInstance().load(getActivity(), "MapFragment"));
 
         if (editable) {
-            Button action = new Button(getContext());
-            action.setText(getString(R.string.save));
-            action.setOnClickListener(v -> {
+            expander_add = new FabExpander(
+                    root.findViewById(R.id.floating_action_add_button),
+                    AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
+                    AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
+                    1.7, 0.25
+            );
+
+            expander_sub = new FabExpander(
+                    root.findViewById(R.id.floating_action_sub_button),
+                    AnimationUtils.loadAnimation(getContext(), R.anim.fab_middle_show),
+                    AnimationUtils.loadAnimation(getContext(), R.anim.fab_middle_hide),
+                    1.5, 1.5
+            );
+
+            expander_save = new FabExpander(
+                    root.findViewById(R.id.floating_action_save_button),
+                    AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
+                    AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
+                    0.25, 1.7
+            );
+
+            FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(view -> {
+                if (fabStatus) {
+                    expander_add.hide();
+                    expander_sub.hide();
+                    expander_save.hide();
+                    fabStatus = false;
+                } else {
+                    expander_add.expand();
+                    expander_sub.expand();
+                    expander_save.expand();
+                    fabStatus = true;
+                }
+            });
+
+            expander_save.fab.setOnClickListener(view -> {
                 parking.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
                 ProgresService.getInstance().showProgress(getContext(), getString(R.string.parking_saving));
                 NetworkService
@@ -126,9 +160,20 @@ public class ParkingDetails extends Fragment {
                             }
                         });
             });
-            buttonLayout.addView(action);
+
+            expander_add.fab.setOnClickListener(view -> {
+                Toast
+                        .makeText(getActivity(), getString(R.string.forbidden), Toast.LENGTH_LONG)
+                        .show();
+            });
+
+            expander_sub.fab.setOnClickListener(view -> {
+                Toast
+                        .makeText(getActivity(), getString(R.string.forbidden), Toast.LENGTH_LONG)
+                        .show();
+            });
         }
-        buttonLayout.addView(map);
+
         return root;
     }
 }

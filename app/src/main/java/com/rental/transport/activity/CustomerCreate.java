@@ -28,9 +28,8 @@ public class CustomerCreate extends Fragment {
     private Boolean isValidEmail(EditText text) {
 
         IStringValidator validator = new EmailValidator();
-        if (validator.validate(text.getText().toString())) {
+        if (validator.validate(text.getText().toString()))
             return true;
-        }
 
         text.requestFocus();
         text.setError(getString(R.string.wrong_data_entered));
@@ -39,9 +38,8 @@ public class CustomerCreate extends Fragment {
 
     private Boolean isValidPassword(EditText text) {
         IStringValidator validator = new PasswordValidator();
-        if (validator.validate(text.getText().toString())) {
+        if (validator.validate(text.getText().toString()))
             return true;
-        }
 
         text.requestFocus();
         text.setError(getString(R.string.wrong_data_entered));
@@ -50,9 +48,8 @@ public class CustomerCreate extends Fragment {
 
     private Boolean isValidPhone(EditText text) {
         IStringValidator validator = new PhoneValidator();
-        if (validator.validate(text.getText().toString())) {
+        if (validator.validate(text.getText().toString()))
             return true;
-        }
 
         text.requestFocus();
         text.setError(getString(R.string.wrong_data_entered));
@@ -61,9 +58,8 @@ public class CustomerCreate extends Fragment {
 
     private Boolean isValidFio(EditText text) {
         IStringValidator validator = new PasswordValidator();
-        if (validator.validate(text.getText().toString())) {
+        if (validator.validate(text.getText().toString()))
             return true;
-        }
 
         text.requestFocus();
         text.setError(getString(R.string.wrong_data_entered));

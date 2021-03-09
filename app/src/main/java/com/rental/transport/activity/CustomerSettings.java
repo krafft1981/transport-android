@@ -4,14 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.AnimationUtils;
 import android.widget.Gallery;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.adapter.ParkingGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
@@ -22,6 +22,7 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 import com.rental.transport.service.SharedService;
+import com.rental.transport.views.FabExpander;
 
 import lombok.NonNull;
 import retrofit2.Call;
@@ -29,6 +30,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CustomerSettings extends Fragment {
+
+    private FabExpander expander_save;
+    private FabExpander expander_exit;
+
+    private boolean fabStatus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,8 @@ public class CustomerSettings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        fabStatus = false;
 
         Customer customer = MemoryService.getInstance().getCustomer();
 
@@ -53,18 +61,34 @@ public class CustomerSettings extends Fragment {
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
-        LinearLayout buttonLayout = root.findViewById(R.id.buttonLayout);
-        Button exit = new Button(getContext());
-        exit.setText(getString(R.string.exit));
-        exit.setOnClickListener(v -> {
-            SharedService.getInstance().clear();
-            FragmentService.getInstance().fragmentHistoryClear(getActivity());
-            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+        expander_save = new FabExpander(
+                root.findViewById(R.id.floating_action_save_button),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
+                1.7, 0.25
+        );
+
+        expander_exit = new FabExpander(
+                root.findViewById(R.id.floating_action_exit_button),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
+                0.25, 1.7
+        );
+
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(view -> {
+            if (fabStatus) {
+                expander_save.hide();
+                expander_exit.hide();
+                fabStatus = false;
+            } else {
+                expander_save.expand();
+                expander_exit.expand();
+                fabStatus = true;
+            }
         });
 
-        Button action = new Button(getContext());
-        action.setText(getString(R.string.save));
-        action.setOnClickListener(v -> {
+        expander_save.fab.setOnClickListener(view -> {
             customer.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService
@@ -86,8 +110,13 @@ public class CustomerSettings extends Fragment {
                         }
                     });
         });
-        buttonLayout.addView(action);
-        buttonLayout.addView(exit);
+
+        expander_exit.fab.setOnClickListener(view -> {
+            SharedService.getInstance().clear();
+            FragmentService.getInstance().fragmentHistoryClear(getActivity());
+            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+        });
+
         return root;
     }
 }

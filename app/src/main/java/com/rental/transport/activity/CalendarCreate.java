@@ -1,10 +1,10 @@
 package com.rental.transport.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Customer;
@@ -20,7 +22,7 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.views.RectangleView;
+import com.rental.transport.views.FabExpander;
 
 import java.util.Date;
 import java.util.List;
@@ -36,6 +38,11 @@ public class CalendarCreate extends Fragment {
     private Long stop = 0L;
     private Boolean makeOrder;
 
+    private FabExpander expander_add;
+    private FabExpander expander_sub;
+
+    private boolean fabStatus;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +50,29 @@ public class CalendarCreate extends Fragment {
 
     private void drawTimeLine(FrameLayout timeShow, List<Calendar> data) {
 
-        timeShow.removeAllViews();
-        View rectangle = new RectangleView(getContext(), Color.GREEN);
-        ViewGroup.LayoutParams params = rectangle.getLayoutParams();
-        params.height = 50;
-        params.width = 100;
-        rectangle.setLayoutParams(params);
-        timeShow.addView(rectangle);
-        timeShow.invalidate();
+//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.MATCH_PARENT
+//        );
+//
+//        timeShow.removeAllViews();
+//        View rectangle1 = new RectangleView(getContext(), Color.GREEN);
+//        rectangle1.setOnClickListener(v -> {
+//            Toast.makeText(getContext(), "Clicked 1", Toast.LENGTH_SHORT).show();
+//        });
+//
+//        rectangle1.setLayoutParams(params);
+//        timeShow.addView(rectangle1);
+//
+//        View rectangle2 = new RectangleView(getContext(), Color.RED);
+//        rectangle2.setOnClickListener(v -> {
+//            Toast.makeText(getContext(), "Clicked 2", Toast.LENGTH_SHORT).show();
+//        });
+//
+//        rectangle2.setLayoutParams(params);
+//        rectangle2.setLeft(40);
+//        timeShow.addView(rectangle2);
+//        timeShow.invalidate();
     }
 
     private void refreshViews(FrameLayout timeShow) {
@@ -68,8 +90,8 @@ public class CalendarCreate extends Fragment {
                         @Override
                         public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
                             ProgresService.getInstance().hideProgress();
-                            if (response.isSuccessful())
-                                drawTimeLine(timeShow, response.body());
+//                            if (response.isSuccessful())
+                            drawTimeLine(timeShow, response.body());
                         }
 
                         @Override
@@ -91,8 +113,8 @@ public class CalendarCreate extends Fragment {
                         @Override
                         public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
                             ProgresService.getInstance().hideProgress();
-                            if (response.isSuccessful())
-                                drawTimeLine(timeShow, response.body());
+//                            if (response.isSuccessful())
+                            drawTimeLine(timeShow, response.body());
                         }
 
                         @Override
@@ -109,9 +131,11 @@ public class CalendarCreate extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        fabStatus = false;
+
         View root = inflater.inflate(R.layout.calendar_create, container, false);
         TextView type = root.findViewById(R.id.calendarType);
-        FrameLayout timeShow = root.findViewById(R.id.timeShow);
+//        FrameLayout timeShow = root.findViewById(R.id.timeShow);
 
         makeOrder = !MemoryService.getInstance().getProperty().get("useTransport").equals("no");
         if (makeOrder)
@@ -122,10 +146,24 @@ public class CalendarCreate extends Fragment {
         CalendarView calendarView = root.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             currentDate = new Date(year - 1900, month, dayOfMonth + 1).getTime();
-            refreshViews(timeShow);
+//            refreshViews(timeShow);
         });
 
-        root.findViewById(R.id.buttonOk).setOnClickListener(v -> {
+        expander_add = new FabExpander(
+                root.findViewById(R.id.floating_action_add_button),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
+                1.7, 0.25
+        );
+
+        expander_sub = new FabExpander(
+                root.findViewById(R.id.floating_action_exit_button),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
+                0.25, 1.7
+        );
+
+        root.findViewById(R.id.floating_action_add_button).setOnClickListener(v -> {
 
             if (makeOrder) {
                 Transport transport = MemoryService.getInstance().getTransport();
@@ -138,8 +176,8 @@ public class CalendarCreate extends Fragment {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 ProgresService.getInstance().hideProgress();
-                                if (response.isSuccessful())
-                                    refreshViews(timeShow);
+//                                if (response.isSuccessful())
+//                                    refreshViews(timeShow);
                             }
 
                             @Override
@@ -160,8 +198,8 @@ public class CalendarCreate extends Fragment {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 ProgresService.getInstance().hideProgress();
-                                if (response.isSuccessful())
-                                    refreshViews(timeShow);
+//                                if (response.isSuccessful())
+//                                    refreshViews(timeShow);
                             }
 
                             @Override
@@ -175,7 +213,20 @@ public class CalendarCreate extends Fragment {
             }
         });
 
-        root.findViewById(R.id.buttonCancel).setOnClickListener(v -> {
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(view -> {
+            if (fabStatus) {
+                expander_add.hide();
+                expander_sub.hide();
+                fabStatus = false;
+            } else {
+                expander_add.expand();
+                expander_sub.expand();
+                fabStatus = true;
+            }
+        });
+
+        root.findViewById(R.id.floating_action_exit_button).setOnClickListener(v -> {
 
             if (makeOrder)
                 FragmentService
@@ -187,7 +238,12 @@ public class CalendarCreate extends Fragment {
                         .load(getActivity(), "CalendarFragment");
         });
 
-        refreshViews(timeShow);
+        CrystalRangeSeekbar rb = root.findViewById(R.id.rangeSeekbar);
+        rb.setOnRangeSeekbarChangeListener((minValue, maxValue) -> {
+
+        });
+
+//        refreshViews(timeShow);
         return root;
     }
 }

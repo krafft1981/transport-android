@@ -18,10 +18,6 @@ public class RectangleView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        Toast
-                .makeText(getContext(), String.valueOf(this.getHeight()) + " " + String.valueOf(this.getWidth()), Toast.LENGTH_LONG)
-                .show();
-
         canvas.drawRect(0, this.getHeight(), this.getWidth(), 0, paint);
     }
 }

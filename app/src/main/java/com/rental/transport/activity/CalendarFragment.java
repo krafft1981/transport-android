@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +21,7 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+import com.rental.transport.views.FabExpander;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,19 +39,41 @@ public class CalendarFragment extends Fragment {
     private Date currentDate = Calendar.getInstance().getTime();
     SimpleDateFormat dateFormatter = new SimpleDateFormat("d MMMM yyyy");
 
+    private FabExpander expander_add;
+    private FabExpander expander_sub;
+
+    private boolean fabStatus;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    private void showDayEvents(FrameLayout frame, Date day) {
+    private void showCalendar(FrameLayout frame, Button date) {
+        frame.removeAllViews();
+        CalendarView cv = new CalendarView(getContext());
+        cv.setDateTextAppearance(android.R.style.TextAppearance_Medium);
+        cv.setWeekDayTextAppearance(android.R.style.TextAppearance_Medium);
+        cv.setDate(currentDate.getTime());
+        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            currentDate = new Date(year - 1900, month, dayOfMonth + 1);
+            date.setText(dateFormatter.format(currentDate));
+            showDayEvents(frame, currentDate, false);
+        });
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        params.addRule(RelativeLayout.ABOVE, R.id.calendarBody);
+        cv.setLayoutParams(params);
+        frame.addView(cv);
+    }
+
+    private void showDayEvents(FrameLayout frame, Date day, Boolean editable) {
 
         frame.removeAllViews();
 
-        ProgresService
-                .getInstance()
-                .showProgress(getActivity(), getString(R.string.calendar_loading));
-
+        ProgresService.getInstance().showProgress(getActivity(), getString(R.string.calendar_loading));
         NetworkService
                 .getInstance()
                 .getCalendarApi()
@@ -59,7 +84,20 @@ public class CalendarFragment extends Fragment {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
                             ListView listView = new ListView(getContext());
+//                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//                                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                                    ViewGroup.LayoutParams.MATCH_PARENT
+//                            );
+//                            params.addRule(RelativeLayout.ABOVE, R.id.calendarBody);
+//                            listView.setLayoutParams(params);
                             listView.setAdapter(new CalendarListAdapter(getActivity(), response.body()));
+                            if (editable) {
+                                listView.setOnItemClickListener((parent, view, position, id) -> {
+                                    Toast
+                                            .makeText(getContext(), "selected item: " + String.valueOf(id), Toast.LENGTH_LONG)
+                                            .show();
+                                });
+                            }
                             frame.addView(listView);
                         }
                     }
@@ -74,9 +112,17 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
+    private Calendar getCalendar() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.setTime(currentDate);
+        return calendar;
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        fabStatus = false;
 
         dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
@@ -84,68 +130,74 @@ public class CalendarFragment extends Fragment {
         FrameLayout frame = root.findViewById(R.id.calendarBody);
         Button date = root.findViewById(R.id.calendarDay);
 
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(currentDate);
-        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        calendar.set(java.util.Calendar.MINUTE, 0);
-        calendar.set(java.util.Calendar.SECOND, 0);
-        calendar.set(java.util.Calendar.MILLISECOND, 0);
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        currentDate = calendar.getTime();
+        expander_add = new FabExpander(
+                root.findViewById(R.id.floating_action_add_button),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
+                1.7, 0.25
+        );
+
+        expander_sub = new FabExpander(
+                root.findViewById(R.id.floating_action_exit_button),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
+                AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
+                0.25, 1.7
+        );
+
+        {
+            Calendar c = getCalendar();
+            c.set(java.util.Calendar.HOUR_OF_DAY, 0);
+            c.set(java.util.Calendar.MINUTE, 0);
+            c.set(java.util.Calendar.SECOND, 0);
+            c.set(java.util.Calendar.MILLISECOND, 0);
+            currentDate = c.getTime();
+        }
 
         date.setText(dateFormatter.format(currentDate));
+        root.findViewById(R.id.calendarDay).setOnClickListener(v -> {
+            showCalendar(frame, date);
+        });
 
         root.findViewById(R.id.calendarLeft).setOnClickListener(v -> {
-            Calendar calendar12 = new GregorianCalendar();
-            calendar12.setTimeZone(TimeZone.getTimeZone("UTC"));
-            calendar12.setTime(currentDate);
-            calendar12.add(Calendar.DATE, -1);
-            currentDate = calendar12.getTime();
+            Calendar c = getCalendar();
+            c.add(Calendar.DATE, -1);
+            currentDate = c.getTime();
             date.setText(dateFormatter.format(currentDate));
-
-            showDayEvents(frame, currentDate);
+            showDayEvents(frame, currentDate, false);
         });
 
         root.findViewById(R.id.calendarRight).setOnClickListener(v -> {
-            Calendar calendar1 = new GregorianCalendar();
-            calendar1.setTimeZone(TimeZone.getTimeZone("UTC"));
-            calendar1.setTime(currentDate);
-            calendar1.add(Calendar.DATE, 1);
-            currentDate = calendar1.getTime();
+            Calendar c = getCalendar();
+            c.add(Calendar.DATE, 1);
+            currentDate = c.getTime();
             date.setText(dateFormatter.format(currentDate));
-
-            showDayEvents(frame, currentDate);
+            showDayEvents(frame, currentDate, false);
         });
 
-        root.findViewById(R.id.calendarDay).setOnClickListener(v -> {
-            frame.removeAllViews();
-            CalendarView cv = new CalendarView(getContext());
-            cv.setDateTextAppearance(android.R.style.TextAppearance_DeviceDefault_Medium);
-            cv.setWeekDayTextAppearance(android.R.style.TextAppearance_DeviceDefault_Medium);
-            cv.setDate(currentDate.getTime());
-            cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-                currentDate = new Date(year - 1900, month, dayOfMonth + 1);
-                date.setText(dateFormatter.format(currentDate));
-                showDayEvents(frame, currentDate);
-            });
-            frame.addView(cv);
+        FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(view -> {
+            if (fabStatus) {
+                expander_add.hide();
+                expander_sub.hide();
+                showDayEvents(frame, currentDate, false);
+                fabStatus = false;
+            } else {
+                expander_add.expand();
+                expander_sub.expand();
+                fabStatus = true;
+            }
         });
 
-        FloatingActionButton fab = root.findViewById(R.id.floating_action_button);
-        fab.setOnClickListener(v -> {
-
-            MemoryService
-                    .getInstance()
-                    .getProperty().put("useTransport", "no");
-
-            FragmentService
-                    .getInstance()
-                    .load(getActivity(), "CalendarCreate");
-
-            showDayEvents(frame, currentDate);
+        expander_add.fab.setOnClickListener(view -> {
+            MemoryService.getInstance().getProperty().put("useTransport", "no");
+            FragmentService.getInstance().load(getActivity(), "CalendarCreate");
         });
 
-        showDayEvents(frame, currentDate);
+        expander_sub.fab.setOnClickListener(view -> {
+            showDayEvents(frame, currentDate, true);
+        });
+
+        showDayEvents(frame, currentDate, false);
         return root;
     }
 }

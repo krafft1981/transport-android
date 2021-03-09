@@ -28,6 +28,8 @@ import retrofit2.Response;
 
 public class OrdersFragment extends Fragment {
 
+    private Integer page = 0;
+    private Integer size = 200;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +41,11 @@ public class OrdersFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.order_fragment, container, false);
         ListView orderList = root.findViewById(R.id.orders_list);
-        ProgresService
-                .getInstance()
-                .showProgress(getActivity(), getString(R.string.orders_loading));
+        ProgresService.getInstance().showProgress(getActivity(), getString(R.string.orders_loading));
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doGetCustomerOrders()
+                .doGetPagesOrderRequest(page, size)
                 .enqueue(new Callback<List<Order>>() {
                     @Override
                     public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {

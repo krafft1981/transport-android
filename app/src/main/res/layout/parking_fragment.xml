@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="60dp"
     android:background="@drawable/background"
     android:orientation="vertical">
@@ -13,5 +14,60 @@
         android:horizontalSpacing="1dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="1dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_menu_compass"
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ok"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_sub_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/cancel"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_menu_save"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
 
 </RelativeLayout>

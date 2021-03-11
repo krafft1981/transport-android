@@ -15,10 +15,12 @@ public class TransportGalleryAdapter extends BaseAdapter {
 
     private Context context;
     private List<Long> data;
+    private Boolean editable;
 
-    public TransportGalleryAdapter(Context context, List<Long> data) {
+    public TransportGalleryAdapter(Context context, List<Long> data, Boolean editable) {
         this.context = context;
         this.data = data;
+        this.editable = editable;
     }
 
     // returns the number of images, in our example it is 10
@@ -47,6 +49,7 @@ public class TransportGalleryAdapter extends BaseAdapter {
 
         image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         image.setAdjustViewBounds(true);
+        image.setImageResource(R.drawable.icon);
 
         return image;
     }

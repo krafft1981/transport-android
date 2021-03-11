@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
+import com.rental.transport.adapter.CustomerGalleryAdapter;
 import com.rental.transport.adapter.ParkingGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Customer;
@@ -55,7 +56,7 @@ public class CustomerSettings extends Fragment {
         listView.setAdapter(adapter);
 
         Gallery gallery = root.findViewById(R.id.gallery);
-        gallery.setAdapter(new ParkingGalleryAdapter(getContext(), customer.getImage()));
+        gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage(), true));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(customer.getImage().get(position));
             FragmentService.getInstance().load(getActivity(), "PictureFragment");

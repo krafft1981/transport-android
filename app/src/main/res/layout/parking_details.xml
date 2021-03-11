@@ -26,9 +26,9 @@
                 android:id="@+id/buttonMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/map"
                 android:layout_gravity="center"
-                android:padding="1dp" />
+                android:padding="1dp"
+                android:text="@string/map" />
 
             <com.rental.transport.views.MyListView
                 android:id="@+id/property"
@@ -68,10 +68,9 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_compass"
-        app:backgroundTint="@color/gray"
         android:visibility="invisible"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_add_button"
@@ -83,9 +82,8 @@
         android:layout_margin="16dp"
         android:src="@drawable/ok"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/green"
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_sub_button"
@@ -97,9 +95,8 @@
         android:layout_margin="16dp"
         android:src="@drawable/cancel"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/red"
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_save_button"
@@ -111,7 +108,6 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini" />
 </RelativeLayout>

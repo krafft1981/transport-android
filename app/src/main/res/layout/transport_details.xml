@@ -39,6 +39,5 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         app:backgroundTint="@color/gray"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:fabSize="mini" />
 </RelativeLayout>

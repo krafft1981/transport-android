@@ -16,4 +16,6 @@ public class Calendar {
     private Long stopAt;
     @SerializedName("order")
     private Long order;
+    @SerializedName("type")
+    private Long type;
 }

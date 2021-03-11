@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="очень очень длинный тип"
+                android:text="Тип"
                 android:textSize="14sp"
                 android:textStyle="normal|italic|bold" />
         </LinearLayout>
@@ -50,7 +50,7 @@
                 android:id="@+id/transportName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="очень очень очень очень очень длинное название прям поэма на семи листах"
+                android:text="Название"
                 android:textSize="14sp"
                 android:gravity="left"
                 android:textStyle="normal|italic|bold" />

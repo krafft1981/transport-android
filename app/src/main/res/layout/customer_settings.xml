@@ -42,8 +42,7 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_compass"
         app:backgroundTint="@color/gray"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_save_button"
@@ -55,9 +54,8 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_exit_button"
@@ -69,7 +67,6 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_lock_power_off"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini" />
 </RelativeLayout>

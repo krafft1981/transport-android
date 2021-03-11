@@ -84,7 +84,7 @@ public class ParkingDetails extends Fragment {
         Boolean editable = parking.getCustomer().contains(customer.getId());
 
         Gallery gallery = root.findViewById(R.id.gallery);
-        gallery.setAdapter(new ParkingGalleryAdapter(getContext(), parking.getImage()));
+        gallery.setAdapter(new ParkingGalleryAdapter(getContext(), parking.getImage(), editable));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(parking.getImage().get(position));
             FragmentService.getInstance().load(getActivity(), "PictureFragment");

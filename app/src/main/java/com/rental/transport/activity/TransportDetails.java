@@ -41,15 +41,13 @@ public class TransportDetails extends Fragment {
 
         Transport transport = MemoryService.getInstance().getTransport();
         Customer customer = MemoryService.getInstance().getCustomer();
-
+        Boolean editable = transport.getCustomer().contains(customer.getId());
         Gallery gallery = root.findViewById(R.id.gallery);
-        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
+        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage(), editable));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(transport.getImage().get(position));
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
-
-        Boolean editable = transport.getCustomer().contains(customer.getId());
 
         ListView listView = root.findViewById(R.id.property);
         listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), editable));

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="60dp"
     android:background="@drawable/background"
     android:orientation="vertical">
@@ -25,8 +25,7 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_compass"
         app:backgroundTint="@color/gray"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_add_button"
@@ -38,9 +37,8 @@
         android:layout_margin="16dp"
         android:src="@drawable/ok"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/green"
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_sub_button"
@@ -52,9 +50,8 @@
         android:layout_margin="16dp"
         android:src="@drawable/cancel"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
+        app:backgroundTint="@color/red"
+        app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_save_button"
@@ -66,8 +63,6 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/transparent"
-        app:fabSize="mini"
-        app:layout_behavior="com.rental.transport.views.FabExpander.FAB_Float_on_Scroll" />
-
+        app:backgroundTint="@color/gray"
+        app:fabSize="mini" />
 </RelativeLayout>

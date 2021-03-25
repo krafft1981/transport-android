@@ -1,6 +1,7 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Calendar;
+import com.rental.transport.model.Event;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/customer")
-    public Call<List<Calendar>> doGetCustomerCalendar(
+    public Call<List<Event>> doGetCustomerCalendar(
             @Query("day") Long day
     );
 

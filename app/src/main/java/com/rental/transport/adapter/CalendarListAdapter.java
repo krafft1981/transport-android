@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Customer;
+import com.rental.transport.model.Event;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.PropertyService;
 
@@ -23,10 +24,10 @@ import java.util.TimeZone;
 public class CalendarListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Calendar> data;
+    private List<Event> data;
     SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");
 
-    public CalendarListAdapter(Context context, List<Calendar> data) {
+    public CalendarListAdapter(Context context, List<Event> data) {
 
         dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
@@ -85,7 +86,7 @@ public class CalendarListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Calendar calendar = data.get(position);
+        Event event = data.get(position);
 
         Customer customer = MemoryService
                 .getInstance()
@@ -93,24 +94,24 @@ public class CalendarListAdapter extends BaseAdapter {
 
         String fio = PropertyService
                 .getInstance()
-                .getValue(customer.getProperty(), "fio");
+                .getValue(customer.getProperty(), "customer_fio");
 
         String phone = PropertyService
                 .getInstance()
-                .getValue(customer.getProperty(), "phone");
+                .getValue(customer.getProperty(), "customer_phone");
 
-        Long orderId = calendar.getOrder();
-        if (orderId != null) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.gray));
-
-        }
-
-        holder.number.setText(String.valueOf(position));
-        holder.fio.setText(fio);
-
-        holder.phone.setText(phone);
-        holder.startAt.setText(dateFormatter.format(calendar.getStartAt()));
-        holder.stopAt.setText(dateFormatter.format(calendar.getStopAt()));
+//        Long orderId = calendar.getOrder();
+//        if (orderId != null) {
+//            convertView.setBackgroundColor(context.getResources().getColor(R.color.gray));
+//
+//        }
+//
+//        holder.number.setText(String.valueOf(position));
+//        holder.fio.setText(fio);
+//
+//        holder.phone.setText(phone);
+//        holder.startAt.setText(dateFormatter.format(calendar.getStartAt()));
+//        holder.stopAt.setText(dateFormatter.format(calendar.getStopAt()));
 
         return convertView;
     }

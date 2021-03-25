@@ -12,18 +12,13 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
-import com.rental.transport.adapter.OrderListAdapter;
-import com.rental.transport.adapter.ParkingGridAdapter;
+import com.rental.transport.adapter.OrderConfirmationListAdapter;
 import com.rental.transport.model.Order;
-import com.rental.transport.model.Parking;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.FabExpander;
 
-import java.security.spec.ECField;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +59,7 @@ public class OrdersFragment extends Fragment {
 
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful())
-                            orderList.setAdapter(new OrderListAdapter(getActivity(), response.body()));
+                            orderList.setAdapter(new OrderConfirmationListAdapter(getActivity(), response.body()));
                     }
 
                     @Override
@@ -114,6 +109,26 @@ public class OrdersFragment extends Fragment {
             }
         });
 
+        root.findViewById(R.id.floating_action_add_button).setOnClickListener(view -> {
+            expander_add.hide();
+            expander_sub.hide();
+            expander_save.hide();
+            fabStatus = false;
+        });
+
+        root.findViewById(R.id.floating_action_sub_button).setOnClickListener(view -> {
+            expander_add.hide();
+            expander_sub.hide();
+            expander_save.hide();
+            fabStatus = false;
+        });
+
+        root.findViewById(R.id.floating_action_save_button).setOnClickListener(view -> {
+            expander_add.hide();
+            expander_sub.hide();
+            expander_save.hide();
+            fabStatus = false;
+        });
 
         return root;
     }

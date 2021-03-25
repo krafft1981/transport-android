@@ -66,16 +66,7 @@
                     android:text="02:00" />
             </LinearLayout>
 
-            <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-                android:id="@+id/rangeSeekbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:corner_radius="30"
-                app:max_value="86400"
-                app:min_value="0"
-                app:steps="300" />
-
-            <!--    https://metanit.com/java/android/4.7.php-->
+            <!-- https://metanit.com/java/android/4.7.php -->
         </LinearLayout>
     </ScrollView>
 

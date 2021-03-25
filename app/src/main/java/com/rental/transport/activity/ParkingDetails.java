@@ -139,6 +139,12 @@ public class ParkingDetails extends Fragment {
             });
 
             expander_save.fab.setOnClickListener(view -> {
+
+                expander_add.hide();
+                expander_sub.hide();
+                expander_save.hide();
+                fabStatus = false;
+
                 parking.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
                 ProgresService.getInstance().showProgress(getContext(), getString(R.string.parking_saving));
                 NetworkService
@@ -162,12 +168,24 @@ public class ParkingDetails extends Fragment {
             });
 
             expander_add.fab.setOnClickListener(view -> {
+
+                expander_add.hide();
+                expander_sub.hide();
+                expander_save.hide();
+                fabStatus = false;
+
                 Toast
                         .makeText(getActivity(), getString(R.string.forbidden), Toast.LENGTH_LONG)
                         .show();
             });
 
             expander_sub.fab.setOnClickListener(view -> {
+
+                expander_add.hide();
+                expander_sub.hide();
+                expander_save.hide();
+                fabStatus = false;
+
                 Toast
                         .makeText(getActivity(), getString(R.string.forbidden), Toast.LENGTH_LONG)
                         .show();

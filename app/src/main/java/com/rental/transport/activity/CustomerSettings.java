@@ -90,6 +90,11 @@ public class CustomerSettings extends Fragment {
         });
 
         expander_save.fab.setOnClickListener(view -> {
+
+            expander_save.hide();
+            expander_exit.hide();
+            fabStatus = false;
+
             customer.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService

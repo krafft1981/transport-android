@@ -78,9 +78,9 @@ public class CalendarFragment extends Fragment {
                 .getInstance()
                 .getCalendarApi()
                 .doGetCustomerCalendar(day.getTime())
-                .enqueue(new Callback<List<com.rental.transport.model.Calendar>>() {
+                .enqueue(new Callback<List<com.rental.transport.model.Event>>() {
                     @Override
-                    public void onResponse(Call<List<com.rental.transport.model.Calendar>> call, Response<List<com.rental.transport.model.Calendar>> response) {
+                    public void onResponse(Call<List<com.rental.transport.model.Event>> call, Response<List<com.rental.transport.model.Event>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
                             ListView listView = new ListView(getContext());
@@ -103,7 +103,7 @@ public class CalendarFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<List<com.rental.transport.model.Calendar>> call, Throwable t) {
+                    public void onFailure(Call<List<com.rental.transport.model.Event>> call, Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
@@ -191,9 +191,17 @@ public class CalendarFragment extends Fragment {
         expander_add.fab.setOnClickListener(view -> {
             MemoryService.getInstance().getProperty().put("useTransport", "no");
             FragmentService.getInstance().load(getActivity(), "CalendarCreate");
+            expander_add.hide();
+            expander_sub.hide();
+            fabStatus = false;
         });
 
         expander_sub.fab.setOnClickListener(view -> {
+
+            expander_add.hide();
+            expander_sub.hide();
+            fabStatus = false;
+
             showDayEvents(frame, currentDate, true);
         });
 

@@ -12,11 +12,11 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Customer;
+import com.rental.transport.model.Event;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
@@ -86,16 +86,16 @@ public class CalendarCreate extends Fragment {
                     .getInstance()
                     .getCalendarApi()
                     .doGetCustomerCalendar(currentDate)
-                    .enqueue(new Callback<List<Calendar>>() {
+                    .enqueue(new Callback<List<Event>>() {
                         @Override
-                        public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
+                        public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                             ProgresService.getInstance().hideProgress();
 //                            if (response.isSuccessful())
-                            drawTimeLine(timeShow, response.body());
+//                            drawTimeLine(timeShow, response.body());
                         }
 
                         @Override
-                        public void onFailure(Call<List<Calendar>> call, Throwable t) {
+                        public void onFailure(Call<List<Event>> call, Throwable t) {
                             ProgresService.getInstance().hideProgress();
                             Toast
                                     .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
@@ -236,11 +236,6 @@ public class CalendarCreate extends Fragment {
                 FragmentService
                         .getInstance()
                         .load(getActivity(), "CalendarFragment");
-        });
-
-        CrystalRangeSeekbar rb = root.findViewById(R.id.rangeSeekbar);
-        rb.setOnRangeSeekbarChangeListener((minValue, maxValue) -> {
-
         });
 
 //        refreshViews(timeShow);

@@ -3,9 +3,14 @@ package com.rental.transport.activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;
@@ -34,8 +39,9 @@ public class MainActivity extends FragmentActivity {
 
         FragmentActivity activity = this;
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setHorizontalScrollBarEnabled(true);
+        bottomNavigation.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem item) {

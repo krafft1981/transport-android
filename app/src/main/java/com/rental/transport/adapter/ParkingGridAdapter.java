@@ -69,13 +69,13 @@ public class ParkingGridAdapter extends BaseAdapter {
         holder.name.setText(
                 PropertyService
                         .getInstance()
-                        .getValue(parking.getProperty(), "name")
+                        .getValue(parking.getProperty(), "parking_name")
         );
 
         holder.address.setText(
                 PropertyService
                         .getInstance()
-                        .getValue(parking.getProperty(), "address")
+                        .getValue(parking.getProperty(), "parking_address")
         );
 
         ImageService

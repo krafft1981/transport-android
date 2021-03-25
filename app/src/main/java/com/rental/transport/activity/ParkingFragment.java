@@ -109,12 +109,22 @@ public class ParkingFragment extends Fragment {
         });
 
         expander_add.fab.setOnClickListener(view -> {
+
+            expander_add.hide();
+            expander_sub.hide();
+            fabStatus = false;
+
             Toast
                     .makeText(getActivity(), getString(R.string.forbidden), Toast.LENGTH_LONG)
                     .show();
         });
 
         expander_sub.fab.setOnClickListener(view -> {
+
+            expander_add.hide();
+            expander_sub.hide();
+            fabStatus = false;
+
             Toast
                     .makeText(getActivity(), getString(R.string.forbidden), Toast.LENGTH_LONG)
                     .show();

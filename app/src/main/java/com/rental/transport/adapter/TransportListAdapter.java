@@ -72,13 +72,13 @@ public class TransportListAdapter extends BaseAdapter {
         holder.name.setText(
                 PropertyService
                         .getInstance()
-                        .getValue(transport.getProperty(), "name")
+                        .getValue(transport.getProperty(), "transport_name")
         );
 
         holder.cost.setText(
                 PropertyService
                         .getInstance()
-                        .getValue(transport.getProperty(), "cost")
+                        .getValue(transport.getProperty(), "transport_price")
         );
 
 

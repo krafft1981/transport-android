@@ -11,6 +11,8 @@ public class Event {
     private Calendar calendar;
     @SerializedName("order")
     private Order order;
+    @SerializedName("request")
+    private Request request;
     @SerializedName("type")
     private Long type;
 }

@@ -19,6 +19,6 @@ public class Order {
     private Long createdAt;
     @SerializedName("confirmed_at")
     private Long confirmedAt;
-    @SerializedName("state")
-    private String state;
+    @SerializedName("status")
+    private String status;
 }

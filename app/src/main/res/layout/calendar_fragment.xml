@@ -44,6 +44,7 @@
         android:id="@+id/calendarBody"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/calendarControls"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -61,28 +62,28 @@
         app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_add_button"
+        android:id="@+id/floating_action_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@drawable/ok"
+        android:src="@drawable/ic_login"
         android:visibility="invisible"
-        app:backgroundTint="@color/green"
+        app:backgroundTint="@color/gray"
         app:fabSize="mini" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_exit_button"
+        android:id="@+id/floating_action_out_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:src="@drawable/cancel"
+        android:src="@drawable/icon_user"
         android:visibility="invisible"
-        app:backgroundTint="@color/red"
+        app:backgroundTint="@color/gray"
         app:fabSize="mini" />
 </RelativeLayout>

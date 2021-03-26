@@ -1,5 +1,6 @@
 package com.rental.transport.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.FabExpander;
+import com.rental.transport.views.RectangleView;
 
 import java.util.Date;
 import java.util.List;
@@ -50,29 +52,29 @@ public class CalendarCreate extends Fragment {
 
     private void drawTimeLine(FrameLayout timeShow, List<Calendar> data) {
 
-//        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.MATCH_PARENT
-//        );
-//
-//        timeShow.removeAllViews();
-//        View rectangle1 = new RectangleView(getContext(), Color.GREEN);
-//        rectangle1.setOnClickListener(v -> {
-//            Toast.makeText(getContext(), "Clicked 1", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        rectangle1.setLayoutParams(params);
-//        timeShow.addView(rectangle1);
-//
-//        View rectangle2 = new RectangleView(getContext(), Color.RED);
-//        rectangle2.setOnClickListener(v -> {
-//            Toast.makeText(getContext(), "Clicked 2", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        rectangle2.setLayoutParams(params);
-//        rectangle2.setLeft(40);
-//        timeShow.addView(rectangle2);
-//        timeShow.invalidate();
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+
+        timeShow.removeAllViews();
+        View rectangle1 = new RectangleView(getContext(), Color.GREEN);
+        rectangle1.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Clicked 1", Toast.LENGTH_SHORT).show();
+        });
+
+        rectangle1.setLayoutParams(params);
+        timeShow.addView(rectangle1);
+
+        View rectangle2 = new RectangleView(getContext(), Color.RED);
+        rectangle2.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Clicked 2", Toast.LENGTH_SHORT).show();
+        });
+
+        rectangle2.setLayoutParams(params);
+        rectangle2.setLeft(40);
+        timeShow.addView(rectangle2);
+        timeShow.invalidate();
     }
 
     private void refreshViews(FrameLayout timeShow) {
@@ -84,7 +86,7 @@ public class CalendarCreate extends Fragment {
         if (!makeOrder) {
             NetworkService
                     .getInstance()
-                    .getCalendarApi()
+                    .getOrderApi()
                     .doGetCustomerCalendar(currentDate)
                     .enqueue(new Callback<List<Event>>() {
                         @Override
@@ -107,14 +109,14 @@ public class CalendarCreate extends Fragment {
             Transport transport = MemoryService.getInstance().getTransport();
             NetworkService
                     .getInstance()
-                    .getCalendarApi()
+                    .getOrderApi()
                     .doGetCustomerTransportCalendar(transport.getId(), customer.getId(), currentDate)
                     .enqueue(new Callback<List<Calendar>>() {
                         @Override
                         public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
                             ProgresService.getInstance().hideProgress();
 //                            if (response.isSuccessful())
-                            drawTimeLine(timeShow, response.body());
+//                            drawTimeLine(timeShow, response.body());
                         }
 
                         @Override
@@ -135,7 +137,7 @@ public class CalendarCreate extends Fragment {
 
         View root = inflater.inflate(R.layout.calendar_create, container, false);
         TextView type = root.findViewById(R.id.calendarType);
-//        FrameLayout timeShow = root.findViewById(R.id.timeShow);
+        FrameLayout calendarCreate = root.findViewById(R.id.calendarCreate);
 
         makeOrder = !MemoryService.getInstance().getProperty().get("useTransport").equals("no");
         if (makeOrder)
@@ -146,24 +148,24 @@ public class CalendarCreate extends Fragment {
         CalendarView calendarView = root.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             currentDate = new Date(year - 1900, month, dayOfMonth + 1).getTime();
-//            refreshViews(timeShow);
+            refreshViews(calendarCreate);
         });
 
         expander_add = new FabExpander(
-                root.findViewById(R.id.floating_action_add_button),
+                root.findViewById(R.id.floating_action_in_button),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
                 1.7, 0.25
         );
 
         expander_sub = new FabExpander(
-                root.findViewById(R.id.floating_action_exit_button),
+                root.findViewById(R.id.floating_action_out_button),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
                 0.25, 1.7
         );
 
-        root.findViewById(R.id.floating_action_add_button).setOnClickListener(v -> {
+        root.findViewById(R.id.floating_action_in_button).setOnClickListener(v -> {
 
             if (makeOrder) {
                 Transport transport = MemoryService.getInstance().getTransport();
@@ -176,8 +178,8 @@ public class CalendarCreate extends Fragment {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 ProgresService.getInstance().hideProgress();
-//                                if (response.isSuccessful())
-//                                    refreshViews(timeShow);
+                                if (response.isSuccessful())
+                                    refreshViews(calendarCreate);
                             }
 
                             @Override
@@ -189,27 +191,27 @@ public class CalendarCreate extends Fragment {
                             }
                         });
             } else {
-                ProgresService.getInstance().showProgress(getContext(), getString(R.string.event_creating));
-                NetworkService
-                        .getInstance()
-                        .getCalendarApi()
-                        .doPutOutRequest(currentDate, start, stop)
-                        .enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                ProgresService.getInstance().hideProgress();
-//                                if (response.isSuccessful())
-//                                    refreshViews(timeShow);
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                ProgresService.getInstance().hideProgress();
-                                Toast
-                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                        });
+//                ProgresService.getInstance().showProgress(getContext(), getString(R.string.event_creating));
+//                NetworkService
+//                        .getInstance()
+//                        .getCalendarApi()
+//                        .doPutOutRequest(currentDate, start, stop)
+//                        .enqueue(new Callback<Void>() {
+//                            @Override
+//                            public void onResponse(Call<Void> call, Response<Void> response) {
+//                                ProgresService.getInstance().hideProgress();
+////                                if (response.isSuccessful())
+////                                    refreshViews(timeShow);
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<Void> call, Throwable t) {
+//                                ProgresService.getInstance().hideProgress();
+//                                Toast
+//                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+//                                        .show();
+//                            }
+//                        });
             }
         });
 
@@ -226,7 +228,7 @@ public class CalendarCreate extends Fragment {
             }
         });
 
-        root.findViewById(R.id.floating_action_exit_button).setOnClickListener(v -> {
+        root.findViewById(R.id.floating_action_out_button).setOnClickListener(v -> {
 
             if (makeOrder)
                 FragmentService
@@ -238,7 +240,7 @@ public class CalendarCreate extends Fragment {
                         .load(getActivity(), "CalendarFragment");
         });
 
-//        refreshViews(timeShow);
+        refreshViews(calendarCreate);
         return root;
     }
 }

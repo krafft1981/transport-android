@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.adapter.CustomerGalleryAdapter;
-import com.rental.transport.adapter.ParkingGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
@@ -70,7 +69,7 @@ public class CustomerSettings extends Fragment {
         );
 
         expander_exit = new FabExpander(
-                root.findViewById(R.id.floating_action_exit_button),
+                root.findViewById(R.id.floating_action_out_button),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
                 0.25, 1.7

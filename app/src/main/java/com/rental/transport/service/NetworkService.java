@@ -5,14 +5,12 @@ import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
-import com.rental.transport.network.CalendarApi;
 import com.rental.transport.network.CustomerApi;
 import com.rental.transport.network.ImageApi;
 import com.rental.transport.network.OrderApi;
 import com.rental.transport.network.ParkingApi;
 import com.rental.transport.network.RegistrationApi;
 import com.rental.transport.network.TransportApi;
-import com.rental.transport.network.TypeApi;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,15 +89,7 @@ public class NetworkService {
         return mRetrofitDidest.create(ParkingApi.class);
     }
 
-    public TypeApi getTypeApi() {
-        return mRetrofitDidest.create(TypeApi.class);
-    }
-
     public ImageApi getImageApi() {
         return mRetrofitDidest.create(ImageApi.class);
-    }
-
-    public CalendarApi getCalendarApi() {
-        return mRetrofitDidest.create(CalendarApi.class);
     }
 }

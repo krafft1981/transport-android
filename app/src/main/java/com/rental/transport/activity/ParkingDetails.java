@@ -102,7 +102,7 @@ public class ParkingDetails extends Fragment {
 
         if (editable) {
             expander_add = new FabExpander(
-                    root.findViewById(R.id.floating_action_add_button),
+                    root.findViewById(R.id.floating_action_in_button),
                     AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
                     AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
                     1.7, 0.25

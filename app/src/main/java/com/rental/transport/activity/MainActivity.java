@@ -24,9 +24,7 @@ public class MainActivity extends FragmentActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setVisibility(mode);
         if (!show) {
-            MemoryService
-                    .getInstance()
-                    .setCustomer(null);
+            MemoryService.getInstance().setCustomer(null);
         }
     }
 

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rental.transport.R;
 import com.rental.transport.adapter.CalendarListAdapter;
-import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -39,10 +37,12 @@ public class CalendarFragment extends Fragment {
     private Date currentDate = Calendar.getInstance().getTime();
     SimpleDateFormat dateFormatter = new SimpleDateFormat("d MMMM yyyy");
 
-    private FabExpander expander_add;
-    private FabExpander expander_sub;
+    private FabExpander expander_in;
+    private FabExpander expander_out;
 
     private boolean fabStatus;
+
+    private Integer viewType = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,9 @@ public class CalendarFragment extends Fragment {
 
     private void showCalendar(FrameLayout frame, Button date) {
         frame.removeAllViews();
+
         CalendarView cv = new CalendarView(getContext());
+
         cv.setDateTextAppearance(android.R.style.TextAppearance_Medium);
         cv.setWeekDayTextAppearance(android.R.style.TextAppearance_Medium);
         cv.setDate(currentDate.getTime());
@@ -60,12 +62,7 @@ public class CalendarFragment extends Fragment {
             date.setText(dateFormatter.format(currentDate));
             showDayEvents(frame, currentDate, false);
         });
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        params.addRule(RelativeLayout.ABOVE, R.id.calendarBody);
-        cv.setLayoutParams(params);
+
         frame.addView(cv);
     }
 
@@ -73,43 +70,49 @@ public class CalendarFragment extends Fragment {
 
         frame.removeAllViews();
 
-        ProgresService.getInstance().showProgress(getActivity(), getString(R.string.calendar_loading));
-        NetworkService
-                .getInstance()
-                .getCalendarApi()
-                .doGetCustomerCalendar(day.getTime())
-                .enqueue(new Callback<List<com.rental.transport.model.Event>>() {
-                    @Override
-                    public void onResponse(Call<List<com.rental.transport.model.Event>> call, Response<List<com.rental.transport.model.Event>> response) {
-                        ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            ListView listView = new ListView(getContext());
-//                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-//                                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                                    ViewGroup.LayoutParams.MATCH_PARENT
-//                            );
-//                            params.addRule(RelativeLayout.ABOVE, R.id.calendarBody);
-//                            listView.setLayoutParams(params);
-                            listView.setAdapter(new CalendarListAdapter(getActivity(), response.body()));
-                            if (editable) {
-                                listView.setOnItemClickListener((parent, view, position, id) -> {
-                                    Toast
-                                            .makeText(getContext(), "selected item: " + String.valueOf(id), Toast.LENGTH_LONG)
-                                            .show();
-                                });
-                            }
-                            frame.addView(listView);
-                        }
-                    }
+        switch (viewType) {
+            case 0: {
 
-                    @Override
-                    public void onFailure(Call<List<com.rental.transport.model.Event>> call, Throwable t) {
-                        ProgresService.getInstance().hideProgress();
-                        Toast
-                                .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
+                ProgresService.getInstance().showProgress(getActivity(), getString(R.string.calendar_loading));
+                NetworkService
+                        .getInstance()
+                        .getOrderApi()
+                        .doGetCustomerCalendar(day.getTime())
+                        .enqueue(new Callback<List<com.rental.transport.model.Event>>() {
+                            @Override
+                            public void onResponse(Call<List<com.rental.transport.model.Event>> call, Response<List<com.rental.transport.model.Event>> response) {
+                                ProgresService.getInstance().hideProgress();
+                                if (response.isSuccessful()) {
+                                    ListView listView = new ListView(getContext());
+                                    listView.setAdapter(new CalendarListAdapter(getActivity(), response.body()));
+                                    if (editable) {
+                                        listView.setOnItemClickListener((parent, view, position, id) -> {
+                                            Toast
+                                                    .makeText(getContext(), "selected item: " + String.valueOf(id), Toast.LENGTH_LONG)
+                                                    .show();
+                                        });
+                                    }
+                                    frame.addView(listView);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<com.rental.transport.model.Event>> call, Throwable t) {
+                                ProgresService.getInstance().hideProgress();
+                                Toast
+                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        });
+                break;
+            }
+            case 1: {
+                Toast
+                        .makeText(getContext(), "not ready", Toast.LENGTH_LONG)
+                        .show();
+                break;
+            }
+        }
     }
 
     private Calendar getCalendar() {
@@ -130,15 +133,15 @@ public class CalendarFragment extends Fragment {
         FrameLayout frame = root.findViewById(R.id.calendarBody);
         Button date = root.findViewById(R.id.calendarDay);
 
-        expander_add = new FabExpander(
-                root.findViewById(R.id.floating_action_add_button),
+        expander_in = new FabExpander(
+                root.findViewById(R.id.floating_action_in_button),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
                 1.7, 0.25
         );
 
-        expander_sub = new FabExpander(
-                root.findViewById(R.id.floating_action_exit_button),
+        expander_out = new FabExpander(
+                root.findViewById(R.id.floating_action_out_button),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_show),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_bottom_hide),
                 0.25, 1.7
@@ -177,29 +180,32 @@ public class CalendarFragment extends Fragment {
         FloatingActionButton fab = root.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(view -> {
             if (fabStatus) {
-                expander_add.hide();
-                expander_sub.hide();
+                expander_in.hide();
+                expander_out.hide();
                 showDayEvents(frame, currentDate, false);
                 fabStatus = false;
             } else {
-                expander_add.expand();
-                expander_sub.expand();
+                expander_in.expand();
+                expander_out.expand();
                 fabStatus = true;
             }
         });
 
-        expander_add.fab.setOnClickListener(view -> {
-            MemoryService.getInstance().getProperty().put("useTransport", "no");
-            FragmentService.getInstance().load(getActivity(), "CalendarCreate");
-            expander_add.hide();
-            expander_sub.hide();
+        expander_in.fab.setOnClickListener(view -> {
+
+            viewType = 0;
+            expander_in.hide();
+            expander_out.hide();
             fabStatus = false;
+
+            showDayEvents(frame, currentDate, true);
         });
 
-        expander_sub.fab.setOnClickListener(view -> {
+        expander_out.fab.setOnClickListener(view -> {
 
-            expander_add.hide();
-            expander_sub.hide();
+            viewType = 1;
+            expander_in.hide();
+            expander_out.hide();
             fabStatus = false;
 
             showDayEvents(frame, currentDate, true);

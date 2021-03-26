@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
@@ -33,15 +34,6 @@ public class CalendarListAdapter extends BaseAdapter {
 
         this.context = context;
         this.data = data;
-
-        Collections.sort(this.data, new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                Calendar p1 = (Calendar) o1;
-                Calendar p2 = (Calendar) o2;
-                return p1.getStartAt().compareTo(p2.getStartAt());
-            }
-        });
     }
 
     public class ViewHolder {
@@ -100,18 +92,27 @@ public class CalendarListAdapter extends BaseAdapter {
                 .getInstance()
                 .getValue(customer.getProperty(), "customer_phone");
 
-//        Long orderId = calendar.getOrder();
-//        if (orderId != null) {
-//            convertView.setBackgroundColor(context.getResources().getColor(R.color.gray));
-//
-//        }
-//
-//        holder.number.setText(String.valueOf(position));
-//        holder.fio.setText(fio);
-//
-//        holder.phone.setText(phone);
-//        holder.startAt.setText(dateFormatter.format(calendar.getStartAt()));
-//        holder.stopAt.setText(dateFormatter.format(calendar.getStopAt()));
+        switch (event.getType().intValue()) {
+            case 1: {
+                holder.fio.setText(fio);
+                holder.phone.setText(phone);
+                convertView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+                break;
+            }
+            case 2:
+                convertView.setBackgroundColor(context.getResources().getColor(R.color.red));
+                break;
+            case 3:
+                convertView.setBackgroundColor(context.getResources().getColor(R.color.silver));
+                break;
+            case 4:
+                convertView.setBackgroundColor(context.getResources().getColor(R.color.blue));
+                break;
+        }
+
+        holder.number.setText(String.valueOf(position));
+        holder.startAt.setText(dateFormatter.format(event.getCalendar().getStartAt()));
+        holder.stopAt.setText(dateFormatter.format(event.getCalendar().getStopAt()));
 
         return convertView;
     }

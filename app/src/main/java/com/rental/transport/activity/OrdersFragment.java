@@ -73,7 +73,7 @@ public class OrdersFragment extends Fragment {
                 });
 
         expander_add = new FabExpander(
-                root.findViewById(R.id.floating_action_add_button),
+                root.findViewById(R.id.floating_action_in_button),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_show),
                 AnimationUtils.loadAnimation(getContext(), R.anim.fab_top_hide),
                 1.7, 0.25
@@ -109,7 +109,7 @@ public class OrdersFragment extends Fragment {
             }
         });
 
-        root.findViewById(R.id.floating_action_add_button).setOnClickListener(view -> {
+        root.findViewById(R.id.floating_action_in_button).setOnClickListener(view -> {
             expander_add.hide();
             expander_sub.hide();
             expander_save.hide();

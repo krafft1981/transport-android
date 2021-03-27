@@ -1,9 +1,7 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Calendar;
-import com.rental.transport.model.Customer;
 import com.rental.transport.model.Event;
-import com.rental.transport.model.Order;
 
 import java.util.List;
 
@@ -18,8 +16,20 @@ import retrofit2.http.Query;
 public interface OrderApi {
 
     @Headers("Content-Type: application/json")
+    @POST("/order/request/confirm")
+    public Call<Void> doPostConfirmOrder(
+            @Query("request_id") Long id
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("/order/request/reject")
+    public Call<Void> doPostRejectOrder(
+            @Query("request_id") Long id
+    );
+
+    @Headers("Content-Type: application/json")
     @POST("/order")
-    public Call<Void> doPostOrderRequest(
+    public Call<Void> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
             @Query("start_at") Long startAt,
@@ -27,62 +37,57 @@ public interface OrderApi {
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/order/page")
-    public Call<List<Order>> doGetPagesOrderRequest(
+    @GET("/order/transport")
+    public Call<List<Event>> doGetEventByTransport(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/order/request")
-    public Call<List<Long>> doGetOrderRequest();
-
-    @Headers("Content-Type: application/json")
-    @GET("/order/client")
-    public Call<List<Order>> doGetCustomerOrders(
+    @GET("/order/customer")
+    public Call<List<Event>> doGetEventByCustomer(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
-    @POST("/order/confirm")
-    public Call<List<Customer>> doPostConfirmOrderRequest(
-            @Query("order_id") Long id
+    @GET("/order/request/transport")
+    public Call<List<Event>> doGetRequestEventByTransport(
+            @Query("page") Integer page,
+            @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
-    @POST("/order/reject")
-    public Call<Customer> doPostRejectOrderRequest(
-            @Query("order_id") Long id
+    @GET("/order/request/customer")
+    public Call<List<Event>> doGetRequestEventByCustomer(
+            @Query("page") Integer page,
+            @Query("size") Integer size
+    );
+
+    @Headers("Content-Type: application/json")
+    @PUT("/order/absent")
+    public Call<List<Event>> doPutAbsentCustomer(
+            @Query("day") Long day,
+            @Query("start") Long start,
+            @Query("stop") Long stop
+    );
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/order/absent")
+    public Call<List<Event>> doDeleteAbsentCustomer(
+            @Query("id") Long id
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/calendar/transport")
-    public Call<List<Calendar>> doGetCustomerTransportCalendar(
-            @Query("transport_id") Long transportId,
-            @Query("customer_id") Long customerId,
-            @Query("day") Long day
+    public Call<List<Calendar>> doGetTransportCalendar(
+            @Query("day") Long day,
+            @Query("transport_id") Long transportId
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/calendar/customer")
     public Call<List<Event>> doGetCustomerCalendar(
             @Query("day") Long day
-    );
-
-    @Headers("Content-Type: application/json")
-    @PUT("/order/calendar")
-    public Call<Void> doPutOutRequest(
-            @Query("day") Long day,
-            @Query("start") Long start,
-            @Query("stop") Long stop
-    );
-
-    @Headers("Content-Type: application/json")
-    @DELETE("/order/calendar")
-    public Call<Void> doDeleteOutRequest(
-            @Query("day") Long day,
-            @Query("start") Long start,
-            @Query("stop") Long stop
     );
 }

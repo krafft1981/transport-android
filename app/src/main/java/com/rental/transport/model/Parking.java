@@ -12,7 +12,6 @@ public class Parking {
 
     @SerializedName("id")
     private Long id;
-
     @SerializedName("property")
     private List<Property> property = new ArrayList<>();
     @SerializedName("image")

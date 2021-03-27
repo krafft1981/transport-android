@@ -14,5 +14,5 @@ public class Event {
     @SerializedName("request")
     private Request request;
     @SerializedName("type")
-    private Long type;
+    private long type;
 }

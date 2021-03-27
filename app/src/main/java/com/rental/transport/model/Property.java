@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Property {
 
-    @SerializedName("id")
-    private Long id;
     @SerializedName("human_name")
     private String humanName;
     @SerializedName("logic_name")
@@ -19,18 +17,4 @@ public class Property {
     private String value;
     @SerializedName("type")
     private String type;
-
-    public Property(String humanName, String logicName, String value) {
-        setHumanName(humanName);
-        setLogicName(logicName);
-        setValue(value);
-        setType("Calculated");
-    }
-
-    public Property(String type, String logicName, String humanName, String value) {
-        setHumanName(humanName);
-        setLogicName(logicName);
-        setValue(value);
-        setType(type);
-    }
 }

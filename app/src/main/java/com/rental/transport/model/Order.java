@@ -12,13 +12,6 @@ public class Order {
 
     @SerializedName("id")
     private Long id;
-
     @SerializedName("property")
     private List<Property> property = new ArrayList<>();
-    @SerializedName("created_at")
-    private Long createdAt;
-    @SerializedName("confirmed_at")
-    private Long confirmedAt;
-    @SerializedName("status")
-    private String status;
 }

@@ -106,27 +106,27 @@ public class CalendarCreate extends Fragment {
                     });
 
         } else {
-            Transport transport = MemoryService.getInstance().getTransport();
-            NetworkService
-                    .getInstance()
-                    .getOrderApi()
-                    .doGetCustomerTransportCalendar(transport.getId(), customer.getId(), currentDate)
-                    .enqueue(new Callback<List<Calendar>>() {
-                        @Override
-                        public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
-                            ProgresService.getInstance().hideProgress();
+//            Transport transport = MemoryService.getInstance().getTransport();
+//            NetworkService
+//                    .getInstance()
+//                    .getOrderApi()
+//                    .doGetCustomerTransportCalendar(transport.getId(), customer.getId(), currentDate)
+//                    .enqueue(new Callback<List<Calendar>>() {
+//                        @Override
+//                        public void onResponse(Call<List<Calendar>> call, Response<List<Calendar>> response) {
+//                            ProgresService.getInstance().hideProgress();
 //                            if (response.isSuccessful())
 //                            drawTimeLine(timeShow, response.body());
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Calendar>> call, Throwable t) {
-                            ProgresService.getInstance().hideProgress();
-                            Toast
-                                    .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    });
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<List<Calendar>> call, Throwable t) {
+//                            ProgresService.getInstance().hideProgress();
+//                            Toast
+//                                    .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+//                                    .show();
+//                        }
+//                    });
         }
     }
 
@@ -173,7 +173,7 @@ public class CalendarCreate extends Fragment {
                 NetworkService
                         .getInstance()
                         .getOrderApi()
-                        .doPostOrderRequest(transport.getId(), currentDate, start, stop)
+                        .doPostRequest(transport.getId(), currentDate, start, stop)
                         .enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

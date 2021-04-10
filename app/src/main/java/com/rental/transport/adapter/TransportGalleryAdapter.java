@@ -49,7 +49,6 @@ public class TransportGalleryAdapter extends BaseAdapter {
 
         image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         image.setAdjustViewBounds(true);
-        image.setImageResource(R.drawable.icon);
 
         return image;
     }

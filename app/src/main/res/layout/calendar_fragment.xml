@@ -1,89 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/calendar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="60dp"
-    android:background="@drawable/background">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/calendarControls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/calendarLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="&lt;"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/calendarDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="2dp"
-            android:text="12-мая-2021"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/calendarRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="2dp"
-            android:text="&gt;"
-            android:textSize="20dp" />
-
-    </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/calendarBody"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/calendarControls"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="50dp">
 
-    <!--    https://habr.com/ru/company/nix/blog/369097/-->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_compass"
-        app:backgroundTint="@color/gray"
-        app:fabSize="mini" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_login"
-        android:visibility="invisible"
-        app:backgroundTint="@color/gray"
-        app:fabSize="mini" />
+            <CalendarView
+                android:id="@+id/calendarBody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:weekDayTextAppearance="@android:style/TextAppearance.Medium"
+                android:dateTextAppearance="@android:style/TextAppearance.Medium"
+                android:layout_gravity="center" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_action_out_button"
-        android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/calendarTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calendarBody"
+                android:layout_centerHorizontal="true"
+                android:text="Время" />
+
+            <View
+                android:id="@+id/calendarViewLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_below="@id/calendarTimeLabel"
+                android:layout_centerHorizontal="true"
+                android:text="Время" />
+
+            <com.rental.transport.views.TimeView
+                android:id="@+id/calendarContainer"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/calendarViewLabel"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/calendarCreateRequest"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:src="@drawable/icon_user"
-        android:visibility="invisible"
-        app:backgroundTint="@color/gray"
-        app:fabSize="mini" />
+        android:text="Создать заявку" />
+
 </RelativeLayout>

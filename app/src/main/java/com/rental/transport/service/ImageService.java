@@ -53,7 +53,8 @@ public class ImageService {
             File file = getFile(context, imageId);
             FileOutputStream out = new FileOutputStream(file);
             out.write(decodedString, 0, decodedString.length);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
         }
 
@@ -109,7 +110,8 @@ public class ImageService {
         if (images.size() > index) {
             Long imageId = images.get(index);
             setImage(context, imageId, defaultImage, image);
-        } else {
+        }
+        else {
             image.setImageResource(defaultImage);
             image.invalidate();
         }

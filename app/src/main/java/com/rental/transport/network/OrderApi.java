@@ -4,6 +4,7 @@ import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -32,34 +33,33 @@ public interface OrderApi {
     public Call<Void> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
-            @Query("start_at") Long startAt,
-            @Query("stop_at") Long stopAt
+            @Query("hour") Integer[] hour
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/transport")
-    public Call<List<Event>> doGetEventByTransport(
+    public Call<Map<Integer, Event>> doGetEventByTransport(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/customer")
-    public Call<List<Event>> doGetEventByCustomer(
+    public Call<Map<Integer, Event>> doGetEventByCustomer(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/transport")
-    public Call<List<Event>> doGetRequestEventByTransport(
+    public Call<Map<Integer, Event>> doGetRequestEventByTransport(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/customer")
-    public Call<List<Event>> doGetRequestEventByCustomer(
+    public Call<Map<Integer, Event>> doGetRequestEventByCustomer(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
@@ -68,8 +68,7 @@ public interface OrderApi {
     @PUT("/order/absent")
     public Call<List<Event>> doPutAbsentCustomer(
             @Query("day") Long day,
-            @Query("start") Long start,
-            @Query("stop") Long stop
+            @Query("hour") Integer[] hour
     );
 
     @Headers("Content-Type: application/json")
@@ -80,14 +79,14 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @GET("/order/calendar/transport")
-    public Call<List<Calendar>> doGetTransportCalendar(
+    public Call<Map<Integer, Event>> doGetTransportCalendar(
             @Query("day") Long day,
             @Query("transport_id") Long transportId
     );
 
     @Headers("Content-Type: application/json")
     @GET("/order/calendar/customer")
-    public Call<List<Event>> doGetCustomerCalendar(
+    public Call<Map<Integer, Event>> doGetCustomerCalendar(
             @Query("day") Long day
     );
 }

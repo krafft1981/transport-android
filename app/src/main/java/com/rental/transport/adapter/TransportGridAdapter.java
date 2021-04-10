@@ -84,7 +84,7 @@ public class TransportGridAdapter extends BaseAdapter {
 
         ImageService
                 .getInstance()
-                .setImage(context, transport.getImage(), position, R.drawable.transport, holder.image);
+                .setImage(context, transport.getImage(), R.drawable.transport, holder.image);
 
         return convertView;
     }

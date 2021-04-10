@@ -7,12 +7,10 @@ import lombok.Data;
 @Data
 public class Event {
 
-    @SerializedName("calendar")
-    private Calendar calendar;
     @SerializedName("order")
     private Order order;
     @SerializedName("request")
     private Request request;
     @SerializedName("type")
-    private long type;
+    private Integer type;
 }

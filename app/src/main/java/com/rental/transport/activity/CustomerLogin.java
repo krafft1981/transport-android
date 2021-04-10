@@ -80,7 +80,6 @@ public class CustomerLogin extends Fragment {
                                 SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                             }
                             MemoryService.getInstance().setCustomer(response.body());
-                            ((MainActivity) getActivity()).showMenu(true);
                             FragmentService.getInstance().load(getActivity(), "TransportFragment");
                             remember.clearFocus();
                         }
@@ -169,13 +168,8 @@ public class CustomerLogin extends Fragment {
         String savedPassword = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_password));
 
         if ((savedUsername != null) && (savedPassword != null))
+            login(root, savedUsername, savedPassword);
 
-            login(root,
-                    savedUsername,
-                    savedPassword
-            );
-
-        ((MainActivity) getActivity()).showMenu(false);
         return root;
     }
 }

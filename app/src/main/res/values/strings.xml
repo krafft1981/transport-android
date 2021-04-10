@@ -1,11 +1,5 @@
 <resources>
-    <string name="app_name">Транспорт</string>
-    <string name="account">Профиль</string>
-    <string name="transport">Транспорт</string>
-    <string name="search">Поиск</string>
-    <string name="orders">Заказы</string>
-    <string name="calendar">Календарь</string>
-    <string name="parking">Стоянки</string>
+    <string name="app_name">Яхты</string>
     <string name="message">Сообщения</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>

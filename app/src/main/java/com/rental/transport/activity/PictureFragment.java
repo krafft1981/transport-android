@@ -24,8 +24,14 @@ public class PictureFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.picture_fragment, container, false);
         ImageView image = root.findViewById(R.id.image);
-        Long imageId = MemoryService.getInstance().getImageId();
-        ImageService.getInstance().setImage(getContext(), imageId, R.drawable.border, image);
+        Long imageId = MemoryService
+                .getInstance()
+                .getImageId();
+
+        ImageService
+                .getInstance()
+                .setImage(getContext(), imageId, R.drawable.border, image);
+
         return root;
     }
 }

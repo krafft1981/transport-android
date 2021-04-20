@@ -12,12 +12,21 @@ public enum EventTypeEnum {
     FREE(6, "Free");
 
     @Getter
-    private int id = 0;
+    private Integer id = 0;
     @Getter
     private String name;
 
-    EventTypeEnum(int id, String name) {
+    EventTypeEnum(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public static EventTypeEnum byId(Integer type) {
+        for (EventTypeEnum result : EventTypeEnum.values()) {
+            if (result.getId() == type)
+                return result;
+        }
+
+        throw new IllegalArgumentException("Try get EventTypeEnum undefined value: " + type);
     }
 }

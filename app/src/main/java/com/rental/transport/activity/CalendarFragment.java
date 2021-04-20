@@ -19,6 +19,7 @@ import com.rental.transport.views.TimeView;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.NonNull;
 import retrofit2.Call;
@@ -58,6 +59,32 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
+
+    private void sendRequestList(Set<Integer> hours) {
+
+        Transport transport = MemoryService.getInstance().getTransport();
+
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getOrderApi()
+                .doPostRequest(transport.getId(), currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        ProgresService.getInstance().hideProgress();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +103,8 @@ public class CalendarFragment extends Fragment {
         });
 
         root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> {
-
-            Toast
-                    .makeText(getActivity(), "Держи пятюню :-)", Toast.LENGTH_LONG)
-                    .show();
+            sendRequestList(timeView.getHours());
+            loadDetails(timeView);
         });
 
         timeView.setOnTouchListener((view, event) -> {

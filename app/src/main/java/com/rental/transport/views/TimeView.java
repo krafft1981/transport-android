@@ -12,22 +12,32 @@ import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Event;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 public class TimeView extends View {
 
+    public Set<Integer> getHours() {
+
+        Set<Integer> result = new HashSet();
+
+        for (Map.Entry<Integer, Coordinate> entry : pos.entrySet()) {
+            if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST)
+                result.add(entry.getKey());
+        }
+
+        return result;
+    }
+
     @AllArgsConstructor
     private class BusyBox {
-        private Integer type;
+        private EventTypeEnum type;
         private String text;
     }
 
-    @Getter
-    @Setter
     private class Coordinate {
         float left = 0;
         float right = 0;
@@ -58,15 +68,14 @@ public class TimeView extends View {
                     if ((entry.getValue().top < y) && (y < entry.getValue().bottom)) myY = true;
 
                     if (myX && myY) {
-                        if (box.get(entry.getKey()).type == EventTypeEnum.FREE.getId()) {
-                            box.get(entry.getKey()).type = EventTypeEnum.REQUEST.getId();
-
+                        if (box.get(entry.getKey()).type == EventTypeEnum.FREE) {
+                            box.get(entry.getKey()).type = EventTypeEnum.REQUEST;
                             view.invalidate();
                             break;
                         }
 
-                        if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST.getId()) {
-                            box.get(entry.getKey()).type = EventTypeEnum.FREE.getId();
+                        if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST) {
+                            box.get(entry.getKey()).type = EventTypeEnum.FREE;
                             view.invalidate();
                             break;
                         }
@@ -84,16 +93,14 @@ public class TimeView extends View {
     public void setData(Map<Integer, Event> data) {
 
         box.clear();
+        pos.clear();
 
         for (Integer hour = 0; hour < 24; hour++) {
-            if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId())
-                box.put(
-                        hour,
-                        new BusyBox(
-                                data.get(hour).getType(),
-                                hour.toString() + ":00"
-                        )
-                );
+            if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
+                EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
+                String value = hour.toString() + ":00";
+                box.put(hour, new BusyBox(type, value));
+            }
         }
     }
 
@@ -138,24 +145,28 @@ public class TimeView extends View {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
             switch (busyBox.type) {
-                case 1: { //"Generated"
+                case GENERATED: {
                     paint.setColor(Color.GRAY);
                     break;
                 }
 
-                case 2:   //"Unavailable"
-                case 4:   //"Order"
-                case 5: { //"Busy"
+                case ORDER: {
+                    paint.setColor(Color.WHITE);
+                    break;
+                }
+
+                case UNAVAILABLE:
+                case BUSY: {
                     paint.setColor(Color.RED);
                     break;
                 }
 
-                case 3: { //"Request"
+                case REQUEST: {
                     paint.setColor(Color.YELLOW);
                     break;
                 }
 
-                case 6: { //"Free"
+                case FREE: {
                     paint.setColor(Color.GREEN);
                     break;
                 }

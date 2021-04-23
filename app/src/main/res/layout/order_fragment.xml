@@ -17,7 +17,8 @@
             <com.rental.transport.views.MyListView
                 android:id="@+id/property"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:divider="@android:color/transparent" />
 
         </LinearLayout>
     </ScrollView>

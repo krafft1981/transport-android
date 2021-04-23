@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Event;
+import com.rental.transport.model.Order;
+import com.rental.transport.service.MemoryService;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +21,22 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 
 public class TimeView extends View {
+
+    private Map<Integer, BusyBox> box = new HashMap();
+    private Map<Integer, Coordinate> pos = new HashMap();
+
+    public TimeView(Context context) {
+        super(context);
+        init(context, null);
+    }
+
+    public TimeView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+    }
 
     public Set<Integer> getHours() {
 
@@ -36,6 +54,7 @@ public class TimeView extends View {
     private class BusyBox {
         private EventTypeEnum type;
         private String text;
+        private Order order;
     }
 
     private class Coordinate {
@@ -45,7 +64,7 @@ public class TimeView extends View {
         float bottom = 0;
     }
 
-    public void click(View view, MotionEvent event) {
+    public EventTypeEnum click(View view, MotionEvent event) {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // нажатие
@@ -71,24 +90,28 @@ public class TimeView extends View {
                         if (box.get(entry.getKey()).type == EventTypeEnum.FREE) {
                             box.get(entry.getKey()).type = EventTypeEnum.REQUEST;
                             view.invalidate();
-                            break;
+                            return box.get(entry.getKey()).type;
                         }
 
                         if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST) {
                             box.get(entry.getKey()).type = EventTypeEnum.FREE;
                             view.invalidate();
-                            break;
+                            return box.get(entry.getKey()).type;
                         }
+
+                        if (box.get(entry.getKey()).type == EventTypeEnum.ORDER)
+                            MemoryService.getInstance().setOrder(box.get(entry.getKey()).order);
+
+                        return box.get(entry.getKey()).type;
                     }
                 }
 
                 break;
             }
         }
-    }
 
-    private Map<Integer, BusyBox> box = new HashMap();
-    private Map<Integer, Coordinate> pos = new HashMap();
+        return EventTypeEnum.byId(0);
+    }
 
     public void setData(Map<Integer, Event> data) {
 
@@ -99,22 +122,10 @@ public class TimeView extends View {
             if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
                 EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
                 String value = hour.toString() + ":00";
-                box.put(hour, new BusyBox(type, value));
+                Order orderId = data.get(hour).getOrder();
+                box.put(hour, new BusyBox(type, value, orderId));
             }
         }
-    }
-
-    public TimeView(Context context) {
-        super(context);
-        init(context, null);
-    }
-
-    public TimeView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs);
-    }
-
-    private void init(Context context, AttributeSet attrs) {
     }
 
     @Override

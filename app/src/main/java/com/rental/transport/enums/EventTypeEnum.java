@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum EventTypeEnum {
 
+    UNCKNOWN(0, "Uncknown"),
     GENERATED(1, "Generated"),
     UNAVAILABLE(2, "Unavailable"),
     REQUEST(3, "Request"),
@@ -13,6 +14,7 @@ public enum EventTypeEnum {
 
     @Getter
     private Integer id = 0;
+
     @Getter
     private String name;
 

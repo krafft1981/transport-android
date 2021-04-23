@@ -8,6 +8,7 @@ import com.rental.transport.activity.CalendarFragment;
 import com.rental.transport.activity.CustomerCreate;
 import com.rental.transport.activity.CustomerLogin;
 import com.rental.transport.activity.MapFragment;
+import com.rental.transport.activity.OrderFragment;
 import com.rental.transport.activity.PictureFragment;
 import com.rental.transport.activity.TransportDetails;
 import com.rental.transport.activity.TransportFragment;
@@ -27,6 +28,7 @@ public class FragmentService {
         frags.put("CalendarFragment", new CalendarFragment());
         frags.put("TransportDetails", new TransportDetails());
         frags.put("PictureFragment", new PictureFragment());
+        frags.put("OrderFragment", new OrderFragment());
     }
 
     public static FragmentService getInstance() {
@@ -36,7 +38,6 @@ public class FragmentService {
 
         return mInstance;
     }
-
 
     public void load(FragmentActivity activity, String name) {
 

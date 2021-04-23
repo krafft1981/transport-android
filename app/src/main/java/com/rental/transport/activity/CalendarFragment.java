@@ -10,8 +10,10 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
+import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Transport;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -60,8 +62,9 @@ public class CalendarFragment extends Fragment {
     }
 
 
-    private void sendRequestList(Set<Integer> hours) {
+    private void updateDetails(TimeView tv) {
 
+        Set<Integer> hours = tv.getHours();
         Transport transport = MemoryService.getInstance().getTransport();
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
@@ -69,14 +72,18 @@ public class CalendarFragment extends Fragment {
                 .getInstance()
                 .getOrderApi()
                 .doPostRequest(transport.getId(), currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
                         ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful()) {
+                            tv.setData(response.body());
+                            tv.invalidate();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, @NonNull Throwable t) {
+                    public void onFailure(Call<Map<Integer, Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -102,13 +109,11 @@ public class CalendarFragment extends Fragment {
             loadDetails(timeView);
         });
 
-        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> {
-            sendRequestList(timeView.getHours());
-            loadDetails(timeView);
-        });
+        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> updateDetails(timeView));
 
         timeView.setOnTouchListener((view, event) -> {
-            timeView.click(view, event);
+            if (timeView.click(view, event) == EventTypeEnum.ORDER)
+                FragmentService.getInstance().load(getActivity(), "OrderFragment");
             return true;
         });
 

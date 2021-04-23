@@ -1,6 +1,7 @@
 package com.rental.transport.service;
 
 import com.rental.transport.model.Customer;
+import com.rental.transport.model.Order;
 import com.rental.transport.model.Parking;
 import com.rental.transport.model.Transport;
 
@@ -23,6 +24,10 @@ public class MemoryService {
     @Getter
     @Setter
     private Parking parking;
+
+    @Getter
+    @Setter
+    private Order order;
 
     @Getter
     @Setter

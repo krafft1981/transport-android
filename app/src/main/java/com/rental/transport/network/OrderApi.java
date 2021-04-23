@@ -1,6 +1,5 @@
 package com.rental.transport.network;
 
-import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @POST("/order")
-    public Call<Void> doPostRequest(
+    public Call<Map<Integer, Event>> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
             @Query("hour") Integer[] hour

@@ -23,7 +23,6 @@ public class PropertyListAdapter extends BaseAdapter {
     ValidatorFactory vf = new ValidatorFactory();
 
     public PropertyListAdapter(Context context, List<Property> data, Boolean editable) {
-
         this.context = context;
         this.data = data;
         this.editable = editable;
@@ -70,7 +69,8 @@ public class PropertyListAdapter extends BaseAdapter {
             holder.value = convertView.findViewById(R.id.propertyValue);
             if (!editable) {
                 holder.value.setKeyListener(null);
-            } else {
+            }
+            else {
                 holder.value.setOnFocusChangeListener((v, hasFocus) -> {
                     if (!hasFocus) {
                         IStringValidator validator = vf.getValidator(holder.type.getText().toString());
@@ -83,7 +83,8 @@ public class PropertyListAdapter extends BaseAdapter {
             }
 
             convertView.setTag(holder);
-        } else {
+        }
+        else {
             holder = (PropertyListAdapter.ViewHolder) convertView.getTag();
         }
 

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -28,16 +26,13 @@ import retrofit2.Response;
 
 public class TransportFragment extends Fragment {
 
-    private Integer page = 0;
-    private Integer size = 100;
-
     private void loadTransport(GridView grid) {
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_loading));
         NetworkService
                 .getInstance()
                 .getTransportApi()
-                .doGetTransportList(page, size)
+                .doGetMyTransport()
                 .enqueue(new Callback<List<Transport>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
@@ -70,19 +65,6 @@ public class TransportFragment extends Fragment {
         grid.setOnItemClickListener((parent, v, position, id) -> {
             MemoryService.getInstance().setTransport((Transport) parent.getAdapter().getItem(position));
             FragmentService.getInstance().load(getActivity(), "TransportDetails");
-        });
-
-        grid.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
         });
 
         loadTransport(grid);

@@ -32,9 +32,8 @@ public class CustomerLogin extends Fragment {
     private Boolean isValidEmail(EditText text) {
 
         IStringValidator validator = new EmailValidator();
-        if (validator.validate(text.getText().toString())) {
+        if (validator.validate(text.getText().toString()))
             return true;
-        }
 
         text.requestFocus();
         text.setError(getString(R.string.wrong_data_entered));
@@ -43,9 +42,8 @@ public class CustomerLogin extends Fragment {
 
     private Boolean isValidPassword(EditText text) {
         IStringValidator validator = new PasswordValidator();
-        if (validator.validate(text.getText().toString())) {
+        if (validator.validate(text.getText().toString()))
             return true;
-        }
 
         text.requestFocus();
         text.setError(getString(R.string.wrong_data_entered));
@@ -81,7 +79,7 @@ public class CustomerLogin extends Fragment {
                             }
                             MemoryService.getInstance().setCustomer(response.body());
                             FragmentService.getInstance().load(getActivity(), "TransportFragment");
-                            ((MainActivity)getActivity()).showMenu(true);
+                            ((MainActivity) getActivity()).showMenu(true);
                         }
                     }
 
@@ -105,6 +103,7 @@ public class CustomerLogin extends Fragment {
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.customer_login, container, false);
+
         EditText customer = root.findViewById(R.id.loginEmail);
         EditText password = root.findViewById(R.id.loginPassword);
 
@@ -161,11 +160,9 @@ public class CustomerLogin extends Fragment {
             }
         });
 
-        root.findViewById(R.id.loginRegisterLink).setOnClickListener(v ->
-                FragmentService
-                        .getInstance()
-                        .load(getActivity(), "CustomerCreate")
-        );
+        root
+                .findViewById(R.id.loginRegisterLink)
+                .setOnClickListener(v -> FragmentService.getInstance().load(getActivity(), "CustomerCreate"));
 
         String savedUsername = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_username));
         String savedPassword = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_password));
@@ -178,7 +175,7 @@ public class CustomerLogin extends Fragment {
             login(root, savedUsername, savedPassword);
         }
 
-        ((MainActivity)getActivity()).showMenu(false);
+        ((MainActivity) getActivity()).showMenu(false);
         return root;
     }
 }

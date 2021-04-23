@@ -7,6 +7,12 @@
         android:title="@string/transport" />
 
     <item
+        android:id="@+id/request_menu"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/requests" />
+
+    <item
         android:id="@+id/orders_menu"
         android:enabled="true"
         android:icon="@drawable/icon_order"

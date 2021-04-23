@@ -1,7 +1,5 @@
 package com.rental.transport.service;
 
-import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -9,9 +7,11 @@ import com.rental.transport.R;
 import com.rental.transport.activity.CalendarFragment;
 import com.rental.transport.activity.CustomerCreate;
 import com.rental.transport.activity.CustomerLogin;
+import com.rental.transport.activity.CustomerSettings;
 import com.rental.transport.activity.MapFragment;
 import com.rental.transport.activity.OrderFragment;
 import com.rental.transport.activity.PictureFragment;
+import com.rental.transport.activity.RequestFragment;
 import com.rental.transport.activity.TransportDetails;
 import com.rental.transport.activity.TransportFragment;
 
@@ -23,6 +23,7 @@ public class FragmentService {
     private HashMap<String, Fragment> frags = new HashMap<>();
 
     private FragmentService() {
+        frags.put("CustomerSettings", new CustomerSettings());
         frags.put("CustomerLogin", new CustomerLogin());
         frags.put("TransportFragment", new TransportFragment());
         frags.put("MapFragment", new MapFragment());
@@ -31,6 +32,7 @@ public class FragmentService {
         frags.put("TransportDetails", new TransportDetails());
         frags.put("PictureFragment", new PictureFragment());
         frags.put("OrderFragment", new OrderFragment());
+        frags.put("RequestFragment", new RequestFragment());
     }
 
     public static FragmentService getInstance() {
@@ -42,10 +44,6 @@ public class FragmentService {
     }
 
     public void load(FragmentActivity activity, String name) {
-
-        Toast
-                .makeText(activity, name, Toast.LENGTH_LONG)
-                .show();
 
         activity.getSupportFragmentManager()
                 .beginTransaction()

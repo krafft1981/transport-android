@@ -80,7 +80,7 @@ public class CustomerLogin extends Fragment {
                                 SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                             }
                             MemoryService.getInstance().setCustomer(response.body());
-                            FragmentService.getInstance().load(getActivity(), "TransportDetails");
+                            FragmentService.getInstance().load(getActivity(), "TransportFragment");
                             remember.clearFocus();
                         }
                     }
@@ -162,7 +162,9 @@ public class CustomerLogin extends Fragment {
         });
 
         root.findViewById(R.id.loginRegisterLink).setOnClickListener(v ->
-                FragmentService.getInstance().load(getActivity(), "CustomerCreate")
+                FragmentService
+                        .getInstance()
+                        .load(getActivity(), "CustomerCreate")
         );
 
         String savedUsername = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_username));

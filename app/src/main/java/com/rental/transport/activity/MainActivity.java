@@ -2,13 +2,13 @@ package com.rental.transport.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.MemoryService;
 
 public class MainActivity extends FragmentActivity {
 
@@ -17,9 +17,6 @@ public class MainActivity extends FragmentActivity {
         int mode = show ? View.VISIBLE : View.GONE;
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setVisibility(mode);
-        if (!show) {
-            MemoryService.getInstance().setCustomer(null);
-        }
     }
 
     @Override
@@ -28,29 +25,42 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentActivity activity = this;
-
         BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setHorizontalScrollBarEnabled(true);
         bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.transport_menu: {
-                    FragmentService.getInstance().load(activity, "TransportDetail");
+                    Toast
+                            .makeText(this, "TransportFragment", Toast.LENGTH_LONG)
+                            .show();
+//
+                    FragmentService.getInstance().load(this, "TransportFragment");
                     break;
                 }
 
                 case R.id.orders_menu: {
-                    FragmentService.getInstance().load(activity, "OrdersFragment");
+                    Toast
+                            .makeText(this, "OrdersFragment", Toast.LENGTH_LONG)
+                            .show();
+
+//                    FragmentService.getInstance().load(this, "OrdersFragment");
                     break;
                 }
 
                 case R.id.calendar_menu: {
-                    FragmentService.getInstance().load(activity, "CalendarFragment");
+                    Toast
+                            .makeText(this, "CalendarFragment", Toast.LENGTH_LONG)
+                            .show();
+
+                    FragmentService.getInstance().load(this, "CalendarFragment");
                     break;
                 }
 
                 case R.id.account_menu: {
-                    FragmentService.getInstance().load(activity, "CustomerSettings");
+                    Toast
+                            .makeText(this, "CustomerSettings", Toast.LENGTH_LONG)
+                            .show();
+
+//                    FragmentService.getInstance().load(this, "CustomerSettings");
                     break;
                 }
             }
@@ -58,8 +68,7 @@ public class MainActivity extends FragmentActivity {
             return true;
         });
 
-        if (savedInstanceState == null) {
-            FragmentService.getInstance().load(activity, "CustomerLogin");
-        }
+        if (savedInstanceState == null)
+            FragmentService.getInstance().load(this, "CustomerLogin");
     }
 }

@@ -81,7 +81,7 @@ public class CustomerLogin extends Fragment {
                             }
                             MemoryService.getInstance().setCustomer(response.body());
                             FragmentService.getInstance().load(getActivity(), "TransportFragment");
-                            remember.clearFocus();
+                            ((MainActivity)getActivity()).showMenu(true);
                         }
                     }
 
@@ -178,6 +178,7 @@ public class CustomerLogin extends Fragment {
             login(root, savedUsername, savedPassword);
         }
 
+        ((MainActivity)getActivity()).showMenu(false);
         return root;
     }
 }

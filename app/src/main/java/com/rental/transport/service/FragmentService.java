@@ -1,5 +1,7 @@
 package com.rental.transport.service;
 
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -40,6 +42,10 @@ public class FragmentService {
     }
 
     public void load(FragmentActivity activity, String name) {
+
+        Toast
+                .makeText(activity, name, Toast.LENGTH_LONG)
+                .show();
 
         activity.getSupportFragmentManager()
                 .beginTransaction()

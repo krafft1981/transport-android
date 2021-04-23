@@ -61,7 +61,6 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
-
     private void updateDetails(TimeView tv) {
 
         Set<Integer> hours = tv.getHours();
@@ -104,20 +103,20 @@ public class CalendarFragment extends Fragment {
         TimeView timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
         cv.setDate(currentDay.getTime());
-        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            currentDay = new Date(year - 1900, month, dayOfMonth + 1);
-            loadDetails(timeView);
-        });
-
-        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> updateDetails(timeView));
-
-        timeView.setOnTouchListener((view, event) -> {
-            if (timeView.click(view, event) == EventTypeEnum.ORDER)
-                FragmentService.getInstance().load(getActivity(), "OrderFragment");
-            return true;
-        });
-
-        loadDetails(timeView);
+//        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+//            currentDay = new Date(year - 1900, month, dayOfMonth + 1);
+//            loadDetails(timeView);
+//        });
+//
+//        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> updateDetails(timeView));
+//
+//        timeView.setOnTouchListener((view, event) -> {
+//            if (timeView.click(view, event) == EventTypeEnum.ORDER)
+//                FragmentService.getInstance().load(getActivity(), "OrderFragment");
+//            return true;
+//        });
+//
+//        loadDetails(timeView);
         return root;
     }
 }

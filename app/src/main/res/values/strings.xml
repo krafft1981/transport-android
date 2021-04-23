@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Яхты</string>
+    <string name="app_name">Капитан</string>
     <string name="message">Сообщения</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
@@ -16,7 +16,6 @@
     <string name="customer_creating">Создание пользователя</string>
     <string name="transport_saving">Сохранение транспорта</string>
     <string name="transport_loading">Загрузка транспорта</string>
-    <string name="parking_saving">Сохранение стоянки</string>
     <string name="customer_loading">Загрузка пользователя</string>
     <string name="wrong_credentials">Вход запрещён</string>
     <string name="boolean_property_value_yes">Да</string>
@@ -44,4 +43,8 @@
     <string name="order_creating">Создание заказа</string>
     <string name="event_creating">Создание отгула</string>
     <string name="forbidden">Запрещено</string>
+    <string name="transport">Транспорт</string>
+    <string name="orders">Заказы</string>
+    <string name="calendar">Календарь</string>
+    <string name="account">Профиль</string>
 </resources>

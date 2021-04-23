@@ -80,7 +80,7 @@ public class CustomerLogin extends Fragment {
                                 SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                             }
                             MemoryService.getInstance().setCustomer(response.body());
-                            FragmentService.getInstance().load(getActivity(), "TransportFragment");
+                            FragmentService.getInstance().load(getActivity(), "TransportDetails");
                             remember.clearFocus();
                         }
                     }
@@ -142,7 +142,8 @@ public class CustomerLogin extends Fragment {
                                     Toast
                                             .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
                                             .show();
-                                } else {
+                                }
+                                else {
                                     Toast
                                             .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
                                             .show();
@@ -160,15 +161,20 @@ public class CustomerLogin extends Fragment {
             }
         });
 
-        root.findViewById(R.id.loginRegisterLink).setOnClickListener(v -> FragmentService
-                .getInstance()
-                .load(getActivity(), "CustomerCreate"));
+        root.findViewById(R.id.loginRegisterLink).setOnClickListener(v ->
+                FragmentService.getInstance().load(getActivity(), "CustomerCreate")
+        );
 
         String savedUsername = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_username));
         String savedPassword = SharedService.getInstance().getValue(getActivity(), getString(R.string.preferred_password));
 
-        if ((savedUsername != null) && (savedPassword != null))
+        if ((savedUsername != null) && (savedPassword != null)) {
+
+            customer.setText(savedUsername);
+            password.setText(savedPassword);
+
             login(root, savedUsername, savedPassword);
+        }
 
         return root;
     }

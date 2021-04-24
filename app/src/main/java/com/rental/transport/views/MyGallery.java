@@ -6,7 +6,6 @@ import android.widget.Gallery;
 
 public class MyGallery extends Gallery {
 
-    private Boolean editable = false;
     public MyGallery(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

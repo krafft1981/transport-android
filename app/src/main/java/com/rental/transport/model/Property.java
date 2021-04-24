@@ -17,4 +17,6 @@ public class Property {
     private String value;
     @SerializedName("type")
     private String type;
+    @SerializedName("order")
+    private Integer order;
 }

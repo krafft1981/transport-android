@@ -1,6 +1,8 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,12 +17,10 @@ public class TransportGalleryAdapter extends BaseAdapter {
 
     private Context context;
     private List<Long> data;
-    private Boolean editable;
 
-    public TransportGalleryAdapter(Context context, List<Long> data, Boolean editable) {
+    public TransportGalleryAdapter(Context context, List<Long> data) {
         this.context = context;
         this.data = data;
-        this.editable = editable;
     }
 
     // returns the number of images, in our example it is 10
@@ -43,12 +43,25 @@ public class TransportGalleryAdapter extends BaseAdapter {
         // position argument will indicate the location of image
         // create a ImageView programmatically
         ImageView image = new ImageView(context);
+
+        Integer height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        Integer width = Resources.getSystem().getDisplayMetrics().widthPixels;
+
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // code for portrait mode
+            height = height / 5 * 3;
+        }
+        else {
+            // code for landscape mode
+        }
+
+        android.widget.Gallery.LayoutParams params = new android.widget.Gallery.LayoutParams(width, height);
+        image.setLayoutParams(params);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         ImageService
                 .getInstance()
                 .setImage(context, data, position, R.drawable.transport, image);
-
-        image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        image.setAdjustViewBounds(true);
 
         return image;
     }

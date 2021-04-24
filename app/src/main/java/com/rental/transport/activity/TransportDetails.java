@@ -1,16 +1,11 @@
 package com.rental.transport.activity;
 
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Gallery;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -38,7 +33,7 @@ public class TransportDetails extends Fragment {
         Customer customer = MemoryService.getInstance().getCustomer();
         Boolean editable = transport.getCustomer().contains(customer.getId());
         Gallery gallery = root.findViewById(R.id.gallery);
-        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage(), editable));
+        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(transport.getImage().get(position));
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
@@ -57,4 +52,21 @@ public class TransportDetails extends Fragment {
 
         return root;
     }
+
 }
+
+//public class TransportDetails extends Fragment implements AdapterView.OnItemSelectedListener {
+//
+//    @Override
+//    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+//        // TODO Auto-generated method stub
+//    }
+//
+//    @Override
+//    public void onNothingSelected(AdapterView<?> arg0) {
+//        // TODO Auto-generated method stub
+//    }
+//}
+//    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//    photoPickerIntent.setType("image/*");
+//    startActivityForResult(photoPickerIntent, SELECT_PHOTO);

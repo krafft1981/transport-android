@@ -35,15 +35,14 @@ public class ImageService {
         return new File(context.getCacheDir(), imageId.toString());
     }
 
-    private Boolean setImageFromCache(Context context, Long imageId, ImageView image) {
+    private void setImageFromCache(Context context, Long imageId, ImageView image) throws Exception {
 
         File file = getFile(context, imageId);
         if (!file.exists())
-            return false;
+            throw new Exception("no file found");
 
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
         image.setImageBitmap(bitmap);
-        return true;
     }
 
     private void setImageAndCache(Context context, Long imageId, String data, ImageView image) {
@@ -70,7 +69,11 @@ public class ImageService {
             return;
         }
 
-        if (!setImageFromCache(context, imageId, image)) {
+        try {
+            setImageFromCache(context, imageId, image);
+        }
+
+        catch (Exception e) {
             NetworkService
                     .getInstance()
                     .getImageApi()

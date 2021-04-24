@@ -62,7 +62,8 @@ public class TransportGridAdapter extends BaseAdapter {
             holder.name = convertView.findViewById(R.id.transportName);
             holder.cost = convertView.findViewById(R.id.transportCost);
             convertView.setTag(holder);
-        } else {
+        }
+        else {
             holder = (TransportGridAdapter.ViewHolder) convertView.getTag();
         }
 

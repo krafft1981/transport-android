@@ -15,10 +15,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentActivity activity = this;
-
         if (savedInstanceState == null) {
-            FragmentService.getInstance().load(activity, "CustomerLogin");
+            FragmentService.getInstance().load(this, "CustomerLogin");
         }
     }
 }

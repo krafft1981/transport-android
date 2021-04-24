@@ -17,7 +17,7 @@
             <com.rental.transport.views.MyGallery
                 android:id="@+id/gallery"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="1dp"
                 android:spacing="5dp" />
 

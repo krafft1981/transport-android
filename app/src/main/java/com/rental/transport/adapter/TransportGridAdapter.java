@@ -30,7 +30,6 @@ public class TransportGridAdapter extends BaseAdapter {
         ImageView image;
         TextView type;
         TextView name;
-        TextView cost;
     }
 
     @Override
@@ -60,7 +59,6 @@ public class TransportGridAdapter extends BaseAdapter {
             holder.image = convertView.findViewById(R.id.gridviewImage);
             holder.type = convertView.findViewById(R.id.transportType);
             holder.name = convertView.findViewById(R.id.transportName);
-            holder.cost = convertView.findViewById(R.id.transportCost);
             convertView.setTag(holder);
         } else {
             holder = (TransportGridAdapter.ViewHolder) convertView.getTag();
@@ -74,13 +72,6 @@ public class TransportGridAdapter extends BaseAdapter {
                         .getInstance()
                         .getValue(transport.getProperty(), "transport_name")
         );
-
-        holder.cost.setText(
-                PropertyService
-                        .getInstance()
-                        .getValue(transport.getProperty(), "transport_price")
-        );
-
 
         ImageService
                 .getInstance()

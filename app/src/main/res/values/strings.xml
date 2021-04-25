@@ -35,7 +35,7 @@
     <string name="customer">Персонал</string>
     <string name="parking_loading">Загрузка стоянок</string>
     <string name="request">Выполнение запроса</string>
-    <string name="requests">Запросы</string>
+    <string name="requests">Заявки</string>
     <string name="calendar_loading">Загрузка событий</string>
     <string name="noOrder">Отгул</string>
     <string name="calendar_begin">Время начала</string>

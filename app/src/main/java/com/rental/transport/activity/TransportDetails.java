@@ -55,7 +55,6 @@ public class TransportDetails extends Fragment {
         gallery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //Do something with position
                 currentImage = position;
             }
 
@@ -151,9 +150,48 @@ public class TransportDetails extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Transport transport = MemoryService.getInstance().getTransport();
                     try {
-                        final String fileName = imageReturnedIntent.getData().getEncodedPath();
-                        // save image
-                        // append image to transport
+                        String fileName = imageReturnedIntent.getData().getEncodedPath();
+                        //convert body to base64
+                        String data = "";
+                        ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
+                        NetworkService
+                                .getInstance()
+                                .getImageApi()
+                                .doPostImage(data)
+                                .enqueue(new Callback<Long>() {
+                                    @Override
+                                    public void onResponse(Call<Long> call, Response<Long> response) {
+                                        ProgresService.getInstance().hideProgress();
+                                        transport.getImage().add(response.body());
+                                        NetworkService
+                                                .getInstance()
+                                                .getTransportApi()
+                                                .doPutTransport(transport)
+                                                .enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        ProgresService.getInstance().hideProgress();
+                                                        //update gallery
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        ProgresService.getInstance().hideProgress();
+                                                        Toast
+                                                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                                                .show();
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Long> call, Throwable t) {
+                                        ProgresService.getInstance().hideProgress();
+                                        Toast
+                                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                                .show();
+                                    }
+                                });
                     }
                     catch (Exception e) {
                         e.printStackTrace();

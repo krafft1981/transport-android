@@ -136,9 +136,50 @@ public class CustomerSettings extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Customer customer = MemoryService.getInstance().getCustomer();
                     try {
-                        final String fileName = imageReturnedIntent.getData().getEncodedPath();
-                        // save image
-                        // append image to customer
+                        String fileName = imageReturnedIntent.getData().getEncodedPath();
+                        //convert body to base64
+                        String data = "";
+                        ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
+                        NetworkService
+                                .getInstance()
+                                .getImageApi()
+                                .doPostImage(data)
+                                .enqueue(new Callback<Long>() {
+                                    @Override
+                                    public void onResponse(Call<Long> call, Response<Long> response) {
+                                        ProgresService.getInstance().hideProgress();
+                                        customer.getImage().add(response.body());
+                                        ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
+                                        NetworkService
+                                                .getInstance()
+                                                .getCustomerApi()
+                                                .doPutCustomer(customer)
+                                                .enqueue(new Callback<Void>() {
+                                                    @Override
+                                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                                        ProgresService.getInstance().hideProgress();
+                                                        // update delete button
+                                                        // update gallery
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Void> call, Throwable t) {
+                                                        ProgresService.getInstance().hideProgress();
+                                                        Toast
+                                                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                                                .show();
+                                                    }
+                                                });
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Long> call, Throwable t) {
+                                        ProgresService.getInstance().hideProgress();
+                                        Toast
+                                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                                .show();
+                                    }
+                                });
                     }
                     catch (Exception e) {
                         e.printStackTrace();

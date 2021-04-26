@@ -15,28 +15,24 @@ public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
     @PUT("/customer")
-    public Call<Void> doPutUpdateCustomerRequest(
+    public Call<Void> doPutCustomer(
             @Body Customer customer
     );
 
     @Headers("Content-Type: application/json")
     @GET("/customer/list")
-    public Call<List<Customer>> doGetPagesCustomerRequest(
+    public Call<List<Customer>> doGetPagesCustomer(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @Headers("Content-Type: application/json")
     @GET("/customer")
-    public Call<List<Customer>> doGetCount();
-
-    @Headers("Content-Type: application/json")
-    @GET("/customer")
-    public Call<Customer> doGetCustomerRequest();
+    public Call<Customer> doGetCustomer();
 
     @Headers("Content-Type: application/json")
     @PUT("/customer/update/password")
-    public Call<Void> doPutUpdateCustomerPasswordRequest(
+    public Call<Void> doPutUpdateCustomerPassword(
             @Query("password") String password
     );
 }

@@ -103,10 +103,11 @@ public class CalendarFragment extends Fragment {
         TimeView timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
         cv.setDate(currentDay.getTime());
-//        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-//            currentDay = new Date(year - 1900, month, dayOfMonth + 1);
+
+        cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            currentDay = new Date(year - 1900, month, dayOfMonth + 1);
 //            loadDetails(timeView);
-//        });
+        });
 //
 //        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> updateDetails(timeView));
 //

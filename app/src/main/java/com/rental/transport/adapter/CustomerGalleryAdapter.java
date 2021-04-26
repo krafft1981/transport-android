@@ -1,6 +1,8 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -43,12 +45,25 @@ public class CustomerGalleryAdapter extends BaseAdapter {
         // position argument will indicate the location of image
         // create a ImageView programmatically
         ImageView image = new ImageView(context);
+
+        Integer height = Resources.getSystem().getDisplayMetrics().heightPixels;
+        Integer width = Resources.getSystem().getDisplayMetrics().widthPixels;
+
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // code for portrait mode
+            height = height / 2;
+        }
+        else {
+            // code for landscape mode
+        }
+
+        android.widget.Gallery.LayoutParams params = new android.widget.Gallery.LayoutParams(width, height);
+        image.setLayoutParams(params);
+        image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         ImageService
                 .getInstance()
                 .setImage(context, data, position, R.drawable.icon_user, image);
-
-        image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        image.setAdjustViewBounds(true);
 
         return image;
     }

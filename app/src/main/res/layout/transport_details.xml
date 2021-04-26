@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginBottom="60dp">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -18,26 +17,28 @@
             <com.rental.transport.views.MyGallery
                 android:id="@+id/gallery"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:padding="1dp"
                 android:spacing="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/buttonLoad"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Добавить картинку" />
+                    android:layout_height="wrap_content"
+                    android:text="Добавить" />
 
                 <Button
+                    android:id="@+id/buttonDelete"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Удалить картинку" />
+                    android:layout_height="wrap_content"
+                    android:text="Удалить" />
             </LinearLayout>
-
 
             <com.rental.transport.views.MyListView
                 android:id="@+id/property"
@@ -57,6 +58,13 @@
                 android:textColor="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold|italic" />
+
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Сохранить" />
         </LinearLayout>
     </ScrollView>
 

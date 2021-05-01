@@ -7,8 +7,10 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.rental.transport.enums.EventTypeEnum;
+import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Order;
 import com.rental.transport.service.MemoryService;
@@ -55,6 +57,7 @@ public class TimeView extends View {
         private EventTypeEnum type;
         private String text;
         private Order order;
+        private Calendar calendar;
     }
 
     private class Coordinate {
@@ -87,6 +90,7 @@ public class TimeView extends View {
                     if ((entry.getValue().top < y) && (y < entry.getValue().bottom)) myY = true;
 
                     if (myX && myY) {
+
                         if (box.get(entry.getKey()).type == EventTypeEnum.FREE) {
                             box.get(entry.getKey()).type = EventTypeEnum.REQUEST;
                             view.invalidate();
@@ -123,7 +127,8 @@ public class TimeView extends View {
                 EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
                 String value = hour.toString() + ":00";
                 Order orderId = data.get(hour).getOrder();
-                box.put(hour, new BusyBox(type, value, orderId));
+                Calendar calendar = data.get(hour).getCalendar();
+                box.put(hour, new BusyBox(type, value, orderId, calendar));
             }
         }
     }
@@ -143,10 +148,10 @@ public class TimeView extends View {
         Integer width = this.getWidth();
 
         Paint textPaint = new Paint();
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(40);
         textPaint.setColor(Color.RED);
 
-        Integer sequence = 0;
+        Integer sequense = 0;
 
         Integer delimiter = box.size() / 2;
         if (box.size() % 2 != 0)
@@ -189,18 +194,18 @@ public class TimeView extends View {
             Integer size = width / delimiter;
 
             // Рассчитываем координаты основываясь на delimiter
-            if (sequence < delimiter) {
+            if (sequense < delimiter) {
 
-                coordinate.left = size * (sequence + 0);
-                coordinate.right = size * (sequence + 1) - 2;
+                coordinate.left = size * (sequense + 0);
+                coordinate.right = size * (sequense + 1) - 2;
                 coordinate.top = 0;
                 coordinate.bottom = height / 2 - 1;
 
                 textHeight = height / 4;
             }
             else {
-                coordinate.left = size * (sequence - delimiter + 0);
-                coordinate.right = size * (sequence - delimiter + 1) - 2;
+                coordinate.left = size * (sequense - delimiter + 0);
+                coordinate.right = size * (sequense - delimiter + 1) - 2;
 
                 coordinate.top = height / 2 + 1;
                 coordinate.bottom = height;
@@ -223,7 +228,7 @@ public class TimeView extends View {
             );
 
             pos.put(hour, coordinate);
-            sequence++;
+            sequense++;
         }
     }
 }

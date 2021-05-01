@@ -86,12 +86,7 @@ public class CalendarFragment extends Fragment {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
-                                        .makeText(
-                                                getContext(),
-                                                jObjError
-                                                        .getString("message"),
-                                                Toast.LENGTH_LONG
-                                        )
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
                             }
                             catch (Exception e) {

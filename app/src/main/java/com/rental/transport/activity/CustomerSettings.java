@@ -15,9 +15,9 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.adapter.CustomerGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
-import com.rental.transport.adapter.TransportGalleryAdapter;
 import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -30,7 +30,9 @@ import retrofit2.Response;
 public class CustomerSettings extends Fragment {
 
     private int currentImage = 0;
-    private final int Pick_image = 1;
+    private final int PICK_IMAGE_SELECTED = 1;
+    private Gallery gallery;
+    private View root;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,13 +45,13 @@ public class CustomerSettings extends Fragment {
 
         Customer customer = MemoryService.getInstance().getCustomer();
 
-        View root = inflater.inflate(R.layout.customer_settings, container, false);
+        root = inflater.inflate(R.layout.customer_settings, container, false);
         ListView listView = root.findViewById(R.id.property);
         PropertyListAdapter adapter = new PropertyListAdapter(getContext(), customer.getProperty(), true);
         listView.setAdapter(adapter);
 
-        Gallery gallery = root.findViewById(R.id.gallery);
-        gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage(), true));
+        gallery = root.findViewById(R.id.gallery);
+        gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(customer.getImage().get(position));
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
@@ -59,15 +61,20 @@ public class CustomerSettings extends Fragment {
             root.findViewById(R.id.buttonDelete).setEnabled(false);
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
+
+            Toast
+                    .makeText(getActivity(), "Проверить разрешения", Toast.LENGTH_LONG)
+                    .show();
+
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, Pick_image);
+            startActivityForResult(photoPickerIntent, PICK_IMAGE_SELECTED);
         });
 
         root.findViewById(R.id.buttonDelete).setOnClickListener(v -> {
 
             customer.getImage().remove(customer.getImage().get(currentImage));
-            gallery.setAdapter(new TransportGalleryAdapter(getContext(), customer.getImage()));
+            gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
             gallery.invalidate();
 
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
@@ -119,26 +126,27 @@ public class CustomerSettings extends Fragment {
         });
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, Pick_image);
+
+            Intent ringIntent = new Intent();
+            ringIntent.setType("image/*");
+            ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+            ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
         });
 
         return root;
     }
 
-    //Обрабатываем результат выбора в галерее:
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
         switch (requestCode) {
-            case Pick_image:
+            case PICK_IMAGE_SELECTED: {
                 if (resultCode == Activity.RESULT_OK) {
                     Customer customer = MemoryService.getInstance().getCustomer();
                     try {
-                        String fileName = imageReturnedIntent.getData().getEncodedPath();
-                        //convert body to base64
-                        String data = "";
+                        String data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
                         NetworkService
                                 .getInstance()
@@ -158,8 +166,10 @@ public class CustomerSettings extends Fragment {
                                                     @Override
                                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                                         ProgresService.getInstance().hideProgress();
-                                                        // update delete button
-                                                        // update gallery
+                                                        gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
+                                                        gallery.invalidate();
+                                                        if (customer.getImage().size() != 0)
+                                                            root.findViewById(R.id.buttonDelete).setEnabled(true);
                                                     }
 
                                                     @Override
@@ -182,9 +192,10 @@ public class CustomerSettings extends Fragment {
                                 });
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
+                break;
+            }
         }
     }
 }

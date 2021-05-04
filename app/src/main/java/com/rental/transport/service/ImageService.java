@@ -1,13 +1,18 @@
 package com.rental.transport.service;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.widget.ImageView;
 
 import com.rental.transport.model.Image;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -48,18 +53,19 @@ public class ImageService {
 
     private void setImageAndCache(Context context, Long imageId, String data, ImageView image) {
 
-        byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
         try {
+            byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
             File file = getFile(context, imageId);
             FileOutputStream out = new FileOutputStream(file);
             out.write(decodedString, 0, decodedString.length);
+
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            image.setImageBitmap(bitmap);
         }
         catch (Exception e) {
-
+            System.out.println(e);
         }
-
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        image.setImageBitmap(bitmap);
     }
 
     public void setImage(Context context, Long imageId, int defaultImage, ImageView image) {
@@ -114,6 +120,31 @@ public class ImageService {
         else {
             image.setImageResource(defaultImage);
             image.invalidate();
+        }
+    }
+
+    public String getImage(Context context, Intent intent) {
+
+        String name = getRealPathFromURI(context, intent.getData());
+        Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, false);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
+        return Base64.encodeToString(os.toByteArray(), Base64.NO_WRAP);
+    }
+
+    private String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(index);
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 }

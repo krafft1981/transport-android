@@ -17,12 +17,10 @@ public class CustomerGalleryAdapter extends BaseAdapter {
 
     private Context context;
     private List<Long> data;
-    private Boolean editable;
 
-    public CustomerGalleryAdapter(Context context, List<Long> data, Boolean editable) {
+    public CustomerGalleryAdapter(Context context, List<Long> data) {
         this.context = context;
         this.data = data;
-        this.editable = editable;
     }
 
     // returns the number of images, in our example it is 10

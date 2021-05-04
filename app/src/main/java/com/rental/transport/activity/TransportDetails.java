@@ -18,6 +18,7 @@ import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.adapter.TransportGalleryAdapter;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -30,7 +31,9 @@ import retrofit2.Response;
 public class TransportDetails extends Fragment {
 
     private int currentImage = 0;
-    private final int Pick_image = 1;
+    private final int PICK_IMAGE_SELECTED = 1;
+    private Gallery gallery;
+    private View root;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,9 +43,9 @@ public class TransportDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.transport_details, container, false);
+        root = inflater.inflate(R.layout.transport_details, container, false);
         Transport transport = MemoryService.getInstance().getTransport();
-        Gallery gallery = root.findViewById(R.id.gallery);
+        gallery = root.findViewById(R.id.gallery);
         gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             MemoryService.getInstance().setImageId(transport.getImage().get(position));
@@ -74,7 +77,7 @@ public class TransportDetails extends Fragment {
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
             photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, Pick_image);
+            startActivityForResult(photoPickerIntent, PICK_IMAGE_SELECTED);
         });
 
         root.findViewById(R.id.buttonDelete).setOnClickListener(v -> {
@@ -133,9 +136,16 @@ public class TransportDetails extends Fragment {
         });
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, Pick_image);
+
+            Toast
+                    .makeText(getActivity(), "Проверить разрешения", Toast.LENGTH_LONG)
+                    .show();
+
+            Intent ringIntent = new Intent();
+            ringIntent.setType("image/*");
+            ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+            ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(ringIntent, PICK_IMAGE_SELECTED);
         });
 
         return root;
@@ -146,13 +156,11 @@ public class TransportDetails extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch (requestCode) {
-            case Pick_image:
+            case PICK_IMAGE_SELECTED:
                 if (resultCode == Activity.RESULT_OK) {
                     Transport transport = MemoryService.getInstance().getTransport();
                     try {
-                        String fileName = imageReturnedIntent.getData().getEncodedPath();
-                        //convert body to base64
-                        String data = "";
+                        String data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                         NetworkService
                                 .getInstance()
@@ -171,7 +179,10 @@ public class TransportDetails extends Fragment {
                                                     @Override
                                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                                         ProgresService.getInstance().hideProgress();
-                                                        //update gallery
+                                                        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
+                                                        gallery.invalidate();
+                                                        if (transport.getImage().size() != 0)
+                                                            root.findViewById(R.id.buttonDelete).setEnabled(true);
                                                     }
 
                                                     @Override
@@ -194,7 +205,6 @@ public class TransportDetails extends Fragment {
                                 });
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
         }

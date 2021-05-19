@@ -1,7 +1,9 @@
 package com.rental.transport.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
@@ -30,7 +34,8 @@ import retrofit2.Response;
 public class CustomerSettings extends Fragment {
 
     private int currentImage = 0;
-    private final int PICK_IMAGE_SELECTED = 1;
+    private final int PICK_IMAGE_SELECTED = 100;
+    private final int STORAGE_PERMISSION_CODE = 101;
     private Gallery gallery;
     private View root;
 
@@ -59,17 +64,6 @@ public class CustomerSettings extends Fragment {
 
         if (customer.getImage().size() == 0)
             root.findViewById(R.id.buttonDelete).setEnabled(false);
-
-        root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
-
-            Toast
-                    .makeText(getActivity(), "Проверить разрешения", Toast.LENGTH_LONG)
-                    .show();
-
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, PICK_IMAGE_SELECTED);
-        });
 
         root.findViewById(R.id.buttonDelete).setOnClickListener(v -> {
 
@@ -127,14 +121,38 @@ public class CustomerSettings extends Fragment {
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
 
-            Intent ringIntent = new Intent();
-            ringIntent.setType("image/*");
-            ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-            ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+            String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
+
+                Toast
+                        .makeText(getActivity(), "no customer permissions", Toast.LENGTH_LONG)
+                        .show();
+            }
+
+            getFile();
         });
 
         return root;
+    }
+
+    private void getFile() {
+        Intent ringIntent = new Intent();
+        ringIntent.setType("image/*");
+        ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+        ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Toast
+                .makeText(getActivity(), "bbb", Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override

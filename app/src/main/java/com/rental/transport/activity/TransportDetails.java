@@ -1,7 +1,9 @@
 package com.rental.transport.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
@@ -31,7 +35,8 @@ import retrofit2.Response;
 public class TransportDetails extends Fragment {
 
     private int currentImage = 0;
-    private final int PICK_IMAGE_SELECTED = 1;
+    private final int PICK_IMAGE_SELECTED = 100;
+    private final int STORAGE_PERMISSION_CODE = 101;
     private Gallery gallery;
     private View root;
 
@@ -73,12 +78,6 @@ public class TransportDetails extends Fragment {
         root
                 .findViewById(R.id.transportMap)
                 .setOnClickListener(view -> FragmentService.getInstance().load(getActivity(), "MapFragment"));
-
-        root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            startActivityForResult(photoPickerIntent, PICK_IMAGE_SELECTED);
-        });
 
         root.findViewById(R.id.buttonDelete).setOnClickListener(v -> {
 
@@ -137,18 +136,28 @@ public class TransportDetails extends Fragment {
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
 
-            Toast
-                    .makeText(getActivity(), "Проверить разрешения", Toast.LENGTH_LONG)
-                    .show();
+            String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, 10);
 
-            Intent ringIntent = new Intent();
-            ringIntent.setType("image/*");
-            ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-            ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(ringIntent, PICK_IMAGE_SELECTED);
+                Toast
+                        .makeText(getActivity(), "no transport permissions", Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            getFile();
         });
 
         return root;
+    }
+
+    private void getFile() {
+        Intent ringIntent = new Intent();
+        ringIntent.setType("image/*");
+        ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+        ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
     }
 
     //Обрабатываем результат выбора в галерее:

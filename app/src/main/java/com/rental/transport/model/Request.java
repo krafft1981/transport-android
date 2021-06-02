@@ -2,6 +2,9 @@ package com.rental.transport.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import lombok.Data;
+
+@Data
 public class Request {
 
     @SerializedName("created_at")
@@ -16,4 +19,8 @@ public class Request {
     private Customer driver;
     @SerializedName("transport")
     private Transport transport;
+    @SerializedName("day")
+    private Long day;
+    @SerializedName("hours")
+    private Integer[] hours;
 }

@@ -1,6 +1,7 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Event;
+import com.rental.transport.model.Request;
 
 import java.util.List;
 import java.util.Map;
@@ -51,14 +52,11 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/driver")
-    public Call<Map<Integer, Event>> doGetRequestEventByDriver();
+    public Call<List<Request>> doGetRequestAsDriver();
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/customer")
-    public Call<Map<Integer, Event>> doGetRequestEventByCustomer(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    public Call<List<Request>> doGetRequestAsCustomer();
 
     @Headers("Content-Type: application/json")
     @PUT("/order/absent")

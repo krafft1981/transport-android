@@ -3,10 +3,8 @@ package com.rental.transport.model;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class Property {
 
     @SerializedName("human_name")

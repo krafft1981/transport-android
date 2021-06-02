@@ -1,35 +1,51 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.rental.transport.model.Event;
+import com.rental.transport.R;
+import com.rental.transport.model.Request;
 
-import java.util.Map;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.TimeZone;
+
+import lombok.Getter;
 
 public class RequestListAdapter extends BaseAdapter {
 
+    private Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
     private Context context;
-    private Map<Integer, Event> data;
 
-    public RequestListAdapter(Context context, Map<Integer, Event> data) {
+    @Getter
+    private List<Request> data;
+
+    public RequestListAdapter(Context context, List<Request> data) {
         this.context = context;
         this.data = data;
+
+        Collections.sort(this.data, (Comparator) (o1, o2) -> {
+            Request p1 = (Request) o1;
+            Request p2 = (Request) o2;
+            return p2.getDay().compareTo(p1.getDay());
+        });
+
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     public class ViewHolder {
-        TextView type;
-        TextView logic;
-        TextView name;
-        EditText value;
-    }
-
-    public Map<Integer, Event> getdata() {
-        return data;
+        TextView orderDay;
+        TextView hourStart;
+        TextView hourStop;
+        TextView transportType;
+        TextView transportName;
     }
 
     @Override
@@ -50,43 +66,41 @@ public class RequestListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-//        PropertyListAdapter.ViewHolder holder;
-//        if (convertView == null) {
-//            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = inflater.inflate(R.layout.property_element, parent, false);
-//            holder = new PropertyListAdapter.ViewHolder();
-//
-//            holder.type = convertView.findViewById(R.id.propertyType);
-//            holder.logic = convertView.findViewById(R.id.propertyLogic);
-//            holder.name = convertView.findViewById(R.id.propertyName);
-//            holder.value = convertView.findViewById(R.id.propertyValue);
-//            if (!editable) {
-//                holder.value.setKeyListener(null);
-//            }
-//            else {
-//                holder.value.setOnFocusChangeListener((v, hasFocus) -> {
-//                    if (!hasFocus) {
-//                        IStringValidator validator = vf.getValidator(holder.type.getText().toString());
-//                        if (!validator.validate(holder.value.getText().toString()))
-//                            holder.value.setError(context.getString(R.string.error));
-//                        else
-//                            data.get(position).setValue(holder.value.getText().toString());
-//                    }
-//                });
-//            }
-//
-//            convertView.setTag(holder);
-//        }
-//        else {
-//            holder = (PropertyListAdapter.ViewHolder) convertView.getTag();
-//        }
-//
-//        Property property = data.get(position);
-//
-//        holder.type.setText(property.getType());
-//        holder.logic.setText(property.getLogicName());
-//        holder.name.setText(property.getHumanName());
-//        holder.value.setText(property.getValue());
+        RequestListAdapter.ViewHolder holder;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.request_element, parent, false);
+            holder = new RequestListAdapter.ViewHolder();
+
+            holder.orderDay = convertView.findViewById(R.id.orderDay);
+            holder.hourStart = convertView.findViewById(R.id.hourStart);
+            holder.hourStop = convertView.findViewById(R.id.hourStop);
+            holder.transportType = convertView.findViewById(R.id.transportType);
+            holder.transportName = convertView.findViewById(R.id.transportName);
+
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (RequestListAdapter.ViewHolder) convertView.getTag();
+        }
+
+        Request request = data.get(position);
+
+        calendar.setTimeInMillis(request.getDay());
+
+        Integer min = Integer.MAX_VALUE;
+        Integer max = Integer.MIN_VALUE;
+        for (Integer value : request.getHours()) {
+
+            if (min > value) min = value;
+            if (max < value) max = value;
+        }
+
+        holder.orderDay.setText(calendar.getTime().toString());
+//        holder.transportType.setText(request.getTransport().getType().getName());
+
+        holder.hourStart.setText(min + ":00");
+        holder.hourStop.setText(max + 1 + ":00");
 
         return convertView;
     }

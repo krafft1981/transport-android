@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.widget.ImageView;
 
-import com.rental.transport.model.Image;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -45,19 +43,18 @@ public class ImageService {
         image.setImageBitmap(bitmap);
     }
 
-    private void setImageAndCache(Context context, Long imageId, String data, ImageView image) {
+    private void setImageAndCache(Context context, Long imageId, byte[] data, ImageView image) {
 
-        byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
         try {
             File file = getFile(context, imageId);
             FileOutputStream out = new FileOutputStream(file);
-            out.write(decodedString, 0, decodedString.length);
+            out.write(data, 0, data.length);
         }
         catch (Exception e) {
 
         }
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         image.setImageBitmap(bitmap);
     }
 
@@ -78,18 +75,17 @@ public class ImageService {
                     .getInstance()
                     .getImageApi()
                     .doGetImage(imageId)
-                    .enqueue(new Callback<Image>() {
+                    .enqueue(new Callback<byte[]>() {
                         @Override
-                        public void onResponse(Call<Image> call, Response<Image> response) {
+                        public void onResponse(Call<byte[]> call, Response<byte[]> response) {
                             if (response.isSuccessful()) {
-                                String base64String = response.body().getData();
-                                setImageAndCache(context, imageId, base64String, image);
+                                setImageAndCache(context, imageId, response.body(), image);
                                 image.invalidate();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Image> call, Throwable t) {
+                        public void onFailure(Call<byte[]> call, Throwable t) {
                             image.setImageResource(defaultImage);
                             image.invalidate();
                         }

@@ -7,16 +7,16 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.rental.transport.model.Request;
+import com.rental.transport.model.Event;
 
-import java.util.List;
+import java.util.Map;
 
 public class RequestListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Request> data;
+    private Map<Integer, Event> data;
 
-    public RequestListAdapter(Context context, List<Request> data) {
+    public RequestListAdapter(Context context, Map<Integer, Event> data) {
         this.context = context;
         this.data = data;
     }
@@ -28,7 +28,7 @@ public class RequestListAdapter extends BaseAdapter {
         EditText value;
     }
 
-    public List<Request> getdata() {
+    public Map<Integer, Event> getdata() {
         return data;
     }
 

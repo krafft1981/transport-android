@@ -35,6 +35,11 @@ public class MainActivity extends FragmentActivity {
                     break;
                 }
 
+                case R.id.request_menu: {
+                    FragmentService.getInstance().load(this, "RequestFragment");
+                    break;
+                }
+
                 case R.id.orders_menu: {
                     FragmentService.getInstance().load(this, "OrderFragment");
                     break;
@@ -47,11 +52,6 @@ public class MainActivity extends FragmentActivity {
 
                 case R.id.account_menu: {
                     FragmentService.getInstance().load(this, "CustomerSettings");
-                    break;
-                }
-
-                case R.id.request_menu: {
-                    FragmentService.getInstance().load(this, "RequestFragment");
                     break;
                 }
             }

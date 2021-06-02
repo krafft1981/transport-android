@@ -50,11 +50,8 @@ public interface OrderApi {
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/order/request/transport")
-    public Call<Map<Integer, Event>> doGetRequestEventByTransport(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    @GET("/order/request/driver")
+    public Call<Map<Integer, Event>> doGetRequestEventByDriver();
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/customer")

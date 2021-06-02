@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.widget.ImageView;
 
 import com.rental.transport.model.Image;
@@ -51,16 +50,13 @@ public class ImageService {
         return true;
     }
 
-    private void setImageAndCache(Context context, Long imageId, String data, ImageView image) {
+    private void setImageAndCache(Context context, Long imageId, byte[] data, ImageView image) {
 
         try {
-            byte[] decodedString = Base64.decode(data, Base64.DEFAULT);
             File file = getFile(context, imageId);
             FileOutputStream out = new FileOutputStream(file);
-            out.write(decodedString, 0, decodedString.length);
-
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            out.write(data, 0, data.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             image.setImageBitmap(bitmap);
         }
         catch (Exception e) {
@@ -85,8 +81,7 @@ public class ImageService {
                         @Override
                         public void onResponse(Call<Image> call, Response<Image> response) {
                             if (response.isSuccessful()) {
-                                String base64String = response.body().getData();
-                                setImageAndCache(context, imageId, base64String, image);
+                                setImageAndCache(context, imageId, response.body().getData().getBytes(), image);
                                 image.invalidate();
                             }
                         }
@@ -129,7 +124,7 @@ public class ImageService {
         Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, false);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
-        return Base64.encodeToString(os.toByteArray(), Base64.NO_WRAP);
+        return os.toString();
     }
 
     private String getRealPathFromURI(Context context, Uri contentUri) {

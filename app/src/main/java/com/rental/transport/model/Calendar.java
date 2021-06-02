@@ -13,6 +13,4 @@ public class Calendar {
     private Long day;
     @SerializedName("hours")
     private List<Integer> hours;
-    @SerializedName("message")
-    private String message;
 }

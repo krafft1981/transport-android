@@ -13,6 +13,8 @@ import com.rental.transport.model.Property;
 import com.rental.transport.validator.IStringValidator;
 import com.rental.transport.validator.ValidatorFactory;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class PropertyListAdapter extends BaseAdapter {
@@ -26,6 +28,12 @@ public class PropertyListAdapter extends BaseAdapter {
         this.context = context;
         this.data = data;
         this.editable = editable;
+
+        Collections.sort(this.data, (Comparator) (o1, o2) -> {
+            Property p1 = (Property) o1;
+            Property p2 = (Property) o2;
+            return p1.getOrder().compareTo(p2.getOrder());
+        });
     }
 
     public class ViewHolder {

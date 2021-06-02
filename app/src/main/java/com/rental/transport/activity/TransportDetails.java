@@ -36,7 +36,7 @@ public class TransportDetails extends Fragment {
 
     private int currentImage = 0;
     private final int PICK_IMAGE_SELECTED = 100;
-    private final int STORAGE_PERMISSION_CODE = 101;
+    private final int STORAGE_PERMISSION_CODE = 1;
     private Gallery gallery;
     private View root;
 
@@ -136,28 +136,22 @@ public class TransportDetails extends Fragment {
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
 
-            String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-            if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
+            String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+            if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
 
-                Toast
-                        .makeText(getActivity(), "no transport permissions", Toast.LENGTH_LONG)
-                        .show();
-                return;
+                Intent ringIntent = new Intent();
+                ringIntent.setType("image/*");
+                ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+                ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
             }
+            else {
 
-            getFile();
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
+            }
         });
 
         return root;
-    }
-
-    private void getFile() {
-        Intent ringIntent = new Intent();
-        ringIntent.setType("image/*");
-        ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-        ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
     }
 
     //Обрабатываем результат выбора в галерее:

@@ -121,7 +121,7 @@ public class ImageService {
         String name = getRealPathFromURI(context, intent.getData());
         Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, false);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, os);
         return os.toByteArray();
     }
 

@@ -9,8 +9,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
 
-import com.rental.transport.model.Image;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -77,17 +75,17 @@ public class ImageService {
                     .getInstance()
                     .getImageApi()
                     .doGetImage(imageId)
-                    .enqueue(new Callback<Image>() {
+                    .enqueue(new Callback<byte[]>() {
                         @Override
-                        public void onResponse(Call<Image> call, Response<Image> response) {
+                        public void onResponse(Call<byte[]> call, Response<byte[]> response) {
                             if (response.isSuccessful()) {
-                                setImageAndCache(context, imageId, response.body().getData().getBytes(), image);
+                                setImageAndCache(context, imageId, response.body(), image);
                                 image.invalidate();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Image> call, Throwable t) {
+                        public void onFailure(Call<byte[]> call, Throwable t) {
                             image.setImageResource(defaultImage);
                             image.invalidate();
                         }
@@ -118,13 +116,13 @@ public class ImageService {
         }
     }
 
-    public String getImage(Context context, Intent intent) {
+    public byte[] getImage(Context context, Intent intent) {
 
         String name = getRealPathFromURI(context, intent.getData());
         Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, false);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
-        return os.toString();
+        return os.toByteArray();
     }
 
     private String getRealPathFromURI(Context context, Uri contentUri) {

@@ -1,7 +1,5 @@
 package com.rental.transport.network;
 
-import com.rental.transport.model.Image;
-
 import java.util.List;
 
 import retrofit2.Call;
@@ -18,12 +16,12 @@ public interface ImageApi {
     @Headers("Content-Type: text/plain")
     @POST("/image")
     Call<Long> doPostImage(
-            @Body String data
+            @Body byte[] data
     );
 
     @Headers("Content-Type: application/json")
     @GET("/image")
-    Call<Image> doGetImage(
+    Call<byte[]> doGetImage(
             @Query("id") Long id
     );
 

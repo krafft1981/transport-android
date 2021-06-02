@@ -159,7 +159,7 @@ public class CustomerSettings extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Customer customer = MemoryService.getInstance().getCustomer();
                     try {
-                        String data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
+                        byte[] data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
                         NetworkService
                                 .getInstance()

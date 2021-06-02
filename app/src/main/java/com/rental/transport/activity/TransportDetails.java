@@ -163,7 +163,7 @@ public class TransportDetails extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     Transport transport = MemoryService.getInstance().getTransport();
                     try {
-                        String data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
+                        byte[] data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                         NetworkService
                                 .getInstance()

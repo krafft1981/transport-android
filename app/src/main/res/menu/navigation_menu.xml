@@ -9,7 +9,7 @@
     <item
         android:id="@+id/request_menu"
         android:enabled="true"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@drawable/icon_request"
         android:title="@string/requests" />
 
     <item
@@ -21,7 +21,7 @@
     <item
         android:id="@+id/calendar_menu"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_my_calendar"
+        android:icon="@drawable/icon_calendar"
         android:title="@string/calendar" />
 
     <item

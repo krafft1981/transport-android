@@ -138,7 +138,7 @@ public class TransportDetails extends Fragment {
 
             String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
             if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, 10);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
 
                 Toast
                         .makeText(getActivity(), "no transport permissions", Toast.LENGTH_LONG)

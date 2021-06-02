@@ -35,7 +35,7 @@ public class CustomerSettings extends Fragment {
 
     private int currentImage = 0;
     private final int PICK_IMAGE_SELECTED = 100;
-    private final int STORAGE_PERMISSION_CODE = 101;
+    private final int STORAGE_PERMISSION_CODE = 0;
     private Gallery gallery;
     private View root;
 

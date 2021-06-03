@@ -140,17 +140,6 @@ public class CustomerSettings extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        Toast
-                .makeText(getActivity(), "bbb", Toast.LENGTH_LONG)
-                .show();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 

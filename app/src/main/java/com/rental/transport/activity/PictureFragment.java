@@ -30,7 +30,7 @@ public class PictureFragment extends Fragment {
 
         ImageService
                 .getInstance()
-                .setImage(getContext(), imageId, R.drawable.border, image);
+                .setImage(getContext(), imageId, R.drawable.background, image);
 
         return root;
     }

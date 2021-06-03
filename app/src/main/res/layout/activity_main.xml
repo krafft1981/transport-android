@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/main_activity_container"
@@ -15,8 +15,8 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         app:itemBackground="@color/gray"
-        app:itemIconTint="@color/silver"
-        app:itemTextColor="@color/design_default_color_background"
+        app:itemIconTint="@drawable/bottom_navigation_item_colors"
+        app:itemTextColor="@drawable/bottom_navigation_item_colors"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/navigation_menu" />
 

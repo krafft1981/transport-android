@@ -4,23 +4,9 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp">
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <ListView
+        android:id="@+id/orderList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.rental.transport.views.MyListView
-                android:id="@+id/property"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

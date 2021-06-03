@@ -11,7 +11,7 @@ import com.rental.transport.service.FragmentService;
 
 public class MainActivity extends FragmentActivity {
 
-    public BottomNavigationView bottomNavigation = null;
+    private BottomNavigationView bottomNavigation = null;
 
     public void showMenu(Boolean show) {
 
@@ -26,7 +26,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        https://github.com/aurelhubert/ahbottomnavigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -59,7 +58,9 @@ public class MainActivity extends FragmentActivity {
             return true;
         });
 
-        if (savedInstanceState == null)
+        if (savedInstanceState == null) {
             FragmentService.getInstance().load(this, "CustomerLogin");
+            bottomNavigation.setSelectedItemId(R.id.request_menu);
+        }
     }
 }

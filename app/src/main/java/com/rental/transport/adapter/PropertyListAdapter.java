@@ -88,6 +88,13 @@ public class PropertyListAdapter extends BaseAdapter {
                             data.get(position).setValue(holder.value.getText().toString());
                     }
                 });
+
+                holder.value.setOnEditorActionListener((v, actionId, event) -> {
+                    IStringValidator validator = vf.getValidator(holder.type.getText().toString());
+                    if (validator.validate(holder.value.getText().toString()))
+                        data.get(position).setValue(holder.value.getText().toString());
+                    return true;
+                });
             }
 
             convertView.setTag(holder);

@@ -1,6 +1,7 @@
 package com.rental.transport.service;
 
 import com.rental.transport.model.Customer;
+import com.rental.transport.model.Event;
 import com.rental.transport.model.Order;
 import com.rental.transport.model.Parking;
 import com.rental.transport.model.Transport;
@@ -32,6 +33,10 @@ public class MemoryService {
     @Getter
     @Setter
     private Long imageId;
+
+    @Getter
+    @Setter
+    private Event event;
 
     @Getter
     @Setter

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="actionEnum">
+        <item>Ожидание</item>
+        <item>Принять</item>
+        <item>Отказать</item>
+    </string-array>
+</resources>

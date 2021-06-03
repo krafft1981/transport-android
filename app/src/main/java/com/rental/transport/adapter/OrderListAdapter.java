@@ -72,9 +72,9 @@ public class OrderListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.request_element, parent, false);
             holder = new OrderListAdapter.ViewHolder();
 
-            holder.orderDay = convertView.findViewById(R.id.orderDay);
-            holder.hourStart = convertView.findViewById(R.id.hourStart);
-            holder.hourStop = convertView.findViewById(R.id.hourStop);
+//            holder.orderDay = convertView.findViewById(R.id.orderDay);
+//            holder.hourStart = convertView.findViewById(R.id.hourStart);
+//            holder.hourStop = convertView.findViewById(R.id.hourStop);
             holder.transportType = convertView.findViewById(R.id.transportType);
             holder.transportName = convertView.findViewById(R.id.transportName);
 

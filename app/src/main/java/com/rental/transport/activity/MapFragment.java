@@ -18,17 +18,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.rental.transport.R;
 
 public class MapFragment extends Fragment {
-    MapView mMapView;
+
+    MapView view;
     private GoogleMap googleMap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.map_fragment, container, false);
 
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
+        view = (MapView) rootView.findViewById(R.id.mapView);
+        view.onCreate(savedInstanceState);
 
-        mMapView.onResume(); // needed to get the map to display immediately
+        view.onResume(); // needed to get the map to display immediately
 
         try {
             MapsInitializer.initialize(getContext());
@@ -36,13 +37,13 @@ public class MapFragment extends Fragment {
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
+        view.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
                 // For showing a move to my location button
-//                googleMap.setMyLocationEnabled(true);
+                googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
                 LatLng sydney = new LatLng(-34, 151);
@@ -64,24 +65,24 @@ public class MapFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+        view.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+        view.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        view.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+        view.onLowMemory();
     }
 }

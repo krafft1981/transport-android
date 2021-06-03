@@ -48,4 +48,5 @@
     <string name="orders">Заказы</string>
     <string name="calendar">Календарь</string>
     <string name="account">Профиль</string>
+    <string name="actionPrompt">Выбор</string>
 </resources>

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -60,7 +61,14 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @PUT("/order/absent")
-    public Call<List<Event>> doPutAbsentCustomer(
+    public Call<Event> doPutAbsentCustomer(
+            @Query("id") Long id,
+            @Body String message
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("/order/absent")
+    public Call<Event> doPostAbsentCustomer(
             @Query("day") Long day,
             @Query("hour") Integer[] hour
     );

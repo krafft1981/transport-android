@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class Request {
 
+    @SerializedName("id")
+    private Long id;
     @SerializedName("created_at")
     private Long createdAt;
     @SerializedName("interact_at")

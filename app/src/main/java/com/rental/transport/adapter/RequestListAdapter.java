@@ -4,48 +4,57 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Request;
+import com.rental.transport.model.Transport;
+import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import lombok.Getter;
+import lombok.NonNull;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RequestListAdapter extends BaseAdapter {
 
-    private Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+    private static final String format = "d MMMM (EEE)";
     private Context context;
 
     @Getter
-    private List<Request> data;
+    private List<Request> data = new ArrayList();
 
-    public RequestListAdapter(Context context, List<Request> data) {
+    public RequestListAdapter(Context context) {
         this.context = context;
-        this.data = data;
+        loadRequest();
+    }
 
+    private void sort() {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
             Request p1 = (Request) o1;
             Request p2 = (Request) o2;
-            return p2.getDay().compareTo(p1.getDay());
+            return p1.getDay().compareTo(p2.getDay());
         });
-
-        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     public class ViewHolder {
-        TextView orderDay;
-        TextView hourStart;
-        TextView hourStop;
+        TextView requestDay;
+        TextView requestHours;
         TextView transportType;
         TextView transportName;
+        Spinner action;
     }
 
     @Override
@@ -67,41 +76,149 @@ public class RequestListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         RequestListAdapter.ViewHolder holder;
+
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.request_element, parent, false);
             holder = new RequestListAdapter.ViewHolder();
-
-            holder.orderDay = convertView.findViewById(R.id.orderDay);
-            holder.hourStart = convertView.findViewById(R.id.hourStart);
-            holder.hourStop = convertView.findViewById(R.id.hourStop);
+            holder.requestDay = convertView.findViewById(R.id.requestDay);
+            holder.requestHours = convertView.findViewById(R.id.requestHours);
             holder.transportType = convertView.findViewById(R.id.transportType);
             holder.transportName = convertView.findViewById(R.id.transportName);
+            holder.action = convertView.findViewById(R.id.action);
+            holder.action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    if (pos != 0) {
+                        switch (pos) {
+                            case 1: {
+                                acceptRequest(position);
+                                break;
+                            }
+
+                            case 2: {
+                                rejectRequest(position);
+                                break;
+                            }
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+            });
 
             convertView.setTag(holder);
         }
-        else {
+
+        else
             holder = (RequestListAdapter.ViewHolder) convertView.getTag();
-        }
 
         Request request = data.get(position);
-
-        calendar.setTimeInMillis(request.getDay());
+        Transport transport = request.getTransport();
 
         Integer min = Integer.MAX_VALUE;
         Integer max = Integer.MIN_VALUE;
-        for (Integer value : request.getHours()) {
 
+        for (Integer value : request.getHours()) {
             if (min > value) min = value;
             if (max < value) max = value;
         }
 
-        holder.orderDay.setText(calendar.getTime().toString());
-//        holder.transportType.setText(request.getTransport().getType().getName());
+        max++;
 
-        holder.hourStart.setText(min + ":00");
-        holder.hourStop.setText(max + 1 + ":00");
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+
+        holder.requestDay.setText(df.format(format, new Date(request.getDay())));
+        holder.requestHours.setText(min + ":00" + " - " + max + ":00");
+//        holder.transportType.setText(transport.getType().getName());
+//        holder.transportName.setText(transport.getProperty());
 
         return convertView;
+    }
+
+    private void acceptRequest(Integer position) {
+
+        Request request = data.get(position);
+
+        ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getOrderApi()
+                .doPostConfirmOrder(request.getId())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        ProgresService.getInstance().hideProgress();
+                        loadRequest();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(context, t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
+
+    private void rejectRequest(Integer position) {
+
+        Request request = data.get(position);
+
+        ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getOrderApi()
+                .doPostRejectOrder(request.getId())
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        ProgresService.getInstance().hideProgress();
+                        loadRequest();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(context, t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
+
+    private void loadRequest() {
+
+        RequestListAdapter adapter = this;
+        ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getOrderApi()
+                .doGetRequestAsDriver()
+                .enqueue(new Callback<List<Request>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Request>> call, @NonNull Response<List<Request>> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful()) {
+                            data = response.body();
+                            sort();
+                            adapter.notifyDataSetInvalidated();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Request>> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(context, t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
     }
 }

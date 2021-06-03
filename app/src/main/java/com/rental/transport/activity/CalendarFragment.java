@@ -10,9 +10,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
-import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Event;
-import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
@@ -34,13 +32,11 @@ public class CalendarFragment extends Fragment {
 
     private void loadDetails(TimeView tv) {
 
-        Transport transport = MemoryService.getInstance().getTransport();
-
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.calendar_loading));
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doGetTransportCalendar(currentDay.getTime(), transport.getId())
+                .doGetCustomerCalendar(currentDay.getTime())
                 .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override
                     public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
@@ -61,28 +57,27 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
-    private void updateDetails(TimeView tv) {
+    private void createRecord(TimeView tv) {
 
         Set<Integer> hours = tv.getHours();
-        Transport transport = MemoryService.getInstance().getTransport();
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doPostRequest(transport.getId(), currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
-                .enqueue(new Callback<Map<Integer, Event>>() {
+                .doPostAbsentCustomer(currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
+                .enqueue(new Callback<Event>() {
                     @Override
-                    public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
+                    public void onResponse(Call<Event> call, Response<Event> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            tv.setData(response.body());
-                            tv.invalidate();
+                            MemoryService.getInstance().setEvent(response.body());
+                            FragmentService.getInstance().load(getActivity(), "RecordDetails");
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Map<Integer, Event>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<Event> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -106,18 +101,30 @@ public class CalendarFragment extends Fragment {
 
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             currentDay = new Date(year - 1900, month, dayOfMonth + 1);
-//            loadDetails(timeView);
+            loadDetails(timeView);
         });
-//
-//        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> updateDetails(timeView));
-//
-//        timeView.setOnTouchListener((view, event) -> {
-//            if (timeView.click(view, event) == EventTypeEnum.ORDER)
-//                FragmentService.getInstance().load(getActivity(), "OrderFragment");
-//            return true;
-//        });
-//
-//        loadDetails(timeView);
+
+        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> createRecord(timeView));
+
+        timeView.setOnTouchListener((view, event) -> {
+            switch (timeView.click(view, event)) {
+                case ORDER: {
+                    FragmentService.getInstance().load(getActivity(), "OrderDetails");
+                    break;
+                }
+
+                case UNAVAILABLE: {
+                    FragmentService.getInstance().load(getActivity(), "RecordDetails");
+                    break;
+                }
+
+                default:
+                    break;
+            }
+            return true;
+        });
+
+        loadDetails(timeView);
         return root;
     }
 }

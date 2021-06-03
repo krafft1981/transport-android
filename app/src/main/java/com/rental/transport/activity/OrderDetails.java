@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
-import com.rental.transport.adapter.RequestListAdapter;
 
-public class RequestFragment extends Fragment {
+public class OrderDetails extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,9 +19,7 @@ public class RequestFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.request_fragment, container, false);
-        ListView list = root.findViewById(R.id.requestList);
-        list.setAdapter(new RequestListAdapter(getContext()));
+        View root = inflater.inflate(R.layout.order_details, container, false);
         return root;
     }
 }

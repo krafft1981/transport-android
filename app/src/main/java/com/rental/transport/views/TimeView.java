@@ -170,6 +170,11 @@ public class TimeView extends View {
                     paint.setColor(Color.GREEN);
                     break;
                 }
+
+                case REQUEST: {
+                    paint.setColor(Color.YELLOW);
+                    break;
+                }
             }
 
             Coordinate coordinate = new Coordinate();

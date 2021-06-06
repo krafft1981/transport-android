@@ -79,6 +79,9 @@ public interface OrderApi {
     @GET("/order/transport")
     public Call<List<Order>> doGetOrderByTransport();
 
+    @Headers("Content-Type: application/json")
+    @GET("/order/driver")
+    public Call<List<Order>> doGetOrderByDriver();
 
     @Headers("Content-Type: application/json")
     @GET("/event/customer")

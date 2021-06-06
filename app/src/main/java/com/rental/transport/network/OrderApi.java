@@ -20,18 +20,18 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @POST("/order/request/confirm")
-    public Call<Void> doPostConfirmOrder(
+    public Call<List<Request>> doPostConfirmOrder(
             @Query("request_id") Long id
     );
 
     @Headers("Content-Type: application/json")
     @POST("/order/request/reject")
-    public Call<Void> doPostRejectOrder(
+    public Call<List<Request>> doPostRejectOrder(
             @Query("request_id") Long id
     );
 
     @Headers("Content-Type: application/json")
-    @POST("/order")
+    @POST("/request")
     public Call<Map<Integer, Event>> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
@@ -40,17 +40,11 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @GET("/order/transport")
-    public Call<Map<Integer, Event>> doGetEventByTransport(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    public Call<Map<Integer, Event>> doGetEventByTransport();
 
     @Headers("Content-Type: application/json")
     @GET("/order/customer")
-    public Call<Map<Integer, Event>> doGetEventByCustomer(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    public Call<Map<Integer, Event>> doGetEventByCustomer();
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/driver")
@@ -59,6 +53,23 @@ public interface OrderApi {
     @Headers("Content-Type: application/json")
     @GET("/order/request/customer")
     public Call<List<Request>> doGetRequestAsCustomer();
+
+    @Headers("Content-Type: application/json")
+    @GET("/order/calendar/transport")
+    public Call<Map<Integer, Event>> doGetTransportCalendar(
+            @Query("day") Long day,
+            @Query("transport_id") Long transportId
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/order/calendar/customer")
+    public Call<Map<Integer, Event>> doGetCustomerCalendar(
+            @Query("day") Long day
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/order")
+    Call<List<Order>> doGetOrders();
 
     @Headers("Content-Type: application/json")
     @PUT("/order/absent")
@@ -79,21 +90,4 @@ public interface OrderApi {
     public Call<List<Event>> doDeleteAbsentCustomer(
             @Query("id") Long id
     );
-
-    @Headers("Content-Type: application/json")
-    @GET("/order/calendar/transport")
-    public Call<Map<Integer, Event>> doGetTransportCalendar(
-            @Query("day") Long day,
-            @Query("transport_id") Long transportId
-    );
-
-    @Headers("Content-Type: application/json")
-    @GET("/order/calendar/customer")
-    public Call<Map<Integer, Event>> doGetCustomerCalendar(
-            @Query("day") Long day
-    );
-
-    @Headers("Content-Type: application/json")
-    @GET("/order")
-    Call<List<Order>> doGetOrders();
 }

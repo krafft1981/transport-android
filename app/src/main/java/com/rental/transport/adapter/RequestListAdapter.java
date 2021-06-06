@@ -15,6 +15,7 @@ import com.rental.transport.model.Request;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+import com.rental.transport.service.PropertyService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,21 +90,19 @@ public class RequestListAdapter extends BaseAdapter {
             holder.action.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                    if (pos != 0) {
-                        switch (pos) {
-                            case 1: {
-                                acceptRequest(position);
-                                break;
-                            }
-
-                            case 2: {
-                                rejectRequest(position);
-                                break;
-                            }
-
-                            default:
-                                break;
+                    switch (pos) {
+                        case 1: {
+                            acceptRequest(position);
+                            break;
                         }
+
+                        case 2: {
+                            rejectRequest(position);
+                            break;
+                        }
+
+                        default:
+                            break;
                     }
                 }
 
@@ -120,6 +119,7 @@ public class RequestListAdapter extends BaseAdapter {
 
         Request request = data.get(position);
         Transport transport = request.getTransport();
+        String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
 
         Integer min = Integer.MAX_VALUE;
         Integer max = Integer.MIN_VALUE;
@@ -135,8 +135,8 @@ public class RequestListAdapter extends BaseAdapter {
 
         holder.requestDay.setText(df.format(format, new Date(request.getDay())));
         holder.requestHours.setText(min + ":00" + " - " + max + ":00");
-//        holder.transportType.setText(transport.getType().getName());
-//        holder.transportName.setText(transport.getProperty());
+        holder.transportType.setText(transport.getType().getName());
+        holder.transportName.setText(name);
 
         return convertView;
     }
@@ -144,21 +144,25 @@ public class RequestListAdapter extends BaseAdapter {
     private void acceptRequest(Integer position) {
 
         Request request = data.get(position);
-
+        RequestListAdapter adapter = this;
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getOrderApi()
                 .doPostConfirmOrder(request.getId())
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<List<Request>>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                         ProgresService.getInstance().hideProgress();
-                        loadRequest();
+                        if (response.isSuccessful()) {
+                            data = response.body();
+                            sort();
+                            adapter.notifyDataSetInvalidated();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Request>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(context, t.toString(), Toast.LENGTH_LONG)
@@ -170,21 +174,25 @@ public class RequestListAdapter extends BaseAdapter {
     private void rejectRequest(Integer position) {
 
         Request request = data.get(position);
-
+        RequestListAdapter adapter = this;
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getOrderApi()
                 .doPostRejectOrder(request.getId())
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<List<Request>>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                         ProgresService.getInstance().hideProgress();
-                        loadRequest();
+                        if (response.isSuccessful()) {
+                            data = response.body();
+                            sort();
+                            adapter.notifyDataSetInvalidated();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Request>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(context, t.toString(), Toast.LENGTH_LONG)

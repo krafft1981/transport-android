@@ -12,6 +12,10 @@ public class Order {
 
     @SerializedName("id")
     private Long id;
+    @SerializedName("day")
+    private Long day;
+    @SerializedName("hours")
+    private Integer[] hours;
     @SerializedName("property")
     private List<Property> property = new ArrayList<>();
 }

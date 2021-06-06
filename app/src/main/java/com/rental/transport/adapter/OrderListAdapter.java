@@ -13,14 +13,13 @@ import com.rental.transport.model.Order;
 import com.rental.transport.model.Request;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+import com.rental.transport.service.PropertyService;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -30,6 +29,7 @@ import retrofit2.Response;
 
 public class OrderListAdapter extends BaseAdapter {
 
+    private static final String format = "d MMMM (EEE)";
     private Context context;
 
     @Getter
@@ -50,6 +50,8 @@ public class OrderListAdapter extends BaseAdapter {
 
     public class ViewHolder {
         TextView orderDay;
+        TextView orderHours;
+        TextView orderCustomerPhone;
     }
 
     @Override
@@ -75,10 +77,9 @@ public class OrderListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.order_element, parent, false);
             holder = new OrderListAdapter.ViewHolder();
-
-//            holder.orderDay = convertView.findViewById(R.id.orderDay);
-
-
+            holder.orderDay = convertView.findViewById(R.id.orderDay);
+            holder.orderHours = convertView.findViewById(R.id.orderHours);
+            holder.orderCustomerPhone = convertView.findViewById(R.id.orderCustomerPhone);
             convertView.setTag(holder);
         }
         else {
@@ -87,7 +88,23 @@ public class OrderListAdapter extends BaseAdapter {
 
         Order order = data.get(position);
 
-//        holder.orderDay.setText(calendar.getTime().toString());
+        Integer min = Integer.MAX_VALUE;
+        Integer max = Integer.MIN_VALUE;
+
+        for (Integer value : order.getHours()) {
+            if (min > value) min = value;
+            if (max < value) max = value;
+        }
+
+        max++;
+
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+
+        String phone = PropertyService.getInstance().getValue(order.getProperty(), "order_customer_phone");
+
+        holder.orderDay.setText(df.format(format, new Date(order.getDay())));
+        holder.orderHours.setText(min + ":00" + " - " + max + ":00");
+        holder.orderCustomerPhone.setText(phone);
         return convertView;
     }
 
@@ -104,7 +121,7 @@ public class OrderListAdapter extends BaseAdapter {
                     public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-//                            data = response.body();
+                            data = response.body();
                             sort();
                             adapter.notifyDataSetInvalidated();
                         }

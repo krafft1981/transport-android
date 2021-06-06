@@ -156,24 +156,13 @@ public class TimeView extends View {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
             switch (busyBox.type) {
-                case GENERATED: {
-                    paint.setColor(Color.GRAY);
-                    break;
-                }
-
                 case ORDER: {
                     paint.setColor(Color.WHITE);
                     break;
                 }
 
-                case UNAVAILABLE:
-                case BUSY: {
-                    paint.setColor(Color.RED);
-                    break;
-                }
-
-                case REQUEST: {
-                    paint.setColor(Color.YELLOW);
+                case UNAVAILABLE: {
+                    paint.setColor(Color.BLUE);
                     break;
                 }
 

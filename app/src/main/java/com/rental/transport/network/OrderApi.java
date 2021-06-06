@@ -1,11 +1,14 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Event;
+import com.rental.transport.model.Order;
+import com.rental.transport.model.Request;
 
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -17,18 +20,18 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @POST("/order/request/confirm")
-    public Call<Void> doPostConfirmOrder(
+    public Call<List<Request>> doPostConfirmOrder(
             @Query("request_id") Long id
     );
 
     @Headers("Content-Type: application/json")
     @POST("/order/request/reject")
-    public Call<Void> doPostRejectOrder(
+    public Call<List<Request>> doPostRejectOrder(
             @Query("request_id") Long id
     );
 
     @Headers("Content-Type: application/json")
-    @POST("/order")
+    @POST("/order/request")
     public Call<Map<Integer, Event>> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
@@ -37,44 +40,19 @@ public interface OrderApi {
 
     @Headers("Content-Type: application/json")
     @GET("/order/transport")
-    public Call<Map<Integer, Event>> doGetEventByTransport(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    public Call<Map<Integer, Event>> doGetEventByTransport();
 
     @Headers("Content-Type: application/json")
     @GET("/order/customer")
-    public Call<Map<Integer, Event>> doGetEventByCustomer(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    public Call<Map<Integer, Event>> doGetEventByCustomer();
 
     @Headers("Content-Type: application/json")
-    @GET("/order/request/transport")
-    public Call<Map<Integer, Event>> doGetRequestEventByTransport(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
+    @GET("/order/request/driver")
+    public Call<List<Request>> doGetRequestAsDriver();
 
     @Headers("Content-Type: application/json")
     @GET("/order/request/customer")
-    public Call<Map<Integer, Event>> doGetRequestEventByCustomer(
-            @Query("page") Integer page,
-            @Query("size") Integer size
-    );
-
-    @Headers("Content-Type: application/json")
-    @PUT("/order/absent")
-    public Call<List<Event>> doPutAbsentCustomer(
-            @Query("day") Long day,
-            @Query("hour") Integer[] hour
-    );
-
-    @Headers("Content-Type: application/json")
-    @DELETE("/order/absent")
-    public Call<List<Event>> doDeleteAbsentCustomer(
-            @Query("id") Long id
-    );
+    public Call<List<Request>> doGetRequestAsCustomer();
 
     @Headers("Content-Type: application/json")
     @GET("/order/calendar/transport")
@@ -87,5 +65,29 @@ public interface OrderApi {
     @GET("/order/calendar/customer")
     public Call<Map<Integer, Event>> doGetCustomerCalendar(
             @Query("day") Long day
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/order")
+    Call<List<Order>> doGetOrders();
+
+    @Headers("Content-Type: application/json")
+    @PUT("/order/absent")
+    public Call<Event> doPutAbsentCustomer(
+            @Query("id") Long id,
+            @Body String message
+    );
+
+    @Headers("Content-Type: application/json")
+    @POST("/order/absent")
+    public Call<Event> doPostAbsentCustomer(
+            @Query("day") Long day,
+            @Query("hour") Integer[] hour
+    );
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/order/absent")
+    public Call<List<Event>> doDeleteAbsentCustomer(
+            @Query("id") Long id
     );
 }

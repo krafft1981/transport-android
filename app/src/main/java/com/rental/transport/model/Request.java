@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class Request {
 
+    @SerializedName("id")
+    private Long id;
     @SerializedName("created_at")
     private Long createdAt;
     @SerializedName("interact_at")
@@ -16,4 +18,8 @@ public class Request {
     private Customer driver;
     @SerializedName("transport")
     private Transport transport;
+    @SerializedName("day")
+    private Long day;
+    @SerializedName("hours")
+    private Integer[] hours;
 }

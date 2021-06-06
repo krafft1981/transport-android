@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.adapter.TransportGalleryAdapter;
-import com.rental.transport.model.Customer;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
@@ -30,8 +29,6 @@ public class TransportDetails extends Fragment {
         View root = inflater.inflate(R.layout.transport_details, container, false);
 
         Transport transport = MemoryService.getInstance().getTransport();
-        Customer customer = MemoryService.getInstance().getCustomer();
-        Boolean editable = transport.getCustomer().contains(customer.getId());
         Gallery gallery = root.findViewById(R.id.gallery);
         gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
@@ -40,7 +37,7 @@ public class TransportDetails extends Fragment {
         });
 
         ListView listView = root.findViewById(R.id.property);
-        listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), editable));
+        listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), false));
 
         root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> {
             FragmentService.getInstance().load(getActivity(), "CalendarFragment");

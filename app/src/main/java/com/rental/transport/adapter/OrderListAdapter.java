@@ -115,7 +115,7 @@ public class OrderListAdapter extends BaseAdapter {
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doGetOrders()
+                .doGetOrderByCustomer()
                 .enqueue(new Callback<List<Order>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {

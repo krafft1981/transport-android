@@ -6,10 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rental.transport.R;
+import com.rental.transport.model.Order;
 import com.rental.transport.model.Request;
+import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.ProgresService;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,34 +23,33 @@ import java.util.List;
 import java.util.TimeZone;
 
 import lombok.Getter;
+import lombok.NonNull;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderListAdapter extends BaseAdapter {
 
-    private Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
     private Context context;
 
     @Getter
-    private List<Request> data;
+    private List<Order> data = new ArrayList();
 
-    public OrderListAdapter(Context context, List<Request> data) {
+    public OrderListAdapter(Context context) {
         this.context = context;
-        this.data = data;
+        loadOrders();
+    }
 
+    private void sort() {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
             Request p1 = (Request) o1;
             Request p2 = (Request) o2;
             return p2.getDay().compareTo(p1.getDay());
         });
-
-        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     public class ViewHolder {
         TextView orderDay;
-        TextView hourStart;
-        TextView hourStop;
-        TextView transportType;
-        TextView transportName;
     }
 
     @Override
@@ -69,14 +73,11 @@ public class OrderListAdapter extends BaseAdapter {
         OrderListAdapter.ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.request_element, parent, false);
+            convertView = inflater.inflate(R.layout.order_element, parent, false);
             holder = new OrderListAdapter.ViewHolder();
 
 //            holder.orderDay = convertView.findViewById(R.id.orderDay);
-//            holder.hourStart = convertView.findViewById(R.id.hourStart);
-//            holder.hourStop = convertView.findViewById(R.id.hourStop);
-            holder.transportType = convertView.findViewById(R.id.transportType);
-            holder.transportName = convertView.findViewById(R.id.transportName);
+
 
             convertView.setTag(holder);
         }
@@ -84,24 +85,39 @@ public class OrderListAdapter extends BaseAdapter {
             holder = (OrderListAdapter.ViewHolder) convertView.getTag();
         }
 
-        Request request = data.get(position);
+        Order order = data.get(position);
 
-        calendar.setTimeInMillis(request.getDay());
-
-        Integer min = Integer.MAX_VALUE;
-        Integer max = Integer.MIN_VALUE;
-        for (Integer value : request.getHours()) {
-
-            if (min > value) min = value;
-            if (max < value) max = value;
-        }
-
-        holder.orderDay.setText(calendar.getTime().toString());
-//        holder.transportType.setText(request.getTransport().getType().getName());
-
-        holder.hourStart.setText(min + ":00");
-        holder.hourStop.setText(max + 1 + ":00");
-
+//        holder.orderDay.setText(calendar.getTime().toString());
         return convertView;
     }
+
+    private void loadOrders() {
+
+        OrderListAdapter adapter = this;
+        ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getOrderApi()
+                .doGetOrders()
+                .enqueue(new Callback<List<Order>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful()) {
+//                            data = response.body();
+                            sort();
+                            adapter.notifyDataSetInvalidated();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Order>> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(context, t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
 }
+

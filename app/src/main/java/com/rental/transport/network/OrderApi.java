@@ -1,6 +1,7 @@
 package com.rental.transport.network;
 
 import com.rental.transport.model.Event;
+import com.rental.transport.model.Order;
 import com.rental.transport.model.Request;
 
 import java.util.List;
@@ -91,4 +92,8 @@ public interface OrderApi {
     public Call<Map<Integer, Event>> doGetCustomerCalendar(
             @Query("day") Long day
     );
+
+    @Headers("Content-Type: application/json")
+    @GET("/order")
+    Call<List<Order>> doGetOrders();
 }

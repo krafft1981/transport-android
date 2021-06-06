@@ -42,8 +42,8 @@ public class OrderListAdapter extends BaseAdapter {
 
     private void sort() {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
-            Request p1 = (Request) o1;
-            Request p2 = (Request) o2;
+            Order p1 = (Order) o1;
+            Order p2 = (Order) o2;
             return p2.getDay().compareTo(p1.getDay());
         });
     }

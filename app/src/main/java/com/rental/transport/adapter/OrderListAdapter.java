@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Order;
-import com.rental.transport.model.Request;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
@@ -44,7 +43,12 @@ public class OrderListAdapter extends BaseAdapter {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
             Order p1 = (Order) o1;
             Order p2 = (Order) o2;
-            return p1.getDay().compareTo(p2.getDay());
+            int dayRes = p1.getDay().compareTo(p2.getDay());
+
+//            if (dayRes != 0)
+                return dayRes;
+
+//            return p1.getHours().compareTo(p2.getHours());
         });
     }
 
@@ -81,8 +85,7 @@ public class OrderListAdapter extends BaseAdapter {
             holder.orderHours = convertView.findViewById(R.id.orderHours);
             holder.orderCustomerPhone = convertView.findViewById(R.id.orderCustomerPhone);
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (OrderListAdapter.ViewHolder) convertView.getTag();
         }
 

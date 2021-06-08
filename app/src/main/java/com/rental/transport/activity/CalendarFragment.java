@@ -81,15 +81,13 @@ public class CalendarFragment extends Fragment {
                         if (response.isSuccessful()) {
                             tv.setData(response.body());
                             tv.invalidate();
-                        }
-                        else {
+                        } else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
 
                             loadDetails(tv);
@@ -132,7 +130,6 @@ public class CalendarFragment extends Fragment {
                 FragmentService.getInstance().load(getActivity(), "OrderFragment");
             return true;
         });
-
 
         loadDetails(timeView);
         return root;

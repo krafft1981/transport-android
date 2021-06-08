@@ -94,4 +94,17 @@ public interface OrderApi {
     @Headers("Content-Type: application/json")
     @GET("/order/request/customer")
     public Call<List<Request>> doGetRequestAsCustomer();
+
+    @Headers("Content-Type: text/plain")
+    @POST("/order/message")
+    public Call<Order> doPostOrderMessage(
+            @Query("order_id") Long id,
+            @Body String message
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/order")
+    public Call<Order> doGetOrder(
+            @Query("id") Long id
+    );
 }

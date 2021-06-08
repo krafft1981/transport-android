@@ -28,8 +28,7 @@
             android:id="@+id/propertyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:text="Количество зерна" />
+            android:padding="1dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,9 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:inputType="textMultiLine|textNoSuggestions"
             android:background="@android:color/transparent"
-            android:text="28 тонн" />
+            android:inputType="textMultiLine|textNoSuggestions" />
     </LinearLayout>
 
 </LinearLayout>

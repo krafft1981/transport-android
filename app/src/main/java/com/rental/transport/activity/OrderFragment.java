@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.adapter.OrderListAdapter;
+import com.rental.transport.model.Order;
+import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 
 public class OrderFragment extends Fragment {
 
@@ -24,6 +27,11 @@ public class OrderFragment extends Fragment {
         View root = inflater.inflate(R.layout.order_fragment, container, false);
         ListView list = root.findViewById(R.id.orderList);
         list.setAdapter(new OrderListAdapter(getContext()));
+        list.setOnItemClickListener((arg0, arg1, position, arg3) -> {
+            Order order = (Order)list.getAdapter().getItem(position);
+            MemoryService.getInstance().setOrder(order);
+            FragmentService.getInstance().load(getActivity(), "OrderDetails");
+        });
          return root;
     }
 }

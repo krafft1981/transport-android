@@ -13,6 +13,10 @@ public class MainActivity extends FragmentActivity {
 
     private BottomNavigationView bottomNavigation = null;
 
+    public void setMenuActive(Integer id) {
+        bottomNavigation.setSelectedItemId(id);
+    }
+
     public void showMenu(Boolean show) {
 
         int mode = show ? View.VISIBLE : View.GONE;
@@ -58,9 +62,7 @@ public class MainActivity extends FragmentActivity {
             return true;
         });
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
             FragmentService.getInstance().load(this, "CustomerLogin");
-            bottomNavigation.setSelectedItemId(R.id.request_menu);
-        }
     }
 }

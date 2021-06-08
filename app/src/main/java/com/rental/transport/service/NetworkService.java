@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkService {
 
     private static final String BASE_URL = "http://138.124.187.10:8080";
-//    private static final String BASE_URL = "http://192.168.15.103:8080";
+//    private static final String BASE_URL = "http://192.168.45.103:8080";
 
     private static NetworkService mInstance;
     private Retrofit mRetrofit;

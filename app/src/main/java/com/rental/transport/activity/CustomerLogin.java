@@ -78,7 +78,7 @@ public class CustomerLogin extends Fragment {
                                 SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                             }
                             MemoryService.getInstance().setCustomer(response.body());
-                            FragmentService.getInstance().load(getActivity(), "RequestFragment");
+                            ((MainActivity) getActivity()).setMenuActive(R.id.request_menu);
                             ((MainActivity) getActivity()).showMenu(true);
                         }
                     }
@@ -141,8 +141,7 @@ public class CustomerLogin extends Fragment {
                                     Toast
                                             .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
                                             .show();
-                                }
-                                else {
+                                } else {
                                     Toast
                                             .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
                                             .show();

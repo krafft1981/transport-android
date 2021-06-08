@@ -17,6 +17,8 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,6 +38,12 @@ public class RequestListAdapter extends BaseAdapter {
 
     @Getter
     private List<Request> data = new ArrayList();
+
+    private void setData(List<Request> data) {
+        this.data = data;
+        sort();
+        this.notifyDataSetInvalidated();
+    }
 
     public RequestListAdapter(Context context) {
         this.context = context;
@@ -135,8 +143,6 @@ public class RequestListAdapter extends BaseAdapter {
 
         holder.requestDay.setText(df.format(format, new Date(request.getDay())));
         holder.requestHours.setText(min + ":00" + " - " + max + ":00");
-        holder.transportType.setText(transport.getType().getName());
-        holder.transportName.setText(name);
 
         return convertView;
     }
@@ -144,7 +150,6 @@ public class RequestListAdapter extends BaseAdapter {
     private void acceptRequest(Integer position) {
 
         Request request = data.get(position);
-        RequestListAdapter adapter = this;
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
@@ -155,9 +160,17 @@ public class RequestListAdapter extends BaseAdapter {
                     public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            data = response.body();
-                            sort();
-                            adapter.notifyDataSetInvalidated();
+                            setData(response.body());
+                        }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
                         }
                     }
 
@@ -174,7 +187,6 @@ public class RequestListAdapter extends BaseAdapter {
     private void rejectRequest(Integer position) {
 
         Request request = data.get(position);
-        RequestListAdapter adapter = this;
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
@@ -185,9 +197,17 @@ public class RequestListAdapter extends BaseAdapter {
                     public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            data = response.body();
-                            sort();
-                            adapter.notifyDataSetInvalidated();
+                            setData(response.body());
+                        }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
                         }
                     }
 
@@ -203,7 +223,6 @@ public class RequestListAdapter extends BaseAdapter {
 
     private void loadRequest() {
 
-        RequestListAdapter adapter = this;
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
@@ -214,9 +233,17 @@ public class RequestListAdapter extends BaseAdapter {
                     public void onResponse(@NonNull Call<List<Request>> call, @NonNull Response<List<Request>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            data = response.body();
-                            sort();
-                            adapter.notifyDataSetInvalidated();
+                            setData(response.body());
+                        }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
                         }
                     }
 

@@ -29,6 +29,7 @@ import retrofit2.Response;
 public class OrderListAdapter extends BaseAdapter {
 
     private static final String format = "d MMMM (EEE)";
+    private android.text.format.DateFormat df = new android.text.format.DateFormat();
     private Context context;
 
     @Getter
@@ -39,16 +40,17 @@ public class OrderListAdapter extends BaseAdapter {
         loadOrders();
     }
 
+    private void setData(List<Order> data) {
+        this.data = data;
+        sort();
+        this.notifyDataSetInvalidated();
+    }
+
     private void sort() {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
             Order p1 = (Order) o1;
             Order p2 = (Order) o2;
-            int dayRes = p1.getDay().compareTo(p2.getDay());
-
-//            if (dayRes != 0)
-                return dayRes;
-
-//            return p1.getHours().compareTo(p2.getHours());
+            return p1.getDay().compareTo(p2.getDay());
         });
     }
 
@@ -91,29 +93,16 @@ public class OrderListAdapter extends BaseAdapter {
 
         Order order = data.get(position);
 
-        Integer min = Integer.MAX_VALUE;
-        Integer max = Integer.MIN_VALUE;
-
-        for (Integer value : order.getHours()) {
-            if (min > value) min = value;
-            if (max < value) max = value;
-        }
-
-        max++;
-
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-
         String phone = PropertyService.getInstance().getValue(order.getProperty(), "order_customer_phone");
 
         holder.orderDay.setText(df.format(format, new Date(order.getDay())));
-        holder.orderHours.setText(min + ":00" + " - " + max + ":00");
+        holder.orderHours.setText(order.getMinHour() + ":00" + " - " + order.getMaxHour() + ":00");
         holder.orderCustomerPhone.setText(phone);
         return convertView;
     }
 
     private void loadOrders() {
 
-        OrderListAdapter adapter = this;
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
@@ -123,11 +112,8 @@ public class OrderListAdapter extends BaseAdapter {
                     @Override
                     public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            data = response.body();
-                            sort();
-                            adapter.notifyDataSetInvalidated();
-                        }
+                        if (response.isSuccessful())
+                            setData(response.body());
                     }
 
                     @Override

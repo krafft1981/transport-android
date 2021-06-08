@@ -34,6 +34,7 @@ import retrofit2.Response;
 public class RequestListAdapter extends BaseAdapter {
 
     private static final String format = "d MMMM (EEE)";
+    private android.text.format.DateFormat df = new android.text.format.DateFormat();
     private Context context;
 
     @Getter
@@ -129,20 +130,8 @@ public class RequestListAdapter extends BaseAdapter {
         Transport transport = request.getTransport();
         String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
 
-        Integer min = Integer.MAX_VALUE;
-        Integer max = Integer.MIN_VALUE;
-
-        for (Integer value : request.getHours()) {
-            if (min > value) min = value;
-            if (max < value) max = value;
-        }
-
-        max++;
-
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-
         holder.requestDay.setText(df.format(format, new Date(request.getDay())));
-        holder.requestHours.setText(min + ":00" + " - " + max + ":00");
+        holder.requestHours.setText(request.getMinHour() + ":00" + " - " + request.getMaxHour() + ":00");
 
         return convertView;
     }

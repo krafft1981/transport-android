@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -26,12 +27,14 @@ public class OrderFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.order_fragment, container, false);
         ListView list = root.findViewById(R.id.orderList);
-        list.setAdapter(new OrderListAdapter(getContext()));
+        BaseAdapter adapter = new OrderListAdapter(getContext());
+        list.setAdapter(adapter);
         list.setOnItemClickListener((arg0, arg1, position, arg3) -> {
-            Order order = (Order)list.getAdapter().getItem(position);
+            Order order = (Order)adapter.getItem(position);
             MemoryService.getInstance().setOrder(order);
             FragmentService.getInstance().load(getActivity(), "OrderDetails");
         });
+
          return root;
     }
 }

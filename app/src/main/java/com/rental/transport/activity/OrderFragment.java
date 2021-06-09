@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.adapter.OrderChatAdapter;
-import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Order;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
@@ -96,8 +95,6 @@ public class OrderFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.order_fragment, container, false);
         Order order = MemoryService.getInstance().getOrder();
-        ListView listView = root.findViewById(R.id.property);
-        listView.setAdapter(new PropertyListAdapter(getContext(), order.getProperty(), false));
 
         TextView day = root.findViewById(R.id.orderDay);
         TextView hours = root.findViewById(R.id.orderHours);

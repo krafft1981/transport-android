@@ -50,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="введите почту"
+                        android:hint="Почта"
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:padding="1dp" />
                 </LinearLayout>
@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="введите пароль"
+                        android:hint="пароль"
                         android:inputType="textMultiLine|textNoSuggestions|textPassword"
                         android:padding="1dp" />
                 </LinearLayout>
@@ -124,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="введите номер сотового"
+                        android:hint="Ваш сотовый"
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:padding="1dp" />
                 </LinearLayout>
@@ -161,7 +161,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:hint="введите как вас зовут"
+                        android:hint="Ваше имя"
                         android:inputType="textMultiLine|textNoSuggestions"
                         android:padding="1dp" />
                 </LinearLayout>

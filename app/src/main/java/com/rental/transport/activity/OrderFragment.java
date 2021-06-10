@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.adapter.OrderChatAdapter;
 import com.rental.transport.model.Order;
+import com.rental.transport.model.Text;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -36,7 +37,7 @@ public class OrderFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doPostOrderMessage(orderId, source.getText().toString())
+                .doPostOrderMessage(orderId, new Text(source.getText().toString()))
                 .enqueue(new Callback<Order>() {
                     @Override
                     public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
@@ -108,7 +109,7 @@ public class OrderFragment extends Fragment {
 
         root.findViewById(R.id.chatMessageSend).setOnClickListener(v -> sendOrderMessage(list, source, order.getId()));
         root.findViewById(R.id.chatMessageListUpdate).setOnClickListener(v -> updateOrder(list, order.getId()));
-        
+
         return root;
     }
 }

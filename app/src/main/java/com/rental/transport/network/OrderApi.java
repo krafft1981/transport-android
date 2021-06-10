@@ -3,6 +3,7 @@ package com.rental.transport.network;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Order;
 import com.rental.transport.model.Request;
+import com.rental.transport.model.Text;
 
 import java.util.List;
 import java.util.Map;
@@ -101,11 +102,11 @@ public interface OrderApi {
     @GET("/order/request/customer")
     public Call<List<Request>> doGetRequestAsCustomer();
 
-    @Headers("Content-Type: text/plain")
+    @Headers("Content-Type: application/json")
     @POST("/order/message")
     public Call<Order> doPostOrderMessage(
             @Query("order_id") Long id,
-            @Body String message
+            @Body Text body
     );
 
     @Headers("Content-Type: application/json")

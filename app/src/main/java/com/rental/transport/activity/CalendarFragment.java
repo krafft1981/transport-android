@@ -113,7 +113,7 @@ public class CalendarFragment extends Fragment {
                     break;
                 }
 
-                case UNAVAILABLE: {
+                case NOTEBOOK: {
                     FragmentService.getInstance().load(getActivity(), "RecordDetails");
                     break;
                 }

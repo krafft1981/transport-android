@@ -6,7 +6,7 @@ public enum EventTypeEnum {
 
     UNCKNOWN(0, "Uncknown"),
     GENERATED(1, "Generated"),
-    UNAVAILABLE(2, "Unavailable"),
+    NOTEBOOK(2, "NoteBook"),
     REQUEST(3, "Request"),
     ORDER(4, "Order"),
     BUSY(5, "Busy"),

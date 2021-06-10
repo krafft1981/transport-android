@@ -161,7 +161,7 @@ public class TimeView extends View {
                     break;
                 }
 
-                case UNAVAILABLE: {
+                case NOTEBOOK: {
                     paint.setColor(Color.BLUE);
                     break;
                 }

@@ -77,7 +77,7 @@ public class OrderChatAdapter extends BaseAdapter {
         Message message = data.get(position);
 
         Customer customer = MemoryService.getInstance().getCustomer();
-        Integer gravity = customer.getId() == message.getCustomerId() ? Gravity.LEFT : Gravity.RIGHT;
+        Integer gravity = customer.getId() == message.getCustomerId() ? Gravity.RIGHT : Gravity.LEFT;
 
         holder.date.setText(df.format(format, message.getDate()));
         holder.text.setText(message.getText());

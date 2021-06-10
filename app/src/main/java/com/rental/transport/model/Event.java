@@ -13,6 +13,8 @@ public class Event {
     private Order order;
     @SerializedName("request")
     private Request request;
+    @SerializedName("note")
+    private NoteBook noteBook;
     @SerializedName("type")
     private Integer type;
 }

@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Чат с владельцем" />
+            android:text="Чат с клиентом" />
 
         <ListView
             android:id="@+id/orderMessageChat"

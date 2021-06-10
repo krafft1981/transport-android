@@ -36,7 +36,7 @@ public class CalendarFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doGetDriverCalendar(currentDay.getTime())
+                .doGetCustomerCalendar(currentDay.getTime())
                 .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override
                     public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {

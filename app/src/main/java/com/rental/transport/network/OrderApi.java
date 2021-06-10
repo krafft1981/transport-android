@@ -52,12 +52,6 @@ public interface OrderApi {
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/order/calendar/driver")
-    public Call<Map<Integer, Event>> doGetDriverCalendar(
-            @Query("day") Long day
-    );
-
-    @Headers("Content-Type: application/json")
     @POST("/order/request/confirm")
     public Call<List<Request>> doPostConfirmOrder(
             @Query("request_id") Long id

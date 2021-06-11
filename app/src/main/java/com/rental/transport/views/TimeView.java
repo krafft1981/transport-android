@@ -149,7 +149,7 @@ public class TimeView extends View {
 
         Paint textPaint = new Paint();
         textPaint.setTextSize(40);
-        textPaint.setColor(Color.RED);
+        textPaint.setColor(Color.BLACK);
 
         Integer sequense = 0;
 

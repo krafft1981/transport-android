@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,19 +120,26 @@ public class CustomerSettings extends Fragment {
         });
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+                if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
 
-            String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
-            if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
+                    Intent ringIntent = new Intent();
+                    ringIntent.setType("image/*");
+                    ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+                    ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                    startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                } else {
 
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
+                }
+            }
+            else {
                 Intent ringIntent = new Intent();
                 ringIntent.setType("image/*");
                 ringIntent.setAction(Intent.ACTION_GET_CONTENT);
                 ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
-            }
-            else {
-
-                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
             }
         });
 
@@ -191,8 +199,7 @@ public class CustomerSettings extends Fragment {
                                                 .show();
                                     }
                                 });
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                     }
                 }
                 break;

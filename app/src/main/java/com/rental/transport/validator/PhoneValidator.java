@@ -15,6 +15,7 @@ public class PhoneValidator implements IStringValidator {
             return false;
         }
 
-        return pattern.matcher(value).matches();
+//        return pattern.matcher(value).matches();
+        return !TextUtils.isEmpty(value);
     }
 }

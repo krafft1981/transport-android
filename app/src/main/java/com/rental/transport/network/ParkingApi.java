@@ -17,32 +17,46 @@ public interface ParkingApi {
 
     @Headers("Content-Type: application/json")
     @DELETE("/parking")
-    public Call<Void> doDeleteParking(
+    Call<Void> doDeleteParking(
             @Query("id") Long id
     );
 
     @Headers("Content-Type: application/json")
     @GET("/parking")
-    public Call<Parking> doGetParking(
+    Call<Parking> doGetParking(
             @Query("id") Long id
     );
 
     @GET("/parking/list")
-    public Call<List<Parking>> doGetParkingList(
+    Call<List<Parking>> doGetParkingList(
             @Query("page") Integer page,
             @Query("size") Integer size);
 
     @Headers("Content-Type: application/json")
     @POST("/parking")
-    public Call<Long> doPostParking();
+    Call<Long> doPostParking();
 
     @Headers("Content-Type: application/json")
     @PUT("/parking")
-    public Call<Void> doPutParking(
+    Call<Void> doPutParking(
             @Body Parking parking
     );
 
     @Headers("Content-Type: application/json")
     @GET("/parking/count")
-    public Call<Long> doGetCountParking();
+    Call<Long> doGetCountParking();
+
+    @Headers("Content-Type: application/json")
+    @POST("/parking/image")
+    Call<Parking> doPostParkingImage(
+            @Query("parking_id") Long id,
+            @Body byte[] data
+    );
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/parking/image")
+    Call<Parking> doDeleteParkingImage(
+            @Query("parking_id") Long parkingId,
+            @Query("image_id") Long imageId
+    );
 }

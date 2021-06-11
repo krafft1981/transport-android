@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -125,13 +126,22 @@ public class ImageService {
         return os.toByteArray();
     }
 
-    private String getRealPathFromURI(Context context, Uri contentUri) {
+    private String getRealPathFromURI(Context context, Uri contentUri) { // не на всех телефонах работает
         Cursor cursor = null;
         try {
+            Toast
+                    .makeText(context, contentUri.toString(), Toast.LENGTH_LONG)
+                    .show();
+
             String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
+
+            Toast
+                    .makeText(context, cursor.getString(index), Toast.LENGTH_LONG)
+                    .show();
+
             return cursor.getString(index);
         }
         finally {

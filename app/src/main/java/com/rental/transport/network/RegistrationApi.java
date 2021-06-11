@@ -11,7 +11,7 @@ public interface RegistrationApi {
 
     @Headers("Content-Type: application/json")
     @POST("/registration")
-    public Call<Customer> doPostRegistration(
+    Call<Customer> doPostRegistration(
             @Query("account") String account,
             @Query("password") String password,
             @Query("phone") String phone,
@@ -20,7 +20,7 @@ public interface RegistrationApi {
 
     @Headers("Content-Type: application/json")
     @POST("/registration/email")
-    public Call<Void> doPostEmailRegistration(
+    Call<Void> doPostEmailRegistration(
             @Query("account") String account
     );
 }

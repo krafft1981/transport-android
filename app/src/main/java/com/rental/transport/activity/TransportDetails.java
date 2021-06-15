@@ -29,6 +29,8 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -123,6 +125,16 @@ public class TransportDetails extends Fragment {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             ProgresService.getInstance().hideProgress();
+                            if (!response.isSuccessful()) {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                                catch (Exception e) {
+                                }
+                            }
                         }
 
                         @Override

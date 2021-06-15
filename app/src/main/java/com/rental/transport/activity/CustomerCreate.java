@@ -15,6 +15,8 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +54,16 @@ public class CustomerCreate extends Fragment {
                             ProgresService.getInstance().hideProgress();
                             if (response.isSuccessful())
                                 FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+                            else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                                catch (Exception e) {
+                                }
+                            }
                         }
 
                         @Override

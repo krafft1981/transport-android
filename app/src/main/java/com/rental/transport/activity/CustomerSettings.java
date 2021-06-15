@@ -28,6 +28,8 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,6 +109,16 @@ public class CustomerSettings extends Fragment {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             ProgresService.getInstance().hideProgress();
+                            if (!response.isSuccessful()) {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                                catch (Exception e) {
+                                }
+                            }
                         }
 
                         @Override
@@ -129,7 +141,8 @@ public class CustomerSettings extends Fragment {
                     ringIntent.setAction(Intent.ACTION_GET_CONTENT);
                     ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
                     startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
-                } else {
+                }
+                else {
 
                     ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
                 }
@@ -199,7 +212,8 @@ public class CustomerSettings extends Fragment {
                                                 .show();
                                     }
                                 });
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                     }
                 }
                 break;

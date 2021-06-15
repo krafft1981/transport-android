@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.rental.transport.R;
 import com.rental.transport.service.ImageService;
+import com.rental.transport.service.MemoryService;
 
 import java.util.List;
 
@@ -18,9 +19,9 @@ public class TransportGalleryAdapter extends BaseAdapter {
     private Context context;
     private List<Long> data;
 
-    public TransportGalleryAdapter(Context context, List<Long> data) {
+    public TransportGalleryAdapter(Context context) {
         this.context = context;
-        this.data = data;
+        this.data = MemoryService.getInstance().getTransport().getImage();
     }
 
     // returns the number of images, in our example it is 10
@@ -30,7 +31,7 @@ public class TransportGalleryAdapter extends BaseAdapter {
 
     // returns the Item  of an item, i.e. for our example we can get the image
     public Object getItem(int position) {
-        return position;
+        return data.get(position);
     }
 
     // returns the ID of an item

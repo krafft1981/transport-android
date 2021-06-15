@@ -52,8 +52,8 @@ public class PropertyListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int id) {
-        return data.get(id);
+    public Object getItem(int position) {
+        return data.get(position);
     }
 
     @Override

@@ -1,15 +1,14 @@
 package com.rental.transport.service;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -121,42 +120,53 @@ public class ImageService {
     public byte[] getImage(Context context, Intent intent) {
 
         String name = getRealPathFromURI(context, intent.getData());
-        Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, false);
+        Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, true);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
         return os.toByteArray();
     }
 
-    public void getImage(Activity activity, int code) {
-        Intent ringIntent = new Intent();
-        ringIntent.setType("image/*");
-        ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-        ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), code);
+    private String getRealPathFromURI(Context context, Uri uri) { // не на всех телефонах работает
+
+        return getRealPathFromURI_API19(context, uri);
     }
 
-    private String getRealPathFromURI(Context context, Uri contentUri) { // не на всех телефонах работает
-        Cursor cursor = null;
-        try {
-            Toast
-                    .makeText(context, contentUri.toString(), Toast.LENGTH_LONG)
-                    .show();
+    public static String getRealPathFromURI_API19(Context context, Uri uri) {
 
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
+        String fileName = "";
+        if (uri.getHost().contains("com.android.providers.media")) {
+            // Image pick from recent
+            String wholeID = DocumentsContract.getDocumentId(uri);
 
-            Toast
-                    .makeText(context, cursor.getString(index), Toast.LENGTH_LONG)
-                    .show();
+            // Split at colon, use second item in the array
+            String id = wholeID.split(":")[1];
 
-            return cursor.getString(index);
-        }
-        finally {
-            if (cursor != null) {
-                cursor.close();
+            String[] column = {MediaStore.Images.Media.DATA};
+
+            // where id is equal to
+            String sel = MediaStore.Images.Media._ID + "=?";
+
+            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, column, sel, new String[]{id}, null);
+
+            int columnIndex = cursor.getColumnIndex(column[0]);
+
+            if (cursor.moveToFirst()) {
+                fileName = cursor.getString(columnIndex);
             }
+            cursor.close();
+            return fileName;
         }
+        else {
+            // image pick from gallery
+            return getRealPathFromURI_BelowAPI11(context, uri);
+        }
+    }
+
+    public static String getRealPathFromURI_BelowAPI11(Context context, Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 }

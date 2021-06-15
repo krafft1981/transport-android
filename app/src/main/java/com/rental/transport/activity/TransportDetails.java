@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -37,11 +37,11 @@ import retrofit2.Response;
 
 public class TransportDetails extends Fragment {
 
-    private int currentImage = 0;
     private final int PICK_IMAGE_SELECTED = 100;
     private final int STORAGE_PERMISSION_CODE = 1;
     private Gallery gallery;
     private View root;
+    private Button buttonDelete;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,29 +51,20 @@ public class TransportDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        root = inflater.inflate(R.layout.transport_details, container, false);
         Transport transport = MemoryService.getInstance().getTransport();
+
+        root = inflater.inflate(R.layout.transport_details, container, false);
+        buttonDelete = root.findViewById(R.id.buttonDelete);
         gallery = root.findViewById(R.id.gallery);
-        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
+        gallery.setAdapter(new TransportGalleryAdapter(getContext()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
-            MemoryService.getInstance().setImageId(transport.getImage().get(position));
+            Long imageId = MemoryService.getInstance().getTransport().getImage().get(position);
+            MemoryService.getInstance().setImageId(imageId);
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
-        if (transport.getImage().size() == 0)
-            root.findViewById(R.id.buttonDelete).setEnabled(false);
-
-        gallery.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentImage = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                currentImage = 0;
-            }
-        });
+        if (transport.getImage().isEmpty())
+            buttonDelete.setEnabled(false);
 
         ListView listView = root.findViewById(R.id.property);
         listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), true));
@@ -84,37 +75,48 @@ public class TransportDetails extends Fragment {
 
         root.findViewById(R.id.buttonDelete).setOnClickListener(v -> {
 
-            transport.getImage().remove(transport.getImage().get(currentImage));
-            gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
-            gallery.invalidate();
+            Long selected = gallery.getSelectedItemId();
+            Long imageId = (Long) gallery.getAdapter().getItem(selected.intValue());
 
-            transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
             NetworkService
                     .getInstance()
                     .getTransportApi()
-                    .doPutTransport(transport)
-                    .enqueue(new Callback<Void>() {
+                    .doDropTransportImage(transport.getId(), imageId)
+                    .enqueue(new Callback<Transport>() {
                         @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
+                        public void onResponse(Call<Transport> call, Response<Transport> response) {
                             ProgresService.getInstance().hideProgress();
+                            if (response.isSuccessful()) {
+                                MemoryService.getInstance().setTransport(response.body());
+                                gallery.setAdapter(new TransportGalleryAdapter(getContext()));
+                                gallery.invalidate();
+                                if (response.body().getImage().isEmpty())
+                                    buttonDelete.setEnabled(false);
+                            }
+                            else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                                catch (Exception e) {
+                                }
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+                        public void onFailure(Call<Transport> call, Throwable t) {
                             ProgresService.getInstance().hideProgress();
                             Toast
                                     .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
                                     .show();
                         }
                     });
-
-            if (transport.getImage().isEmpty())
-                v.setEnabled(false);
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-
             transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
             NetworkService
@@ -148,11 +150,14 @@ public class TransportDetails extends Fragment {
         });
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-                    ImageService.getInstance().getImage(getActivity(), PICK_IMAGE_SELECTED);
+                    Intent ringIntent = new Intent();
+                    ringIntent.setType("image/*");
+                    ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+                    ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                    this.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
                 }
                 else {
 
@@ -160,63 +165,56 @@ public class TransportDetails extends Fragment {
                 }
             }
             else {
-                ImageService.getInstance().getImage(getActivity(), PICK_IMAGE_SELECTED);
+                Intent ringIntent = new Intent();
+                ringIntent.setType("image/*");
+                ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+                ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                this.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
             }
         });
 
         return root;
     }
 
-    private void getImage() {
-
-    }
-
-    //Обрабатываем результат выбора в галерее:
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch (requestCode) {
-            case PICK_IMAGE_SELECTED:
+            case PICK_IMAGE_SELECTED: {
                 if (resultCode == Activity.RESULT_OK) {
-                    Transport transport = MemoryService.getInstance().getTransport();
                     try {
+                        Transport transport = MemoryService.getInstance().getTransport();
                         byte[] data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                         NetworkService
                                 .getInstance()
-                                .getImageApi()
-                                .doPostImage(data)
-                                .enqueue(new Callback<Long>() {
+                                .getTransportApi()
+                                .doAddTransportImage(transport.getId(), data)
+                                .enqueue(new Callback<Transport>() {
                                     @Override
-                                    public void onResponse(Call<Long> call, Response<Long> response) {
+                                    public void onResponse(Call<Transport> call, Response<Transport> response) {
                                         ProgresService.getInstance().hideProgress();
-                                        transport.getImage().add(response.body());
-                                        NetworkService
-                                                .getInstance()
-                                                .getTransportApi()
-                                                .doPutTransport(transport)
-                                                .enqueue(new Callback<Void>() {
-                                                    @Override
-                                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                                        ProgresService.getInstance().hideProgress();
-                                                        gallery.setAdapter(new TransportGalleryAdapter(getContext(), transport.getImage()));
-                                                        gallery.invalidate();
-                                                        if (transport.getImage().size() != 0)
-                                                            root.findViewById(R.id.buttonDelete).setEnabled(true);
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<Void> call, Throwable t) {
-                                                        ProgresService.getInstance().hideProgress();
-                                                        Toast
-                                                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
-                                                                .show();
-                                                    }
-                                                });
+                                        if (response.isSuccessful()) {
+                                            MemoryService.getInstance().setTransport(response.body());
+                                            gallery.setAdapter(new TransportGalleryAdapter(getContext()));
+                                            gallery.invalidate();
+                                            if (!response.body().getImage().isEmpty())
+                                                buttonDelete.setEnabled(true);
+                                        }
+                                        else {
+                                            try {
+                                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                                Toast
+                                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                                        .show();
+                                            }
+                                            catch (Exception e) {
+                                            }
+                                        }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Long> call, Throwable t) {
+                                    public void onFailure(Call<Transport> call, Throwable t) {
                                         ProgresService.getInstance().hideProgress();
                                         Toast
                                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -227,6 +225,8 @@ public class TransportDetails extends Fragment {
                     catch (Exception e) {
                     }
                 }
+                break;
+            }
         }
     }
 }

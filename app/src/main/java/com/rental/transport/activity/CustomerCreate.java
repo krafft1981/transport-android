@@ -14,6 +14,7 @@ import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+import com.rental.transport.service.SharedService;
 
 import org.json.JSONObject;
 
@@ -52,8 +53,12 @@ public class CustomerCreate extends Fragment {
                         @Override
                         public void onResponse(Call<Customer> call, Response<Customer> response) {
                             ProgresService.getInstance().hideProgress();
-                            if (response.isSuccessful())
+                            if (response.isSuccessful()) {
                                 FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+                                SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_username), customer.getText().toString());
+                                SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password.getText().toString());
+                            }
+
                             else {
                                 try {
                                     JSONObject jObjError = new JSONObject(response.errorBody().string());

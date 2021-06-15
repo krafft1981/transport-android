@@ -14,58 +14,14 @@ import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.validator.EmailValidator;
-import com.rental.transport.validator.IStringValidator;
-import com.rental.transport.validator.PasswordValidator;
-import com.rental.transport.validator.PhoneValidator;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CustomerCreate extends Fragment {
-
-    private Boolean isValidEmail(EditText text) {
-
-        IStringValidator validator = new EmailValidator();
-        if (validator.validate(text.getText().toString()))
-            return true;
-
-        text.requestFocus();
-        text.setError(getString(R.string.wrong_data_entered));
-        return false;
-    }
-
-    private Boolean isValidPassword(EditText text) {
-        IStringValidator validator = new PasswordValidator();
-        if (validator.validate(text.getText().toString()))
-            return true;
-
-        text.requestFocus();
-        text.setError(getString(R.string.wrong_data_entered));
-        return false;
-    }
-
-    private Boolean isValidPhone(EditText text) {
-        IStringValidator validator = new PhoneValidator();
-        if (validator.validate(text.getText().toString()))
-            return true;
-
-        text.requestFocus();
-        text.setError(getString(R.string.wrong_data_entered));
-        return false;
-    }
-
-    private Boolean isValidFio(EditText text) {
-        IStringValidator validator = new PasswordValidator();
-        if (validator.validate(text.getText().toString()))
-            return true;
-
-        text.requestFocus();
-        text.setError(getString(R.string.wrong_data_entered));
-        return false;
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,23 +38,6 @@ public class CustomerCreate extends Fragment {
         EditText phone = root.findViewById(R.id.fieldCustomerPhone);
         EditText fio = root.findViewById(R.id.fieldCustomerFio);
         root.findViewById(R.id.createButton).setOnClickListener(v -> {
-            if (!isValidEmail(customer)) {
-                customer.setError(getResources().getString(R.string.error));
-                return;
-            }
-            if (!isValidPassword(password)) {
-                password.setError(getResources().getString(R.string.error));
-                return;
-            }
-            if (!isValidPhone(phone)) {
-                phone.setError(getResources().getString(R.string.error));
-                return;
-            }
-            if (!isValidFio(fio)) {
-                phone.setError(getResources().getString(R.string.error));
-                return;
-            }
-
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_creating));
             NetworkService
                     .getInstance()
@@ -115,6 +54,16 @@ public class CustomerCreate extends Fragment {
                             ProgresService.getInstance().hideProgress();
                             if (response.isSuccessful())
                                 FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+                            else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                                catch (Exception e) {
+                                }
+                            }
                         }
 
                         @Override

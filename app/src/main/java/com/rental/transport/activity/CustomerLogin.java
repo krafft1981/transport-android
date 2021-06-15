@@ -19,38 +19,12 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.SharedService;
-import com.rental.transport.validator.EmailValidator;
-import com.rental.transport.validator.IStringValidator;
-import com.rental.transport.validator.PasswordValidator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CustomerLogin extends Fragment {
-
-    private Boolean isValidEmail(EditText text) {
-
-        IStringValidator validator = new EmailValidator();
-        if (validator.validate(text.getText().toString())) {
-            return true;
-        }
-
-        text.requestFocus();
-        text.setError(getString(R.string.wrong_data_entered));
-        return false;
-    }
-
-    private Boolean isValidPassword(EditText text) {
-        IStringValidator validator = new PasswordValidator();
-        if (validator.validate(text.getText().toString())) {
-            return true;
-        }
-
-        text.requestFocus();
-        text.setError(getString(R.string.wrong_data_entered));
-        return false;
-    }
 
     void login(View root, String username, String password) {
         ProgresService
@@ -114,50 +88,45 @@ public class CustomerLogin extends Fragment {
         loginRegisterLink.setPaintFlags(loginRegisterLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         root.findViewById(R.id.loginButton).setOnClickListener(v -> {
-            if (isValidEmail(customer) && isValidPassword(password)) {
-                login(root,
-                        customer.getText().toString(),
-                        password.getText().toString()
-                );
-            }
+            login(root,
+                    customer.getText().toString(),
+                    password.getText().toString()
+            );
         });
 
         root.findViewById(R.id.loginForgotPasswordLink).setOnClickListener(v -> {
-            if (isValidEmail(customer)) {
+            ProgresService.
+                    getInstance()
+                    .showProgress(getActivity(), getString(R.string.request));
 
-                ProgresService.
-                        getInstance()
-                        .showProgress(getActivity(), getString(R.string.request));
-
-                NetworkService
-                        .getInstance()
-                        .getRegistrationApi()
-                        .doPostEmailRegistration(customer.getText().toString())
-                        .enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                ProgresService.getInstance().hideProgress();
-                                if (response.isSuccessful()) {
-                                    Toast
-                                            .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                                else {
-                                    Toast
-                                            .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                ProgresService.getInstance().hideProgress();
+            NetworkService
+                    .getInstance()
+                    .getRegistrationApi()
+                    .doPostEmailRegistration(customer.getText().toString())
+                    .enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            ProgresService.getInstance().hideProgress();
+                            if (response.isSuccessful()) {
                                 Toast
-                                        .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+                                        .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
                                         .show();
                             }
-                        });
-            }
+                            else {
+                                Toast
+                                        .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            ProgresService.getInstance().hideProgress();
+                            Toast
+                                    .makeText(getContext(), t.toString(), Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
         });
 
         root.findViewById(R.id.loginRegisterLink).setOnClickListener(v ->

@@ -19,8 +19,6 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.TimeView;
 
-import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +31,7 @@ import retrofit2.Response;
 public class CalendarFragment extends Fragment {
 
     private Date currentDay;
+    private TimeView timeView;
 
     private void loadDetails(TimeView tv) {
 
@@ -81,17 +80,9 @@ public class CalendarFragment extends Fragment {
                         if (response.isSuccessful()) {
                             tv.setData(response.body());
                             tv.invalidate();
-                        } else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            } catch (Exception e) {
-                            }
-
-                            loadDetails(tv);
                         }
+                        else
+                            loadDetails(tv);
                     }
 
                     @Override
@@ -115,7 +106,7 @@ public class CalendarFragment extends Fragment {
         currentDay = new Date();
 
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
-        TimeView timeView = root.findViewById(R.id.calendarContainer);
+        timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
         cv.setDate(currentDay.getTime());
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {

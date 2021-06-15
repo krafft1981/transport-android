@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Property;
-import com.rental.transport.validator.IStringValidator;
-import com.rental.transport.validator.ValidatorFactory;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +20,6 @@ public class PropertyListAdapter extends BaseAdapter {
     private Context context;
     private List<Property> data;
     private Boolean editable;
-    ValidatorFactory vf = new ValidatorFactory();
 
     public PropertyListAdapter(Context context, List<Property> data, Boolean editable) {
         this.context = context;
@@ -79,20 +76,8 @@ public class PropertyListAdapter extends BaseAdapter {
                 holder.value.setKeyListener(null);
             }
             else {
-                holder.value.setOnFocusChangeListener((v, hasFocus) -> {
-                    if (!hasFocus) {
-                        IStringValidator validator = vf.getValidator(holder.type.getText().toString());
-                        if (!validator.validate(holder.value.getText().toString()))
-                            holder.value.setError(context.getString(R.string.error));
-                        else
-                            data.get(position).setValue(holder.value.getText().toString());
-                    }
-                });
-
                 holder.value.setOnEditorActionListener((v, actionId, event) -> {
-                    IStringValidator validator = vf.getValidator(holder.type.getText().toString());
-                    if (validator.validate(holder.value.getText().toString()))
-                        data.get(position).setValue(holder.value.getText().toString());
+                    data.get(position).setValue(holder.value.getText().toString());
                     return true;
                 });
             }

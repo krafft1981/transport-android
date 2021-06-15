@@ -4,13 +4,10 @@ import android.widget.ListView;
 
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Property;
-import com.rental.transport.validator.IStringValidator;
-import com.rental.transport.validator.ValidatorFactory;
 
 import java.util.List;
 
 public class PropertyService {
-    ValidatorFactory vf = new ValidatorFactory();
     private static PropertyService mInstance;
 
     public PropertyService() {
@@ -47,15 +44,9 @@ public class PropertyService {
         prop.setValue(value);
     }
 
-    public IStringValidator getValidator(List<Property> props, String name) throws IllegalArgumentException {
-
-        Property prop = searchProperty(props, name);
-        return vf.getValidator(prop.getType());
-    }
-
     public List<Property> getPropertyFromList(ListView listView) {
 
-        PropertyListAdapter adapter = (PropertyListAdapter)listView.getAdapter();
+        PropertyListAdapter adapter = (PropertyListAdapter) listView.getAdapter();
         return adapter.getdata();
     }
 }

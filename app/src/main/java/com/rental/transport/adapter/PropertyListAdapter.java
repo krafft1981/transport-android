@@ -1,6 +1,8 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,9 +78,20 @@ public class PropertyListAdapter extends BaseAdapter {
                 holder.value.setKeyListener(null);
             }
             else {
-                holder.value.setOnEditorActionListener((v, actionId, event) -> {
-                    data.get(position).setValue(holder.value.getText().toString());
-                    return true;
+                holder.value.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        data.get(position).setValue(holder.value.getText().toString());
+                        System.out.println(data.get(position).getHumanName() + " = " + data.get(position).getValue());
+                    }
                 });
             }
 

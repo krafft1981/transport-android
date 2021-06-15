@@ -77,9 +77,9 @@ public class PropertyListAdapter extends BaseAdapter {
                 holder.value.setKeyListener(null);
             }
             else {
-                holder.value.setOnFocusChangeListener((v, hasFocus) -> {
-                    if (!hasFocus)
-                        data.get(position).setValue(holder.value.getText().toString());
+                holder.value.setOnEditorActionListener((v, actionId, event) -> {
+                    data.get(position).setValue(holder.value.getText().toString());
+                    return true;
                 });
             }
 

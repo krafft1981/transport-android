@@ -32,7 +32,7 @@ public class PropertyListAdapter extends BaseAdapter {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
             Property p1 = (Property) o1;
             Property p2 = (Property) o2;
-            return p1.getOrder().compareTo(p2.getOrder());
+            return p1.getId().compareTo(p2.getId());
         });
     }
 

@@ -41,13 +41,13 @@ public interface CustomerApi {
 
     @Headers("Content-Type: application/json")
     @POST("/customer/image")
-    Call<Transport> doPostCustomerImage(
+    Call<Customer> doAddCustomerImage(
             @Body byte[] data
     );
 
     @Headers("Content-Type: application/json")
     @DELETE("/customer/image")
-    Call<Transport> doDeleteCustomerImage(
+    Call<Customer> doDropCustomerImage(
             @Query("image_id") Long imageId
     );
 }

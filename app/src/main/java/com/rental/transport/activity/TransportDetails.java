@@ -152,27 +152,23 @@ public class TransportDetails extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-
-                    Intent ringIntent = new Intent();
-                    ringIntent.setType("image/*");
-                    ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
-                } else {
+                    ImageService.getInstance().getImage(getActivity(), PICK_IMAGE_SELECTED);
+                }
+                else {
 
                     ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
                 }
             }
             else {
-                Intent ringIntent = new Intent();
-                ringIntent.setType("image/*");
-                ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                ImageService.getInstance().getImage(getActivity(), PICK_IMAGE_SELECTED);
             }
         });
 
         return root;
+    }
+
+    private void getImage() {
+
     }
 
     //Обрабатываем результат выбора в галерее:

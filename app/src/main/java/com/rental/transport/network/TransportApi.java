@@ -56,14 +56,14 @@ public interface TransportApi {
 
     @Headers("Content-Type: application/json")
     @POST("/transport/image")
-    Call<Transport> doPostTransportImage(
+    Call<Transport> doAddTransportImage(
             @Query("transport_id") Long id,
             @Body byte[] data
     );
 
     @Headers("Content-Type: application/json")
     @DELETE("/transport/image")
-    Call<Transport> doDeleteTransportImage(
+    Call<Transport> doDropTransportImage(
             @Query("transport_id") Long transportId,
             @Query("image_id") Long imageId
     );

@@ -1,5 +1,6 @@
 package com.rental.transport.service;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -124,6 +125,14 @@ public class ImageService {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
         return os.toByteArray();
+    }
+
+    public void getImage(Activity activity, int code) {
+        Intent ringIntent = new Intent();
+        ringIntent.setType("image/*");
+        ringIntent.setAction(Intent.ACTION_GET_CONTENT);
+        ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        activity.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), code);
     }
 
     private String getRealPathFromURI(Context context, Uri contentUri) { // не на всех телефонах работает

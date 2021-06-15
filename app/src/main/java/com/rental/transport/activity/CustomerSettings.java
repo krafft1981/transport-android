@@ -69,23 +69,26 @@ public class CustomerSettings extends Fragment {
 
         root.findViewById(R.id.buttonDelete).setOnClickListener(v -> {
 
-            customer.getImage().remove(customer.getImage().get(currentImage));
-            gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
-            gallery.invalidate();
+            Long imageId = (Long) gallery.getAdapter().getItem(currentImage);
 
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService
                     .getInstance()
                     .getCustomerApi()
-                    .doPutCustomer(customer)
-                    .enqueue(new Callback<Void>() {
+                    .doDropCustomerImage(imageId)
+                    .enqueue(new Callback<Customer>() {
                         @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
+                        public void onResponse(Call<Customer> call, Response<Customer> response) {
                             ProgresService.getInstance().hideProgress();
+                            if (response.isSuccessful()) {
+                                Customer customer = response.body();
+                                MemoryService.getInstance().setCustomer(customer);
+                                gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+                        public void onFailure(Call<Customer> call, Throwable t) {
                             ProgresService.getInstance().hideProgress();
                             Toast
                                     .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -136,11 +139,7 @@ public class CustomerSettings extends Fragment {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
 
-                    Intent ringIntent = new Intent();
-                    ringIntent.setType("image/*");
-                    ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                    ImageService.getInstance().getImage(getActivity(), PICK_IMAGE_SELECTED);
                 }
                 else {
 
@@ -148,11 +147,8 @@ public class CustomerSettings extends Fragment {
                 }
             }
             else {
-                Intent ringIntent = new Intent();
-                ringIntent.setType("image/*");
-                ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+
+                ImageService.getInstance().getImage(getActivity(), PICK_IMAGE_SELECTED);
             }
         });
 
@@ -166,46 +162,31 @@ public class CustomerSettings extends Fragment {
         switch (requestCode) {
             case PICK_IMAGE_SELECTED: {
                 if (resultCode == Activity.RESULT_OK) {
-                    Customer customer = MemoryService.getInstance().getCustomer();
                     try {
+
+                        Toast
+                                .makeText(getContext(), imageReturnedIntent.toString(), Toast.LENGTH_LONG)
+                                .show();
+
                         byte[] data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
                         NetworkService
                                 .getInstance()
-                                .getImageApi()
-                                .doPostImage(data)
-                                .enqueue(new Callback<Long>() {
+                                .getCustomerApi()
+                                .doAddCustomerImage(data)
+                                .enqueue(new Callback<Customer>() {
                                     @Override
-                                    public void onResponse(Call<Long> call, Response<Long> response) {
+                                    public void onResponse(Call<Customer> call, Response<Customer> response) {
                                         ProgresService.getInstance().hideProgress();
-                                        customer.getImage().add(response.body());
-                                        ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
-                                        NetworkService
-                                                .getInstance()
-                                                .getCustomerApi()
-                                                .doPutCustomer(customer)
-                                                .enqueue(new Callback<Void>() {
-                                                    @Override
-                                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                                        ProgresService.getInstance().hideProgress();
-                                                        gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
-                                                        gallery.invalidate();
-                                                        if (customer.getImage().size() != 0)
-                                                            root.findViewById(R.id.buttonDelete).setEnabled(true);
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<Void> call, Throwable t) {
-                                                        ProgresService.getInstance().hideProgress();
-                                                        Toast
-                                                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
-                                                                .show();
-                                                    }
-                                                });
+                                        if (response.isSuccessful()) {
+                                            Customer customer = response.body();
+                                            MemoryService.getInstance().setCustomer(customer);
+                                            gallery.setAdapter(new CustomerGalleryAdapter(getContext(), customer.getImage()));
+                                        }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Long> call, Throwable t) {
+                                    public void onFailure(Call<Customer> call, Throwable t) {
                                         ProgresService.getInstance().hideProgress();
                                         Toast
                                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)

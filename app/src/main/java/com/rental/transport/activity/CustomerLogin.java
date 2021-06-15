@@ -142,7 +142,7 @@ public class CustomerLogin extends Fragment {
 
             customer.setText(savedUsername);
             password.setText(savedPassword);
-//            login(root, savedUsername, savedPassword);
+            login(root, savedUsername, savedPassword);
         }
 
         ((MainActivity) getActivity()).showMenu(false);

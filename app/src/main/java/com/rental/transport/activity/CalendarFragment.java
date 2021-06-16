@@ -35,7 +35,7 @@ public class CalendarFragment extends Fragment {
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.calendar_loading));
         NetworkService
                 .getInstance()
-                .getOrderApi()
+                .getCalendarApi()
                 .doGetCustomerCalendar(currentDay.getTime())
                 .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override
@@ -61,29 +61,29 @@ public class CalendarFragment extends Fragment {
 
         Set<Integer> hours = tv.getHours();
 
-        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
-        NetworkService
-                .getInstance()
-                .getOrderApi()
-                .doPostAbsentCustomer(currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
-                .enqueue(new Callback<Event>() {
-                    @Override
-                    public void onResponse(Call<Event> call, Response<Event> response) {
-                        ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            MemoryService.getInstance().setEvent(response.body());
-                            FragmentService.getInstance().load(getActivity(), "RecordDetails");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Event> call, @NonNull Throwable t) {
-                        ProgresService.getInstance().hideProgress();
-                        Toast
-                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
+//        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
+//        NetworkService
+//                .getInstance()
+//                .getOrderApi()
+//                .doPostAbsentCustomer(currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
+//                .enqueue(new Callback<Event>() {
+//                    @Override
+//                    public void onResponse(Call<Event> call, Response<Event> response) {
+//                        ProgresService.getInstance().hideProgress();
+//                        if (response.isSuccessful()) {
+//                            MemoryService.getInstance().setEvent(response.body());
+//                            FragmentService.getInstance().load(getActivity(), "RecordDetails");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<Event> call, @NonNull Throwable t) {
+//                        ProgresService.getInstance().hideProgress();
+//                        Toast
+//                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+//                                .show();
+//                    }
+//                });
     }
 
     @Override

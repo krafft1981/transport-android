@@ -142,8 +142,8 @@ public class RequestListAdapter extends BaseAdapter {
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
-                .getOrderApi()
-                .doPostConfirmOrder(request.getId())
+                .getRequestApi()
+                .doPostConfirmRequest(request.getId())
                 .enqueue(new Callback<List<Request>>() {
                     @Override
                     public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
@@ -179,8 +179,8 @@ public class RequestListAdapter extends BaseAdapter {
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
-                .getOrderApi()
-                .doPostRejectOrder(request.getId())
+                .getRequestApi()
+                .doPostRejectRequest(request.getId())
                 .enqueue(new Callback<List<Request>>() {
                     @Override
                     public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
@@ -215,7 +215,7 @@ public class RequestListAdapter extends BaseAdapter {
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
-                .getOrderApi()
+                .getRequestApi()
                 .doGetRequestAsDriver()
                 .enqueue(new Callback<List<Request>>() {
                     @Override

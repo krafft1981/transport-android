@@ -39,7 +39,7 @@ public class OrderDetails extends Fragment {
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doPostOrderMessage(orderId, new Text(source.getText().toString()))
+                .doPostMessage(orderId, new Text(source.getText().toString()))
                 .enqueue(new Callback<Order>() {
                     @Override
                     public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {

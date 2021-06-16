@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -34,13 +35,13 @@ public interface RequestApi {
     );
 
     @Headers("Content-Type: application/json")
-    @POST("/request/customer")
+    @GET("/request/customer")
     Call<List<Request>> doGetRequestAsCustomer(
 
     );
 
     @Headers("Content-Type: application/json")
-    @POST("/request/driver")
+    @GET("/request/driver")
     Call<List<Request>> doGetRequestAsDriver(
 
     );

@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface OrderApi {
@@ -16,10 +17,6 @@ public interface OrderApi {
     @Headers("Content-Type: application/json")
     @GET("/order/customer")
     Call<List<Order>> doGetOrderByCustomer();
-
-    @Headers("Content-Type: application/json")
-    @GET("/order/transport")
-    Call<List<Order>> doGetOrderByTransport();
 
     @Headers("Content-Type: application/json")
     @GET("/order/driver")
@@ -32,7 +29,7 @@ public interface OrderApi {
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/order/message")
+    @POST("/order/message")
     Call<Order> doPostMessage(
             @Query("order_id") Long orderId,
             @Body Text body

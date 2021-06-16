@@ -17,18 +17,18 @@ public interface TransportApi {
 
     @Headers("Content-Type: application/json")
     @DELETE("/transport")
-    public Call<Void> doDeleteTransport(
+    Call<Void> doDeleteTransport(
             @Query("id") Long id
     );
 
     @GET("/transport/list")
-    public Call<List<Transport>> doGetTransportList(
+    Call<List<Transport>> doGetTransportList(
             @Query("page") Integer page,
             @Query("size") Integer size
     );
 
     @GET("/transport/list/type")
-    public Call<List<Transport>> goGetTransportTyped(
+    Call<List<Transport>> doGetTransportTyped(
             @Query("type") Long type,
             @Query("page") Integer page,
             @Query("size") Integer size
@@ -36,21 +36,21 @@ public interface TransportApi {
 
     @Headers("Content-Type: application/json")
     @POST("/transport")
-    public Call<Long> doPostTransport(
+    Call<Long> doPostTransport(
             @Query("type") String type
     );
 
     @Headers("Content-Type: application/json")
     @PUT("/transport")
-    public Call<Void> doPutTransport(
+    Call<Void> doPutTransport(
             @Body Transport transport
     );
 
     @GET("/transport/parking")
-    public Call<List<Transport>> doGetParkingTransport(
+    Call<List<Transport>> doGetParkingTransport(
             @Query("parking_id") Long parkingId
     );
 
     @GET("/transport/my")
-    public Call<List<Transport>> doGetMyTransport();
+    Call<List<Transport>> doGetMyTransport();
 }

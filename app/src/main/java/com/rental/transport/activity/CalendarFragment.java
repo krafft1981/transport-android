@@ -40,7 +40,7 @@ public class CalendarFragment extends Fragment {
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.calendar_loading));
         NetworkService
                 .getInstance()
-                .getOrderApi()
+                .getCalendarApi()
                 .doGetTransportCalendar(currentDay.getTime(), transport.getId())
                 .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override
@@ -71,7 +71,7 @@ public class CalendarFragment extends Fragment {
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
         NetworkService
                 .getInstance()
-                .getOrderApi()
+                .getRequestApi()
                 .doPostRequest(transport.getId(), currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
                 .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override

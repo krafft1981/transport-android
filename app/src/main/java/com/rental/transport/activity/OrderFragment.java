@@ -37,7 +37,7 @@ public class OrderFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getOrderApi()
-                .doPostOrderMessage(orderId, new Text(source.getText().toString()))
+                .doPostMessage(orderId, new Text(source.getText().toString()))
                 .enqueue(new Callback<Order>() {
                     @Override
                     public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
@@ -45,7 +45,7 @@ public class OrderFragment extends Fragment {
                         if (response.isSuccessful()) {
                             list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
                             list.invalidate();
-                            source.setText("");
+                            source.getText().clear();
                         }
                     }
 

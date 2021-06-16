@@ -15,31 +15,31 @@ public interface ImageApi {
 
     @Headers("Content-Type: application/json")
     @POST("/image")
-    public Call<Long> doPostImage(
+    Call<Long> doPostImage(
             @Body byte[] image
     );
 
     @Headers("Content-Type: application/json")
     @GET("/image")
-    public Call<byte[]> doGetImage(
+    Call<byte[]> doGetImage(
             @Query("id") Long id
     );
 
     @Headers("Content-Type: application/json")
     @DELETE("/image")
-    public Call<Void> doDeleteImage(
+    Call<Void> doDeleteImage(
             @Query("id") Long[] id
     );
 
     @Headers("Content-Type: application/json")
     @GET("/image")
-    public Call<byte[]> doGetUriImage(
+    Call<byte[]> doGetUriImage(
             @Path("user") Long id
     );
 
     @Headers("Content-Type: application/json")
     @GET("/image/list")
-    public Call<List<Long>> doGetImageList(
+    Call<List<Long>> doGetImageList(
             @Query("page") Integer page,
             @Query("size") Integer size
     );

@@ -36,7 +36,7 @@ public class TransportFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getTransportApi()
-                .doGetTransportList(page, size)
+                .doGetTransportTyped(1L, page, size)
                 .enqueue(new Callback<List<Transport>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
@@ -69,19 +69,6 @@ public class TransportFragment extends Fragment {
         grid.setOnItemClickListener((parent, v, position, id) -> {
             MemoryService.getInstance().setTransport((Transport) parent.getAdapter().getItem(position));
             FragmentService.getInstance().load(getActivity(), "TransportDetails");
-        });
-
-        grid.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
         });
 
         loadTransport(grid);

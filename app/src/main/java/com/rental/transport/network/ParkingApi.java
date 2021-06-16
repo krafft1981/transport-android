@@ -45,4 +45,18 @@ public interface ParkingApi {
     @Headers("Content-Type: application/json")
     @GET("/parking/count")
     Call<Long> doGetCountParking();
+
+    @Headers("Content-Type: application/json")
+    @POST("/parking/image")
+    Call<Parking> doAddParkingImage(
+            @Query("parking_id") Long id,
+            @Body byte[] data
+    );
+
+    @Headers("Content-Type: application/json")
+    @DELETE("/parking/image")
+    Call<Parking> doDropParkingImage(
+            @Query("parking_id") Long parkingId,
+            @Query("image_id") Long imageId
+    );
 }

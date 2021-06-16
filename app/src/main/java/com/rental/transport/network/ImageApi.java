@@ -13,10 +13,10 @@ import retrofit2.http.Query;
 
 public interface ImageApi {
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: text/plain")
     @POST("/image")
     Call<Long> doPostImage(
-            @Body byte[] image
+            @Body byte[] data
     );
 
     @Headers("Content-Type: application/json")
@@ -25,16 +25,9 @@ public interface ImageApi {
             @Query("id") Long id
     );
 
-    @Headers("Content-Type: application/json")
     @DELETE("/image")
     Call<Void> doDeleteImage(
             @Query("id") Long[] id
-    );
-
-    @Headers("Content-Type: application/json")
-    @GET("/image")
-    Call<byte[]> doGetUriImage(
-            @Path("user") Long id
     );
 
     @Headers("Content-Type: application/json")

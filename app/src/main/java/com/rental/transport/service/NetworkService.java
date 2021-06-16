@@ -5,11 +5,13 @@ import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
 import com.burgstaller.okhttp.digest.CachingAuthenticator;
 import com.burgstaller.okhttp.digest.Credentials;
 import com.burgstaller.okhttp.digest.DigestAuthenticator;
+import com.rental.transport.network.CalendarApi;
 import com.rental.transport.network.CustomerApi;
 import com.rental.transport.network.ImageApi;
 import com.rental.transport.network.OrderApi;
 import com.rental.transport.network.ParkingApi;
 import com.rental.transport.network.RegistrationApi;
+import com.rental.transport.network.RequestApi;
 import com.rental.transport.network.TransportApi;
 
 import java.util.Map;
@@ -93,4 +95,13 @@ public class NetworkService {
     public ImageApi getImageApi() {
         return mRetrofitDidest.create(ImageApi.class);
     }
+
+    public RequestApi getRequestApi() {
+        return mRetrofitDidest.create(RequestApi.class);
+    }
+
+    public CalendarApi getCalendarApi() {
+        return mRetrofitDidest.create(CalendarApi.class);
+    }
+
 }

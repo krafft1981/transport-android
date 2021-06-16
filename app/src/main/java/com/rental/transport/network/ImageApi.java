@@ -31,12 +31,6 @@ public interface ImageApi {
     );
 
     @Headers("Content-Type: application/json")
-    @GET("/image")
-    Call<byte[]> doGetUriImage(
-            @Path("user") Long id
-    );
-
-    @Headers("Content-Type: application/json")
     @GET("/image/list")
     Call<List<Long>> doGetImageList(
             @Query("page") Integer page,

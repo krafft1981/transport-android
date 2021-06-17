@@ -15,6 +15,4 @@ public class Event {
     private Request request;
     @SerializedName("type")
     private Integer type;
-    @SerializedName("note")
-    private NoteBook noteBook;
 }

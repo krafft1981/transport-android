@@ -150,7 +150,7 @@ public class TimeView extends View {
         Integer width = this.getWidth();
 
         Paint textPaint = new Paint();
-        textPaint.setTextSize(50);
+        textPaint.setTextSize(30);
         textPaint.setColor(Color.BLACK);
 
         Integer sequence = 0;
@@ -169,7 +169,7 @@ public class TimeView extends View {
                 }
 
                 case NOTEBOOK: {
-                    paint.setColor(Color.BLUE);
+                    paint.setColor(Color.GRAY);
                     break;
                 }
 

@@ -19,6 +19,8 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 
 import lombok.NonNull;
@@ -47,6 +49,16 @@ public class OrderFragment extends Fragment {
                             list.invalidate();
                             source.getText().clear();
                         }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
                     }
 
                     @Override
@@ -73,6 +85,16 @@ public class OrderFragment extends Fragment {
                         if (response.isSuccessful()) {
                             list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
                             list.invalidate();
+                        }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
                         }
                     }
 

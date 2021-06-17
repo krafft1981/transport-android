@@ -34,7 +34,7 @@ public class CustomerLogin extends Fragment {
         NetworkService
                 .getInstance(username, password)
                 .getCustomerApi()
-                .doGetCustomerRequest()
+                .doGetCustomer()
                 .enqueue(new Callback<Customer>() {
                     @Override
                     public void onResponse(Call<Customer> call, Response<Customer> response) {

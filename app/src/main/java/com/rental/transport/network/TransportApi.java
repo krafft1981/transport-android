@@ -28,7 +28,7 @@ public interface TransportApi {
     );
 
     @GET("/transport/list/type")
-    Call<List<Transport>> goGetTransportTyped(
+    Call<List<Transport>> doGetTransportTyped(
             @Query("type") Long type,
             @Query("page") Integer page,
             @Query("size") Integer size

@@ -41,7 +41,7 @@ public class CalendarFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getCalendarApi()
-                .doGetTransportCalendar(currentDay.getTime(), transport.getId())
+                .doGetTransportCalendar(transport.getId(), currentDay.getTime())
                 .enqueue(new Callback<Map<Integer, Event>>() {
                     @Override
                     public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
@@ -110,7 +110,7 @@ public class CalendarFragment extends Fragment {
         CalendarView cv = root.findViewById(R.id.calendarBody);
         cv.setDate(currentDay.getTime());
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            currentDay = new Date(year - 1900, month, dayOfMonth + 1);
+            currentDay = new Date(year - 1900, month, dayOfMonth + 1, 0, 0, 0);
             loadDetails(timeView);
         });
 

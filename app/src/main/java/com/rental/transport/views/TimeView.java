@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Calendar;
@@ -122,7 +121,14 @@ public class TimeView extends View {
         box.clear();
         pos.clear();
 
+        if (data == null)
+            return;
+
         for (Integer hour = 0; hour < 24; hour++) {
+
+            if (data.get(hour) == null)
+                continue;
+
             if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
                 EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
                 String value = hour.toString() + ":00";

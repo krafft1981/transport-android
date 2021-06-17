@@ -19,6 +19,8 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.TimeView;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -81,8 +83,17 @@ public class CalendarFragment extends Fragment {
                             tv.setData(response.body());
                             tv.invalidate();
                         }
-                        else
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
                             loadDetails(tv);
+                        }
                     }
 
                     @Override

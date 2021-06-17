@@ -49,6 +49,16 @@ public class OrderDetails extends Fragment {
                             list.invalidate();
                             source.setText("");
                         }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
                     }
 
                     @Override
@@ -75,6 +85,16 @@ public class OrderDetails extends Fragment {
                         if (response.isSuccessful()) {
                             list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
                             list.invalidate();
+                        }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
                         }
                     }
 

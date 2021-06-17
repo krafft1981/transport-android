@@ -118,7 +118,14 @@ public class TimeView extends View {
         box.clear();
         pos.clear();
 
+        if (data == null)
+            return;
+
         for (Integer hour = 0; hour < 24; hour++) {
+
+            if (data.get(hour) == null)
+                continue;
+
             if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
                 EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
                 String value = hour.toString() + ":00";
@@ -144,7 +151,7 @@ public class TimeView extends View {
 
         Paint textPaint = new Paint();
         textPaint.setTextSize(50);
-        textPaint.setColor(Color.RED);
+        textPaint.setColor(Color.BLACK);
 
         Integer sequence = 0;
 

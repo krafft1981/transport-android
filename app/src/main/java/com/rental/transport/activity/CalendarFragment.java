@@ -9,22 +9,18 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.annotations.SerializedName;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Text;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

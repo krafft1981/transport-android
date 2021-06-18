@@ -20,6 +20,7 @@ import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -136,6 +137,10 @@ public class CalendarFragment extends Fragment {
                 }
 
                 case NOTEBOOK: {
+                    Bundle args = new Bundle();
+                    args.putLong("day", currentDay.getTime());
+                    args.putIntegerArrayList("hours", new ArrayList(timeView.getHours()));
+                    FragmentService.getInstance().get("RecordDetails").setArguments(args);
                     FragmentService.getInstance().load(getActivity(), "RecordDetails");
                     break;
                 }

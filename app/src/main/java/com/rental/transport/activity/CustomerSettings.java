@@ -56,14 +56,16 @@ public class CustomerSettings extends Fragment {
 
         root = inflater.inflate(R.layout.customer_settings, container, false);
         buttonDelete = root.findViewById(R.id.buttonDelete);
-        ListView list = root.findViewById(R.id.property);
+        ListView list = root.findViewById(R.id.customerProperty);
         list.setAdapter(new PropertyListAdapter(getContext(), customer.getProperty(), true));
 
         gallery = root.findViewById(R.id.gallery);
         gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             Long imageId = MemoryService.getInstance().getCustomer().getImage().get(position);
-            MemoryService.getInstance().setImageId(imageId);
+            Bundle bundle = new Bundle();
+            bundle.putLong("imageId", imageId);
+            FragmentService.getInstance().get("PictureFragment").setArguments(bundle);
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
@@ -112,7 +114,7 @@ public class CustomerSettings extends Fragment {
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-            customer.setProperty(PropertyService.getInstance().getPropertyFromList(list));
+//            customer.setProperty(PropertyService.getInstance().getPropertyFromList(list));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService
                     .getInstance()

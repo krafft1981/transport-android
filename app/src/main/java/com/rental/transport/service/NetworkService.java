@@ -103,5 +103,4 @@ public class NetworkService {
     public CalendarApi getCalendarApi() {
         return mRetrofitDidest.create(CalendarApi.class);
     }
-
 }

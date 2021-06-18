@@ -9,15 +9,22 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.annotations.SerializedName;
 import com.rental.transport.R;
+import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
+import com.rental.transport.model.Text;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.TimeView;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,6 +52,16 @@ public class CalendarFragment extends Fragment {
                             tv.setData(response.body());
                             tv.invalidate();
                         }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
                     }
 
                     @Override
@@ -61,29 +78,38 @@ public class CalendarFragment extends Fragment {
 
         Set<Integer> hours = tv.getHours();
 
-//        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
-//        NetworkService
-//                .getInstance()
-//                .getOrderApi()
-//                .doPostAbsentCustomer(currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
-//                .enqueue(new Callback<Event>() {
-//                    @Override
-//                    public void onResponse(Call<Event> call, Response<Event> response) {
-//                        ProgresService.getInstance().hideProgress();
-//                        if (response.isSuccessful()) {
-//                            MemoryService.getInstance().setEvent(response.body());
-//                            FragmentService.getInstance().load(getActivity(), "RecordDetails");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<Event> call, @NonNull Throwable t) {
-//                        ProgresService.getInstance().hideProgress();
-//                        Toast
-//                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                });
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getCalendarApi()
+                .doPostCalendarNote(hours.toArray(new Integer[hours.size()]), currentDay.getTime(), new Text(""))
+                .enqueue(new Callback<Calendar>() {
+                    @Override
+                    public void onResponse(Call<Calendar> call, Response<Calendar> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful()) {
+                            FragmentService.getInstance().load(getActivity(), "RecordDetails");
+                        }
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Calendar> call, @NonNull Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
     }
 
     @Override

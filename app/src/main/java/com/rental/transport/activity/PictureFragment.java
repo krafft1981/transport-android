@@ -24,10 +24,8 @@ public class PictureFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.picture_fragment, container, false);
         ImageView image = root.findViewById(R.id.image);
-        Long imageId = MemoryService
-                .getInstance()
-                .getImageId();
-
+        Bundle bundle = this.getArguments();
+        Long imageId = bundle.getLong("imageId");
         ImageService
                 .getInstance()
                 .setImage(getContext(), imageId, R.drawable.background, image);

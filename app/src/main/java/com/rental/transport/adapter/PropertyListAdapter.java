@@ -20,6 +20,7 @@ import java.util.List;
 public class PropertyListAdapter extends BaseAdapter {
 
     private Context context;
+
     private List<Property> data;
     private Boolean editable;
 
@@ -35,15 +36,17 @@ public class PropertyListAdapter extends BaseAdapter {
         });
     }
 
+    public List<Property> getData() {
+
+        System.out.println(data.toString());
+        return data;
+    }
+
     public class ViewHolder {
         TextView type;
         TextView logic;
         TextView name;
         EditText value;
-    }
-
-    public List<Property> getdata() {
-        return data;
     }
 
     @Override
@@ -76,8 +79,7 @@ public class PropertyListAdapter extends BaseAdapter {
             holder.value = convertView.findViewById(R.id.propertyValue);
             if (!editable) {
                 holder.value.setKeyListener(null);
-            }
-            else {
+            } else {
                 holder.value.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -89,14 +91,15 @@ public class PropertyListAdapter extends BaseAdapter {
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        data.get(position).setValue(holder.value.getText().toString());
+                        data
+                                .get(position)
+                                .setValue(holder.value.getText().toString());
                     }
                 });
             }
 
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (PropertyListAdapter.ViewHolder) convertView.getTag();
         }
 

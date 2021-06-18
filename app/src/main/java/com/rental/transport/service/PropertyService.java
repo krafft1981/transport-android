@@ -47,6 +47,7 @@ public class PropertyService {
     public List<Property> getPropertyFromList(ListView listView) {
 
         PropertyListAdapter adapter = (PropertyListAdapter) listView.getAdapter();
-        return adapter.getdata();
+        System.out.println(adapter.getData().toString());
+        return adapter.getData();
     }
 }

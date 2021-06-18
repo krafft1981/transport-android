@@ -59,14 +59,16 @@ public class TransportDetails extends Fragment {
         gallery.setAdapter(new TransportGalleryAdapter(getContext()));
         gallery.setOnItemClickListener((parent, view, position, id) -> {
             Long imageId = MemoryService.getInstance().getTransport().getImage().get(position);
-            MemoryService.getInstance().setImageId(imageId);
+            Bundle bundle = new Bundle();
+            bundle.putLong("imageId", imageId);
+            FragmentService.getInstance().get("PictureFragment").setArguments(bundle);
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
         if (transport.getImage().isEmpty())
             buttonDelete.setEnabled(false);
 
-        ListView listView = root.findViewById(R.id.property);
+        ListView listView = root.findViewById(R.id.transportProperty);
         listView.setAdapter(new PropertyListAdapter(getContext(), transport.getProperty(), true));
 
         root
@@ -117,7 +119,7 @@ public class TransportDetails extends Fragment {
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-            transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
+//            transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
             NetworkService
                     .getInstance()

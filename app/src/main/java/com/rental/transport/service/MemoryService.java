@@ -1,14 +1,11 @@
 package com.rental.transport.service;
 
+import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Customer;
-import com.rental.transport.model.Event;
 import com.rental.transport.model.Order;
 import com.rental.transport.model.Parking;
 import com.rental.transport.model.Request;
 import com.rental.transport.model.Transport;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,15 +34,7 @@ public class MemoryService {
 
     @Getter
     @Setter
-    private Long imageId;
-
-    @Getter
-    @Setter
-    private Event event;
-
-    @Getter
-    @Setter
-    private Map<String, String> property = new HashMap<String, String>();
+    private Calendar calendar;
 
     private static MemoryService mInstance;
 

@@ -41,7 +41,7 @@
             </LinearLayout>
 
             <com.rental.transport.views.MyListView
-                android:id="@+id/property"
+                android:id="@+id/transportProperty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@android:color/transparent" />

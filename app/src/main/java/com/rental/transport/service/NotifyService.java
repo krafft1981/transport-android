@@ -1,5 +1,7 @@
 package com.rental.transport.service;
 
+import com.rental.transport.model.Customer;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -19,7 +21,7 @@ public class NotifyService {
 
         URI uri;
         try {
-            uri = new URI("ws://138.124.187.10:8080/notify");
+            uri = new URI("ws://138.124.187.10:8080/websocket");
         }
         catch (URISyntaxException e) {
             e.printStackTrace();
@@ -29,7 +31,8 @@ public class NotifyService {
         WebSocketClient client = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
-                send(MemoryService.getInstance().getCustomer().toString());
+                Customer customer = MemoryService.getInstance().getCustomer();
+                send(customer.getId().toString() + " " + customer.getAccount());
             }
 
             @Override

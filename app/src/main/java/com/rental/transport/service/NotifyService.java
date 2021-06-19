@@ -1,6 +1,17 @@
 package com.rental.transport.service;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.rental.transport.R;
 import com.rental.transport.model.Customer;
+import com.rental.transport.model.Transport;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,6 +20,7 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class NotifyService {
 
+    private Integer counter = 0;
     private WebSocketClient webSocketClient = Connect();
     private static NotifyService mInstance;
 
@@ -80,5 +92,33 @@ public class NotifyService {
             mInstance = new NotifyService();
 
         return mInstance;
+    }
+
+    public void sendNotify(Context context, String notify) {
+        Intent notificationIntent = new Intent();
+        PendingIntent pendingIntent = PendingIntent
+                .getActivity(context,
+                        0,
+                        notificationIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+        Transport transport = MemoryService
+                .getInstance()
+                .getTransport();
+
+        String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Client")
+                .setSmallIcon(R.drawable.icon_transport)
+                .setContentText(notify)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.transport))
+                .setAutoCancel(false);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(counter++, builder.build());
     }
 }

@@ -17,6 +17,7 @@ import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.NotifyService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.SharedService;
 
@@ -54,6 +55,7 @@ public class CustomerLogin extends Fragment {
                                 SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                             }
                             MemoryService.getInstance().setCustomer(response.body());
+                            NotifyService.getInstance();
                             FragmentService.getInstance().load(getActivity(), "TransportFragment");
                         }
                     }

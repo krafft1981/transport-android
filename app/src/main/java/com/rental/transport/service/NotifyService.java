@@ -8,7 +8,7 @@ public class NotifyService {
     }
 
     private void Connect() {
-        
+
     }
 
     public static NotifyService getInstance() {

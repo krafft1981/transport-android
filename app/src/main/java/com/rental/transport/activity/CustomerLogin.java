@@ -17,6 +17,7 @@ import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
+import com.rental.transport.service.NotifyService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.SharedService;
 
@@ -27,10 +28,8 @@ import retrofit2.Response;
 public class CustomerLogin extends Fragment {
 
     void login(View root, String username, String password) {
-        ProgresService
-                .getInstance()
-                .showProgress(getActivity(), getString(R.string.customer_loading));
 
+        ProgresService.getInstance().showProgress(getActivity(), getString(R.string.customer_loading));
         NetworkService
                 .getInstance(username, password)
                 .getCustomerApi()
@@ -56,6 +55,7 @@ public class CustomerLogin extends Fragment {
                             MemoryService.getInstance().setCustomer(response.body());
                             ((MainActivity) getActivity()).setMenuActive(R.id.request_menu);
                             ((MainActivity) getActivity()).showMenu(true);
+                            NotifyService.getInstance();
                         }
                     }
 

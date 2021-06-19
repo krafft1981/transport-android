@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.NotifyService;
 
 public class MainActivity extends FragmentActivity {
 
@@ -16,6 +17,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
+            NotifyService.getInstance();
             FragmentService.getInstance().load(this, "CustomerLogin");
         }
     }

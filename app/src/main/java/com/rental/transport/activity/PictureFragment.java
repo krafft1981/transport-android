@@ -59,7 +59,7 @@ public class PictureFragment extends Fragment {
             String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "Client")
-                    .setSmallIcon(R.drawable.transport)
+                    .setSmallIcon(R.drawable.icon_transport)
                     .setContentText("Вам одобрен заказ яхты '" + name + "'")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)

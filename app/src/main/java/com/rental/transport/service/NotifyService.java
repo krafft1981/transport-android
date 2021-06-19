@@ -7,6 +7,10 @@ public class NotifyService {
     public NotifyService() {
     }
 
+    private void Connect() {
+        
+    }
+
     public static NotifyService getInstance() {
 
         if (mInstance == null)

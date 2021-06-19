@@ -48,4 +48,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.burgstaller:okhttp-digest:2.5'
+
+    implementation 'tech.gusavila92:java-android-websocket-client:1.2.2'
 }

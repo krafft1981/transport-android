@@ -48,7 +48,7 @@ public class NotifyService {
             @Override
             public void onOpen() {
                 Customer customer = MemoryService.getInstance().getCustomer();
-                send(customer.getId().toString() + " " + customer.getAccount());
+                send(customer.getId().toString());
             }
 
             @Override

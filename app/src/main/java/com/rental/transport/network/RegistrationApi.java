@@ -15,7 +15,8 @@ public interface RegistrationApi {
             @Query("account") String account,
             @Query("password") String password,
             @Query("phone") String phone,
-            @Query("fio") String fio
+            @Query("fio") String fio,
+            @Query("time_zone") String timeZone
     );
 
     @Headers("Content-Type: application/json")

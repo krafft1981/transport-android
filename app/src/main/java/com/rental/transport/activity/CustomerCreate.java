@@ -18,6 +18,8 @@ import com.rental.transport.service.SharedService;
 
 import org.json.JSONObject;
 
+import java.util.TimeZone;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +49,8 @@ public class CustomerCreate extends Fragment {
                             customer.getText().toString(),
                             password.getText().toString(),
                             phone.getText().toString(),
-                            fio.getText().toString()
+                            fio.getText().toString(),
+                            TimeZone.getDefault().getID()
                     )
                     .enqueue(new Callback<Customer>() {
                         @Override

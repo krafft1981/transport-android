@@ -12,6 +12,8 @@ public class Customer {
 
     @SerializedName("id")
     private Long id;
+    @SerializedName("time_zone")
+    private String timeZone;
     @SerializedName("account")
     private String account;
     @SerializedName("send_email")

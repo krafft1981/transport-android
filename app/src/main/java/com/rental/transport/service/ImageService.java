@@ -12,7 +12,10 @@ import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.nio.file.FileSystemException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -115,58 +118,5 @@ public class ImageService {
             image.setImageResource(defaultImage);
             image.invalidate();
         }
-    }
-
-    public byte[] getImage(Context context, Intent intent) {
-
-        String name = getRealPathFromURI(context, intent.getData());
-        Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(name), 320, 400, true);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
-        return os.toByteArray();
-    }
-
-    private String getRealPathFromURI(Context context, Uri uri) { // не на всех телефонах работает
-
-        return getRealPathFromURI_API19(context, uri);
-    }
-
-    public static String getRealPathFromURI_API19(Context context, Uri uri) {
-
-        String fileName = "";
-        if (uri.getHost().contains("com.android.providers.media")) {
-            // Image pick from recent
-            String wholeID = DocumentsContract.getDocumentId(uri);
-
-            // Split at colon, use second item in the array
-            String id = wholeID.split(":")[1];
-
-            String[] column = {MediaStore.Images.Media.DATA};
-
-            // where id is equal to
-            String sel = MediaStore.Images.Media._ID + "=?";
-
-            Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, column, sel, new String[]{id}, null);
-
-            int columnIndex = cursor.getColumnIndex(column[0]);
-
-            if (cursor.moveToFirst()) {
-                fileName = cursor.getString(columnIndex);
-            }
-            cursor.close();
-            return fileName;
-        }
-        else {
-            // image pick from gallery
-            return getRealPathFromURI_BelowAPI11(context, uri);
-        }
-    }
-
-    public static String getRealPathFromURI_BelowAPI11(Context context, Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
 }

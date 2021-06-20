@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +25,13 @@ import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.adapter.TransportGalleryAdapter;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.service.PropertyService;
 
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -155,11 +157,10 @@ public class TransportDetails extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-                    Intent ringIntent = new Intent();
-                    ringIntent.setType("image/*");
-                    ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    this.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                    Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    takePictureIntent.setType("image/*");
+                    if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
+                        startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
                 }
                 else {
 
@@ -167,11 +168,10 @@ public class TransportDetails extends Fragment {
                 }
             }
             else {
-                Intent ringIntent = new Intent();
-                ringIntent.setType("image/*");
-                ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                this.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                takePictureIntent.setType("image/*");
+                if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
+                    startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
             }
         });
 
@@ -179,14 +179,23 @@ public class TransportDetails extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         switch (requestCode) {
             case PICK_IMAGE_SELECTED: {
                 if (resultCode == Activity.RESULT_OK) {
                     try {
+                        Bitmap image = Bitmap.createScaledBitmap(
+                                MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), intent.getData()),
+                                320,
+                                400,
+                                true
+                        );
+                        ByteArrayOutputStream os = new ByteArrayOutputStream();
+                        image.compress(Bitmap.CompressFormat.JPEG, 80, os);
+                        byte[] data = os.toByteArray();
+
                         Transport transport = MemoryService.getInstance().getTransport();
-                        byte[] data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                         NetworkService
                                 .getInstance()
@@ -225,6 +234,10 @@ public class TransportDetails extends Fragment {
                                 });
                     }
                     catch (Exception e) {
+                        Toast
+                                .makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                                .show();
+
                     }
                 }
                 break;

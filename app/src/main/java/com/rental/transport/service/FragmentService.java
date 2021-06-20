@@ -53,7 +53,7 @@ public class FragmentService {
                 .beginTransaction()
                 .replace(R.id.main_activity_container, frags.get(name), name)
                 .addToBackStack(name)
-                .commitAllowingStateLoss();
+                .commit();
     }
 
     public Fragment get(String name) {

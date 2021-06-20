@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +25,13 @@ import com.rental.transport.adapter.CustomerGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.service.PropertyService;
 
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -179,13 +181,22 @@ public class CustomerSettings extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         switch (requestCode) {
             case PICK_IMAGE_SELECTED: {
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        byte[] data = ImageService.getInstance().getImage(getContext(), imageReturnedIntent);
+                        Bitmap image = Bitmap.createScaledBitmap(
+                                MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), intent.getData()),
+                                320,
+                                400,
+                                true
+                        );
+                        ByteArrayOutputStream os = new ByteArrayOutputStream();
+                        image.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                        byte[] data = os.toByteArray();
+
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
                         NetworkService
                                 .getInstance()
@@ -224,6 +235,9 @@ public class CustomerSettings extends Fragment {
                                 });
                     }
                     catch (Exception e) {
+                        Toast
+                                .makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
+                                .show();
                     }
                 }
                 break;

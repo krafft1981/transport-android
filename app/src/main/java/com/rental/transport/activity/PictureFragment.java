@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 
 import com.rental.transport.R;
 import com.rental.transport.service.ImageService;
-import com.rental.transport.service.NotifyService;
 
 public class PictureFragment extends Fragment {
 
@@ -24,13 +23,14 @@ public class PictureFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.picture_fragment, container, false);
         ImageView image = root.findViewById(R.id.image);
+
         Bundle bundle = this.getArguments();
         Long imageId = bundle.getLong("imageId");
+
         ImageService
                 .getInstance()
                 .setImage(getContext(), imageId, R.drawable.background, image);
 
-        NotifyService.getInstance().sendNotify(getContext(), "Text");
         return root;
     }
 }

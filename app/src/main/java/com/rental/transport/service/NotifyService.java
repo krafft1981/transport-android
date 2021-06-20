@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
+import com.rental.transport.model.Transport;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,20 +21,21 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 public class NotifyService {
 
     // Объявим переменную в начале класса
-    private int counter = 101;
+    private int counter = 1;
 
     // Идентификатор канала
-    private static String CHANNEL_ID = "Cat";
+    private static String CHANNEL_ID = "Client";
 
-    private WebSocketClient webSocketClient = Connect();
+    private WebSocketClient webSocketClient = null;
     private static NotifyService mInstance;
 
     public NotifyService() {
     }
 
-    private WebSocketClient Connect() {
+    public WebSocketClient Connect(Long id) {
 
-        System.out.println("Connect to WebSocket");
+        if (webSocketClient != null)
+            webSocketClient.close();
 
         URI uri;
         try {
@@ -47,8 +49,7 @@ public class NotifyService {
         WebSocketClient client = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
-                Customer customer = MemoryService.getInstance().getCustomer();
-                send(customer.getId().toString());
+                send(id.toString());
             }
 
             @Override
@@ -86,7 +87,7 @@ public class NotifyService {
         client.setReadTimeout(60000);
         client.enableAutomaticReconnection(5000);
         client.connect();
-
+        client.send(id.toString());
         return client;
     }
 
@@ -98,7 +99,7 @@ public class NotifyService {
         return mInstance;
     }
 
-    public void Notify(Context context) {
+    public void Notify(Context context, String text) {
 
         Intent notificationIntent = new Intent();
         PendingIntent contentIntent = PendingIntent
@@ -110,14 +111,12 @@ public class NotifyService {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.del)
-                .setContentTitle("Напоминание")
-                .setContentText("Пора покормить кота")
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.transport))
-                .setTicker("Последнее китайское предупреждение!")
-                .setAutoCancel(true);
+                .setAutoCancel(false);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(counter++, builder.build());

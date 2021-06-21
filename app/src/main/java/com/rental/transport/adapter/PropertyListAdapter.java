@@ -17,9 +17,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import lombok.Getter;
+
 public class PropertyListAdapter extends BaseAdapter {
 
     private Context context;
+
+    @Getter
     private List<Property> data;
     private Boolean editable;
 
@@ -41,10 +45,6 @@ public class PropertyListAdapter extends BaseAdapter {
         TextView logic;
         TextView name;
         EditText value;
-    }
-
-    public List<Property> getdata() {
-        return data;
     }
 
     @Override
@@ -75,28 +75,10 @@ public class PropertyListAdapter extends BaseAdapter {
             holder.logic = convertView.findViewById(R.id.propertyLogic);
             holder.name = convertView.findViewById(R.id.propertyName);
             holder.value = convertView.findViewById(R.id.propertyValue);
-            if (!editable) {
+            if (!editable)
                 holder.value.setKeyListener(null);
-            }
-            else {
-                holder.value.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        data.get(position).setValue(holder.value.getText().toString());
-                    }
-                });
-            }
             convertView.setTag(holder);
-        }
-        else
+        } else
             holder = (PropertyListAdapter.ViewHolder) convertView.getTag();
 
         Property property = data.get(position);

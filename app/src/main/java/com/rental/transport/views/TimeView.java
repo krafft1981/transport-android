@@ -7,9 +7,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.rental.transport.enums.EventTypeEnum;
+import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Order;
 import com.rental.transport.service.MemoryService;
@@ -51,11 +51,16 @@ public class TimeView extends View {
         return result;
     }
 
+    public Calendar getCalendar(Integer hour) {
+        return box.get(hour).calendar;
+    }
+
     @AllArgsConstructor
     private class BusyBox {
         private EventTypeEnum type;
         private String text;
         private Order order;
+        private Calendar calendar;
     }
 
     private class Coordinate {
@@ -103,6 +108,9 @@ public class TimeView extends View {
                         if (box.get(entry.getKey()).type == EventTypeEnum.ORDER)
                             MemoryService.getInstance().setOrder(box.get(entry.getKey()).order);
 
+                        if (box.get(entry.getKey()).type == EventTypeEnum.NOTEBOOK)
+                            MemoryService.getInstance().setCalendar(box.get(entry.getKey()).calendar);
+
                         return box.get(entry.getKey()).type;
                     }
                 }
@@ -131,7 +139,8 @@ public class TimeView extends View {
                 EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
                 String value = hour.toString() + ":00";
                 Order orderId = data.get(hour).getOrder();
-                box.put(hour, new BusyBox(type, value, orderId));
+                Calendar calendar = data.get(hour).getCalendar();
+                box.put(hour, new BusyBox(type, value, orderId, calendar));
             }
         }
     }

@@ -11,10 +11,17 @@ import lombok.Data;
 @AllArgsConstructor
 public class Calendar {
 
+    @SerializedName("id")
+    private Long id;
     @SerializedName("day")
     private Long day;
     @SerializedName("hours")
     private List<Integer> hours;
     @SerializedName("note")
     private String note = "";
+
+    public Calendar(Long day, List<Integer> hours) {
+        setDay(day);
+        setHours(hours);
+    }
 }

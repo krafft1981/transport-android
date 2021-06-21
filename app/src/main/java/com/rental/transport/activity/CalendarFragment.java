@@ -12,14 +12,15 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
-import com.rental.transport.model.Text;
 import com.rental.transport.service.FragmentService;
+import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -31,44 +32,6 @@ import retrofit2.Response;
 public class CalendarFragment extends Fragment {
 
     private Date currentDay = new Date();
-
-    private void createRecord(Long day, Integer[] hours, String message) {
-
-        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
-        NetworkService
-                .getInstance()
-                .getCalendarApi()
-                .doPostCalendarNote(hours, day, new Text(message))
-                .enqueue(new Callback<Calendar>() {
-                    @Override
-                    public void onResponse(Call<Calendar> call, Response<Calendar> response) {
-                        ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
-                        }
-
-                        else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Calendar> call, Throwable t) {
-                        ProgresService.getInstance().hideProgress();
-                        Toast
-                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
-                                .show();
-                    }
-                });
-    }
-
 
     private void loadDetails(TimeView tv) {
 
@@ -124,11 +87,11 @@ public class CalendarFragment extends Fragment {
             loadDetails(timeView);
         });
 
-        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view ->
-                Toast
-                        .makeText(getActivity(), "Сорян. Не готово. Код на испытаниях.", Toast.LENGTH_LONG)
-                        .show()
-        );
+        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> {
+            Calendar calendar = new Calendar(currentDay.getTime(), new ArrayList(timeView.getHours()));
+            MemoryService.getInstance().setCalendar(calendar);
+            FragmentService.getInstance().load(getActivity(), "RecordDetails");
+        });
 
         timeView.setOnTouchListener((view, event) -> {
             switch (timeView.click(view, event)) {
@@ -138,11 +101,7 @@ public class CalendarFragment extends Fragment {
                 }
 
                 case NOTEBOOK: {
-
-                    Toast
-                            .makeText(getActivity(), "Сорян. Не готово. Код на испытаниях.", Toast.LENGTH_LONG)
-                            .show();
-
+                    FragmentService.getInstance().load(getActivity(), "RecordDetails");
                     break;
                 }
 

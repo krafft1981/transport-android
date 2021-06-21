@@ -28,10 +28,12 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+import com.rental.transport.service.PropertyService;
 
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,7 +118,8 @@ public class CustomerSettings extends Fragment {
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-//            customer.setProperty(PropertyService.getInstance().getPropertyFromList(list));
+            customer.setProperty(PropertyService.getInstance().getPropertyFromList(list));
+            customer.setTimeZone(TimeZone.getDefault().getID());
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService
                     .getInstance()
@@ -157,11 +160,10 @@ public class CustomerSettings extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-                    Intent ringIntent = new Intent();
-                    ringIntent.setType("image/*");
-                    ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    this.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                    Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    takePictureIntent.setType("image/*");
+                    if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
+                        startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
                 }
                 else {
 
@@ -169,11 +171,10 @@ public class CustomerSettings extends Fragment {
                 }
             }
             else {
-                Intent ringIntent = new Intent();
-                ringIntent.setType("image/*");
-                ringIntent.setAction(Intent.ACTION_GET_CONTENT);
-                ringIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                this.startActivityForResult(Intent.createChooser(ringIntent, "Select Image"), PICK_IMAGE_SELECTED);
+                Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                takePictureIntent.setType("image/*");
+                if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
+                    startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
             }
         });
 
@@ -194,7 +195,7 @@ public class CustomerSettings extends Fragment {
                                 true
                         );
                         ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                        image.compress(Bitmap.CompressFormat.JPEG, 80, os);
                         byte[] data = os.toByteArray();
 
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));

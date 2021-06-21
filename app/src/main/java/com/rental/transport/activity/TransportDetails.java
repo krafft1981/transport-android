@@ -28,6 +28,7 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+import com.rental.transport.service.PropertyService;
 
 import org.json.JSONObject;
 
@@ -121,7 +122,7 @@ public class TransportDetails extends Fragment {
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-//            transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
+            transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
             NetworkService
                     .getInstance()

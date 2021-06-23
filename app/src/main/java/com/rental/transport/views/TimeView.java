@@ -11,7 +11,6 @@ import android.view.View;
 import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
-import com.rental.transport.model.Order;
 import com.rental.transport.service.MemoryService;
 
 import java.util.HashMap;
@@ -59,7 +58,6 @@ public class TimeView extends View {
     private class BusyBox {
         private EventTypeEnum type;
         private String text;
-        private Order order;
         private Calendar calendar;
     }
 
@@ -106,7 +104,7 @@ public class TimeView extends View {
                         }
 
                         if (box.get(entry.getKey()).type == EventTypeEnum.ORDER)
-                            MemoryService.getInstance().setOrder(box.get(entry.getKey()).order);
+                            MemoryService.getInstance().setCalendar(box.get(entry.getKey()).calendar);
 
                         if (box.get(entry.getKey()).type == EventTypeEnum.NOTEBOOK)
                             MemoryService.getInstance().setCalendar(box.get(entry.getKey()).calendar);
@@ -138,9 +136,8 @@ public class TimeView extends View {
             if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
                 EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
                 String value = hour.toString() + ":00";
-                Order orderId = data.get(hour).getOrder();
                 Calendar calendar = data.get(hour).getCalendar();
-                box.put(hour, new BusyBox(type, value, orderId, calendar));
+                box.put(hour, new BusyBox(type, value, calendar));
             }
         }
     }
@@ -173,13 +170,9 @@ public class TimeView extends View {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
             switch (busyBox.type) {
-                case ORDER: {
-                    paint.setColor(Color.WHITE);
-                    break;
-                }
-
+                case ORDER:
                 case NOTEBOOK: {
-                    paint.setColor(Color.GRAY);
+                    paint.setColor(Color.WHITE);
                     break;
                 }
 

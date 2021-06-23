@@ -200,7 +200,6 @@ public class CalendarFragment extends Fragment {
         root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> {
             Calendar calendar = new Calendar(currentDay.getTime(), new ArrayList(timeView.getHours()));
             MemoryService.getInstance().setCalendar(calendar);
-            FragmentService.getInstance().load(getActivity(), "RecordDetails");
         });
 
         timeView.setOnTouchListener((view, event) -> {

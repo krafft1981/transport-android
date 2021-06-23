@@ -16,28 +16,33 @@
 
             <CalendarView
                 android:id="@+id/calendarBody"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:dateTextAppearance="@android:style/TextAppearance.Medium"
                 android:weekDayTextAppearance="@android:style/TextAppearance.Medium" />
 
+            <EditText
+                android:id="@+id/calendarNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calendarBody"
+                android:hint="Комментарий" />
+
             <TextView
                 android:id="@+id/calendarTimeLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/calendarBody"
-                android:layout_centerHorizontal="true"
+                android:layout_below="@id/calendarNote"
+                android:gravity="center"
                 android:text="Время" />
 
             <View
                 android:id="@+id/calendarViewLabel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:layout_below="@id/calendarTimeLabel"
-                android:layout_centerHorizontal="true"
-                android:text="Время" />
+                android:layout_below="@id/calendarTimeLabel" />
 
             <com.rental.transport.views.TimeView
                 android:id="@+id/calendarContainer"

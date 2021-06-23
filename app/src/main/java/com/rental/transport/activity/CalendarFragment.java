@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
+import com.rental.transport.model.Text;
 import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
@@ -32,6 +33,115 @@ import retrofit2.Response;
 public class CalendarFragment extends Fragment {
 
     private Date currentDay = new Date();
+
+    private void deleteNoteRecord(Long noteId) {
+
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getCalendarApi()
+                .doDeleteCalendarNote(noteId)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful())
+
+                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
+
+    private void createNoteRecord(Long day, Integer[] hours, String message) {
+
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getCalendarApi()
+                .doPostCalendarNote(hours, day, new Text(message))
+                .enqueue(new Callback<Calendar>() {
+                    @Override
+                    public void onResponse(Call<Calendar> call, Response<Calendar> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful())
+
+                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Calendar> call, Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
+
+    private void updateNoteRecord(Long noteId, String message) {
+
+        ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
+        NetworkService
+                .getInstance()
+                .getCalendarApi()
+                .doPutCalendarNote(noteId, new Text(message))
+                .enqueue(new Callback<Calendar>() {
+                    @Override
+                    public void onResponse(Call<Calendar> call, Response<Calendar> response) {
+                        ProgresService.getInstance().hideProgress();
+                        if (response.isSuccessful())
+                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
+
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                            catch (Exception e) {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Calendar> call, Throwable t) {
+                        ProgresService.getInstance().hideProgress();
+                        Toast
+                                .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+    }
+
 
     private void loadDetails(TimeView tv) {
 
@@ -96,12 +206,12 @@ public class CalendarFragment extends Fragment {
         timeView.setOnTouchListener((view, event) -> {
             switch (timeView.click(view, event)) {
                 case ORDER: {
-                    FragmentService.getInstance().load(getActivity(), "OrderDetails");
+
                     break;
                 }
 
                 case NOTEBOOK: {
-                    FragmentService.getInstance().load(getActivity(), "RecordDetails");
+
                     break;
                 }
 

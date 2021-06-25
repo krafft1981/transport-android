@@ -35,15 +35,15 @@ public interface RequestApi {
 
     @Headers("Content-Type: application/json")
     @GET("/request")
-    Call<List<Event>> doGetRequest(
+    Call<List<Request>> doGetRequest(
             @Query("id") Long[] ids
     );
 
     @Headers("Content-Type: application/json")
     @GET("/request/customer")
-    Call<List<Request>> doGetRequestAsCustomer();
+    Call<List<Event>> doGetRequestAsCustomer();
 
     @Headers("Content-Type: application/json")
     @GET("/request/driver")
-    Call<List<Request>> doGetRequestAsDriver();
+    Call<List<Event>> doGetRequestAsDriver();
 }

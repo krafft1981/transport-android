@@ -11,11 +11,11 @@ import android.view.View;
 import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
-import com.rental.transport.model.Order;
 import com.rental.transport.service.MemoryService;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,6 +56,7 @@ public class TimeView extends View {
         private EventTypeEnum type;
         private String text;
         private Calendar calendar;
+        private Long object;
     }
 
     private class Coordinate {
@@ -115,7 +116,7 @@ public class TimeView extends View {
         return EventTypeEnum.byId(0);
     }
 
-    public void setData(Map<Integer, Event> data) {
+    public void setData(List<Event> data) {
 
         box.clear();
         pos.clear();
@@ -125,14 +126,16 @@ public class TimeView extends View {
 
         for (Integer hour = 0; hour < 24; hour++) {
 
-            if (data.get(hour) == null)
-                continue;
-
-            if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
-                EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
-                String value = hour.toString() + ":00";
-                Calendar calendar = data.get(hour).getCalendar();
-                box.put(hour, new BusyBox(type, value, calendar));
+            for (Event event : data) {
+                if (event.getCalendar().getHours().contains(hour)) {
+                    if (event.getType() != EventTypeEnum.GENERATED.getId()) {
+                        EventTypeEnum type = EventTypeEnum.byId(event.getType());
+                        String value = hour.toString() + ":00";
+                        Long object = event.getObjectId();
+                        Calendar calendar = event.getCalendar();
+                        box.put(hour, new BusyBox(type, value, calendar, object));
+                    }
+                }
             }
         }
     }
@@ -206,8 +209,7 @@ public class TimeView extends View {
                 coordinate.bottom = height / 2 - 1;
 
                 textHeight = height / 4;
-            }
-            else {
+            } else {
                 coordinate.left = size * (sequense - delimiter + 0);
                 coordinate.right = size * (sequense - delimiter + 1) - 2;
 

@@ -19,10 +19,6 @@ public interface OrderApi {
     Call<List<Order>> doGetOrderByCustomer();
 
     @Headers("Content-Type: application/json")
-    @GET("/order/transport")
-    Call<List<Order>> doGetOrderByTransport();
-
-    @Headers("Content-Type: application/json")
     @GET("/order/driver")
     Call<List<Order>> doGetOrderByDriver();
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -17,6 +16,8 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -36,13 +37,27 @@ public class TransportFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getTransportApi()
-                .doGetTransportTyped(1L, page, size)
+                .doGetTransportList(page, size)
                 .enqueue(new Callback<List<Transport>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful())
-                            grid.setAdapter(new TransportGridAdapter(getActivity(), response.body()));
+
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+                        else {
+                            if (response.isSuccessful())
+                                grid.setAdapter(new TransportGridAdapter(getActivity(), response.body()));
+                            else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
                     }
 
                     @Override
@@ -61,7 +76,8 @@ public class TransportFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
 
         View root = inflater.inflate(R.layout.transport_fragment, container, false);
         GridView grid = root.findViewById(R.id.gridview);

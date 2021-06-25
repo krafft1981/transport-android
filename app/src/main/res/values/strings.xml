@@ -17,7 +17,7 @@
     <string name="transport_saving">Сохранение транспорта</string>
     <string name="transport_loading">Загрузка транспорта</string>
     <string name="customer_loading">Загрузка пользователя</string>
-    <string name="wrong_credentials">Вход запрещён</string>
+    <string name="wrong_credentials">Неправильное имя пользователя или пароль</string>
     <string name="boolean_property_value_yes">Да</string>
     <string name="boolean_property_value_no">Нет</string>
     <string name="events_loading">Загрузка событий</string>

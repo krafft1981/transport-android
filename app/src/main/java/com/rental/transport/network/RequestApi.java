@@ -4,7 +4,6 @@ import com.rental.transport.model.Event;
 import com.rental.transport.model.Request;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,22 +15,28 @@ public interface RequestApi {
 
     @Headers("Content-Type: application/json")
     @POST("/request/confirm")
-    Call<List<Request>> doPostConfirmRequest(
+    Call<List<Event>> doPostConfirmRequest(
             @Query("request_id") Long requestId
     );
 
     @Headers("Content-Type: application/json")
     @POST("/request/reject")
-    Call<List<Request>> doPostRejectRequest(
+    Call<List<Event>> doPostRejectRequest(
             @Query("request_id") Long requestId
     );
 
     @Headers("Content-Type: application/json")
     @POST("/request")
-    Call<Map<Integer, Event>> doPostRequest(
+    Call<List<Event>> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
             @Query("hour") Integer[] hour
+    );
+
+    @Headers("Content-Type: application/json")
+    @GET("/request")
+    Call<List<Event>> doGetRequest(
+            @Query("id") Long[] ids
     );
 
     @Headers("Content-Type: application/json")

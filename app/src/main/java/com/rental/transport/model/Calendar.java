@@ -9,8 +9,12 @@ import lombok.Data;
 @Data
 public class Calendar {
 
+    @SerializedName("id")
+    private Long id;
     @SerializedName("day")
     private Long day;
     @SerializedName("hours")
     private List<Integer> hours;
+    @SerializedName("note")
+    private String note = "";
 }

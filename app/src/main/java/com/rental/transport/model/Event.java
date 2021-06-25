@@ -9,6 +9,8 @@ public class Event {
 
     @SerializedName("calendar")
     private Calendar calendar;
+    @SerializedName("object_id")
+    private Long objectId = null;
     @SerializedName("type")
     private Integer type;
 }

@@ -46,17 +46,18 @@ public class CustomerLogin extends Fragment {
                             Toast
                                     .makeText(getContext(), getString(R.string.wrong_credentials), Toast.LENGTH_LONG)
                                     .show();
-                        }
+                        } else {
 
-                        if (response.isSuccessful()) {
-                            CheckBox remember = root.findViewById(R.id.loginAuto);
-                            if (remember.isChecked()) {
-                                SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_username), username);
-                                SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
+                            if (response.isSuccessful()) {
+                                CheckBox remember = root.findViewById(R.id.loginAuto);
+                                if (remember.isChecked()) {
+                                    SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_username), username);
+                                    SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
+                                }
+                                MemoryService.getInstance().setCustomer(response.body());
+                                NotifyService.getInstance().Connect(response.body().getId());
+                                FragmentService.getInstance().load(getActivity(), "TransportFragment");
                             }
-                            MemoryService.getInstance().setCustomer(response.body());
-                            NotifyService.getInstance().Connect(response.body().getId());
-                            FragmentService.getInstance().load(getActivity(), "TransportFragment");
                         }
                     }
 
@@ -113,8 +114,7 @@ public class CustomerLogin extends Fragment {
                                 Toast
                                         .makeText(getContext(), getString(R.string.check_email), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            else {
+                            } else {
                                 Toast
                                         .makeText(getContext(), getString(R.string.error), Toast.LENGTH_LONG)
                                         .show();

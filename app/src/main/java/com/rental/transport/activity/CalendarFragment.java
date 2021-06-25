@@ -21,8 +21,8 @@ import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Set;
 
 import lombok.NonNull;
@@ -32,7 +32,7 @@ import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
 
-    private Date currentDay;
+    private Long currentDay;
     private TimeView timeView;
 
     private void loadDetails(TimeView tv) {
@@ -43,19 +43,31 @@ public class CalendarFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getCalendarApi()
-                .doGetTransportCalendar(transport.getId(), currentDay.getTime())
-                .enqueue(new Callback<Map<Integer, Event>>() {
+                .doGetTransportCalendar(transport.getId(), currentDay)
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            tv.setData(response.body());
-                            tv.invalidate();
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+                        else {
+                            if (response.isSuccessful()) {
+                                tv.setData(response.body());
+                                tv.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Map<Integer, Event>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -74,30 +86,32 @@ public class CalendarFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getRequestApi()
-                .doPostRequest(transport.getId(), currentDay.getTime(), hours.toArray(new Integer[hours.size()]))
-                .enqueue(new Callback<Map<Integer, Event>>() {
+                .doPostRequest(transport.getId(), currentDay, hours.toArray(new Integer[hours.size()]))
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            tv.setData(response.body());
-                            tv.invalidate();
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
+                            if (response.isSuccessful()) {
+                                tv.setData(response.body());
+                                tv.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
+                                loadDetails(tv);
                             }
-                            catch (Exception e) {
-                            }
-                            loadDetails(tv);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Map<Integer, Event>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -112,16 +126,16 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        currentDay = new Date();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
 
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
         timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
-        cv.setDate(currentDay.getTime());
+        currentDay = cv.getDate();
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            currentDay = new Date(year - 1900, month, dayOfMonth + 1, 0, 0, 0);
+            GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
+            currentDay = cal.getTimeInMillis();
             loadDetails(timeView);
         });
 

@@ -4,6 +4,7 @@ import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Text;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -19,13 +20,13 @@ public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/customer")
-    Call<Map<Integer, Event>> doGetCustomerCalendar(
+    Call<List<Event>> doGetCustomerCalendar(
             @Query("day") Long day
     );
 
     @Headers("Content-Type: application/json")
     @GET("/calendar/transport")
-    Call<Map<Integer, Event>> doGetTransportCalendar(
+    Call<List<Event>> doGetTransportCalendar(
             @Query("transport_id") Long transportId,
             @Query("day") Long day
     );

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rental.transport.R;
+import com.rental.transport.model.Event;
 import com.rental.transport.model.Request;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.NetworkService;

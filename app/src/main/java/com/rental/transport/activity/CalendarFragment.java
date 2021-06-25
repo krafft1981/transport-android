@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import lombok.NonNull;
@@ -150,13 +151,13 @@ public class CalendarFragment extends Fragment {
                 .getInstance()
                 .getCalendarApi()
                 .doGetCustomerCalendar(currentDay.getTime())
-                .enqueue(new Callback<Map<Integer, Event>>() {
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<Map<Integer, Event>> call, Response<Map<Integer, Event>> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-                            tv.setData(response.body());
-                            tv.invalidate();
+//                            tv.setData(response.body());
+//                            tv.invalidate();
                         }
                         else {
                             try {
@@ -171,7 +172,7 @@ public class CalendarFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<Map<Integer, Event>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)

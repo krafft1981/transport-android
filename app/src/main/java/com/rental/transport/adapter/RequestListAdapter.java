@@ -11,12 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rental.transport.R;
+import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Request;
-import com.rental.transport.model.Transport;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-import com.rental.transport.service.PropertyService;
 
 import org.json.JSONObject;
 
@@ -39,9 +38,9 @@ public class RequestListAdapter extends BaseAdapter {
     private Context context;
 
     @Getter
-    private List<Request> data = new ArrayList();
+    private List<Event> data = new ArrayList();
 
-    private void setData(List<Request> data) {
+    private void setData(List<Event> data) {
         this.data = data;
         sort();
         this.notifyDataSetInvalidated();
@@ -54,9 +53,9 @@ public class RequestListAdapter extends BaseAdapter {
 
     private void sort() {
         Collections.sort(this.data, (Comparator) (o1, o2) -> {
-            Request p1 = (Request) o1;
-            Request p2 = (Request) o2;
-            return p1.getDay().compareTo(p2.getDay());
+            Event p1 = (Event) o1;
+            Event p2 = (Event) o2;
+            return p1.getObjectId().compareTo(p2.getObjectId());
         });
     }
 
@@ -122,50 +121,45 @@ public class RequestListAdapter extends BaseAdapter {
             });
 
             convertView.setTag(holder);
-        }
-
-        else
+        } else
             holder = (RequestListAdapter.ViewHolder) convertView.getTag();
 
-        Request request = data.get(position);
-        Transport transport = request.getTransport();
-        String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
+        Event event = data.get(position);
+        Calendar calendar = event.getCalendar();
 
-        holder.requestDay.setText(df.format(format, new Date(request.getDay())));
-        holder.requestHours.setText(request.getMinHour() + ":00" + " - " + request.getMaxHour() + ":00");
+        holder.requestDay.setText(df.format(format, new Date(calendar.getDay())));
+        holder.requestHours.setText(calendar.getMinHour() + ":00" + " - " + calendar.getMaxHour() + ":00");
 
         return convertView;
     }
 
     private void acceptRequest(Integer position) {
 
-        Request request = data.get(position);
+        Event event = data.get(position);
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getRequestApi()
-                .doPostConfirmRequest(request.getId())
-                .enqueue(new Callback<List<Request>>() {
+                .doPostConfirmRequest(event.getObjectId())
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful())
                             setData(response.body());
-                        }
                         else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Request>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(context, t.toString(), Toast.LENGTH_LONG)
@@ -176,33 +170,31 @@ public class RequestListAdapter extends BaseAdapter {
 
     private void rejectRequest(Integer position) {
 
-        Request request = data.get(position);
+        Event event = data.get(position);
         ProgresService.getInstance().showProgress(context, context.getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getRequestApi()
-                .doPostRejectRequest(request.getId())
-                .enqueue(new Callback<List<Request>>() {
+                .doPostRejectRequest(event.getObjectId())
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<List<Request>> call, Response<List<Request>> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful())
                             setData(response.body());
-                        }
                         else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Request>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(context, t.toString(), Toast.LENGTH_LONG)
@@ -218,27 +210,25 @@ public class RequestListAdapter extends BaseAdapter {
                 .getInstance()
                 .getRequestApi()
                 .doGetRequestAsDriver()
-                .enqueue(new Callback<List<Request>>() {
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(@NonNull Call<List<Request>> call, @NonNull Response<List<Request>> response) {
+                    public void onResponse(@NonNull Call<List<Event>> call, @NonNull Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful())
                             setData(response.body());
-                        }
                         else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<List<Request>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<List<Event>> call, @NonNull Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(context, t.toString(), Toast.LENGTH_LONG)

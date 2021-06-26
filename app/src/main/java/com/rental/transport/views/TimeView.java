@@ -15,6 +15,7 @@ import com.rental.transport.service.MemoryService;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,6 +51,16 @@ public class TimeView extends View {
         return result;
     }
 
+    public void clearHours() {
+
+        for (Map.Entry<Integer, Coordinate> entry : pos.entrySet()) {
+            if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST)
+                box.get(entry.getKey()).type = EventTypeEnum.FREE;
+        }
+
+        this.invalidate();
+    }
+
     public Calendar getCalendar(Integer hour) {
         return box.get(hour).calendar;
     }
@@ -59,6 +70,7 @@ public class TimeView extends View {
         private EventTypeEnum type;
         private String text;
         private Calendar calendar;
+        private Long object;
     }
 
     private class Coordinate {
@@ -93,21 +105,27 @@ public class TimeView extends View {
                     if (myX && myY) {
                         if (box.get(entry.getKey()).type == EventTypeEnum.FREE) {
                             box.get(entry.getKey()).type = EventTypeEnum.REQUEST;
-                            view.invalidate();
+                            this.invalidate();
                             return box.get(entry.getKey()).type;
                         }
 
                         if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST) {
                             box.get(entry.getKey()).type = EventTypeEnum.FREE;
-                            view.invalidate();
+                            this.invalidate();
                             return box.get(entry.getKey()).type;
                         }
 
-                        if (box.get(entry.getKey()).type == EventTypeEnum.ORDER)
-                            MemoryService.getInstance().setCalendar(box.get(entry.getKey()).calendar);
+                        if (box.get(entry.getKey()).type == EventTypeEnum.ORDER) {
+                            Calendar calendar = box.get(entry.getKey()).calendar;
+                            clearHours();
+                            MemoryService.getInstance().setCalendar(calendar);
+                        }
 
-                        if (box.get(entry.getKey()).type == EventTypeEnum.NOTEBOOK)
-                            MemoryService.getInstance().setCalendar(box.get(entry.getKey()).calendar);
+                        if (box.get(entry.getKey()).type == EventTypeEnum.NOTEBOOK) {
+                            Calendar calendar = box.get(entry.getKey()).calendar;
+                            clearHours();
+                            MemoryService.getInstance().setCalendar(calendar);
+                        }
 
                         return box.get(entry.getKey()).type;
                     }
@@ -120,7 +138,7 @@ public class TimeView extends View {
         return EventTypeEnum.byId(0);
     }
 
-    public void setData(Map<Integer, Event> data) {
+    public void setData(List<Event> data) {
 
         box.clear();
         pos.clear();
@@ -130,14 +148,16 @@ public class TimeView extends View {
 
         for (Integer hour = 0; hour < 24; hour++) {
 
-            if (data.get(hour) == null)
-                continue;
-
-            if (data.get(hour).getType() != EventTypeEnum.GENERATED.getId()) {
-                EventTypeEnum type = EventTypeEnum.byId(data.get(hour).getType());
-                String value = hour.toString() + ":00";
-                Calendar calendar = data.get(hour).getCalendar();
-                box.put(hour, new BusyBox(type, value, calendar));
+            for (Event event : data) {
+                if (event.getCalendar().getHours().contains(hour)) {
+                    if (event.getType() != EventTypeEnum.GENERATED.getId()) {
+                        EventTypeEnum type = EventTypeEnum.byId(event.getType());
+                        String value = hour.toString() + ":00";
+                        Long object = event.getObjectId();
+                        Calendar calendar = event.getCalendar();
+                        box.put(hour, new BusyBox(type, value, calendar, object));
+                    }
+                }
             }
         }
     }
@@ -201,8 +221,7 @@ public class TimeView extends View {
                 coordinate.bottom = height / 2 - 1;
 
                 textHeight = height / 4;
-            }
-            else {
+            } else {
                 coordinate.left = size * (sequence - delimiter + 0);
                 coordinate.right = size * (sequence - delimiter + 1) - 2;
 

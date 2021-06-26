@@ -24,4 +24,26 @@ public class Calendar {
         setDay(day);
         setHours(hours);
     }
+
+    public Integer getMinHour() {
+        Integer min = Integer.MAX_VALUE;
+
+        for (Integer value : hours) {
+            if (min > value)
+                min = value;
+        }
+
+        return min;
+    }
+
+    public Integer getMaxHour() {
+        Integer max = Integer.MIN_VALUE;
+
+        for (Integer value : hours) {
+            if (max < value) max = value;
+        }
+
+        max++;
+        return max;
+    }
 }

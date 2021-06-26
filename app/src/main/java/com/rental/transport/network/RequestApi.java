@@ -1,5 +1,6 @@
 package com.rental.transport.network;
 
+import com.rental.transport.model.Event;
 import com.rental.transport.model.Request;
 
 import java.util.List;
@@ -14,19 +15,19 @@ public interface RequestApi {
 
     @Headers("Content-Type: application/json")
     @POST("/request/confirm")
-    Call<List<Request>> doPostConfirmRequest(
+    Call<List<Event>> doPostConfirmRequest(
             @Query("request_id") Long requestId
     );
 
     @Headers("Content-Type: application/json")
     @POST("/request/reject")
-    Call<List<Request>> doPostRejectRequest(
+    Call<List<Event>> doPostRejectRequest(
             @Query("request_id") Long requestId
     );
 
     @Headers("Content-Type: application/json")
     @POST("/request")
-    Call<List<Request>> doPostRequest(
+    Call<List<Event>> doPostRequest(
             @Query("transport_id") Long transportId,
             @Query("day") Long day,
             @Query("hour") Integer[] hour
@@ -40,13 +41,13 @@ public interface RequestApi {
 
     @Headers("Content-Type: application/json")
     @GET("/request/customer")
-    Call<List<Request>> doGetRequestAsCustomer(
+    Call<List<Event>> doGetRequestAsCustomer(
 
     );
 
     @Headers("Content-Type: application/json")
     @GET("/request/driver")
-    Call<List<Request>> doGetRequestAsDriver(
+    Call<List<Event>> doGetRequestAsDriver(
 
     );
 }

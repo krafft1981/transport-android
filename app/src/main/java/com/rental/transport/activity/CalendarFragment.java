@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -13,7 +15,6 @@ import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Text;
-import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -21,10 +22,8 @@ import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import lombok.NonNull;
 import retrofit2.Call;
@@ -35,34 +34,33 @@ public class CalendarFragment extends Fragment {
 
     private Date currentDay = new Date();
 
-    private void deleteNoteRecord(Long noteId) {
+    private void deleteNoteRecord(TimeView timeView, Long noteId) {
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getCalendarApi()
                 .doDeleteCalendarNote(noteId)
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful())
-
-                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
-                        else {
+                        if (response.isSuccessful()) {
+                            timeView.setData(response.body());
+                            timeView.invalidate();
+                        } else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -71,34 +69,33 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
-    private void createNoteRecord(Long day, Integer[] hours, String message) {
+    private void createNoteRecord(TimeView timeView, Long day, Integer[] hours, String message) {
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getCalendarApi()
                 .doPostCalendarNote(hours, day, new Text(message))
-                .enqueue(new Callback<Calendar>() {
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<Calendar> call, Response<Calendar> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful())
-
-                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
-                        else {
+                        if (response.isSuccessful()) {
+                            timeView.setData(response.body());
+                            timeView.invalidate();
+                        } else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Calendar> call, Throwable t) {
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -107,34 +104,33 @@ public class CalendarFragment extends Fragment {
                 });
     }
 
-    private void updateNoteRecord(Long noteId, String message) {
+    private void updateNoteRecord(TimeView timeView, Long calendarId, String message) {
 
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.events_loading));
         NetworkService
                 .getInstance()
                 .getCalendarApi()
-                .doPutCalendarNote(noteId, new Text(message))
-                .enqueue(new Callback<Calendar>() {
+                .doPutCalendarNote(calendarId, new Text(message))
+                .enqueue(new Callback<List<Event>>() {
                     @Override
-                    public void onResponse(Call<Calendar> call, Response<Calendar> response) {
+                    public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful())
-                            FragmentService.getInstance().load(getActivity(), "CalendarFragment");
-
-                        else {
+                        if (response.isSuccessful()) {
+                            timeView.setData(response.body());
+                            timeView.invalidate();
+                        } else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Calendar> call, Throwable t) {
+                    public void onFailure(Call<List<Event>> call, Throwable t) {
                         ProgresService.getInstance().hideProgress();
                         Toast
                                 .makeText(getActivity(), t.toString(), Toast.LENGTH_LONG)
@@ -156,17 +152,15 @@ public class CalendarFragment extends Fragment {
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful()) {
-//                            tv.setData(response.body());
-//                            tv.invalidate();
-                        }
-                        else {
+                            tv.setData(response.body());
+                            tv.invalidate();
+                        } else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            }
-                            catch (Exception e) {
+                            } catch (Exception e) {
                             }
                         }
                     }
@@ -192,26 +186,67 @@ public class CalendarFragment extends Fragment {
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
         TimeView timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
+        EditText note = root.findViewById(R.id.calendarNote);
+        Button buttonLeft = root.findViewById(R.id.calendarActionLeft);
+        Button buttonRight = root.findViewById(R.id.calendarActionRight);
         cv.setDate(currentDay.getTime());
+
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             currentDay = new Date(year - 1900, month, dayOfMonth + 1);
+            note.setVisibility(View.GONE);
             loadDetails(timeView);
+            buttonLeft.setText("Создать запись");
+            buttonRight.setVisibility(View.GONE);
         });
 
-        root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> {
-            Calendar calendar = new Calendar(currentDay.getTime(), new ArrayList(timeView.getHours()));
-            MemoryService.getInstance().setCalendar(calendar);
+        buttonLeft.setOnClickListener(view -> {
+            Calendar calendar = MemoryService.getInstance().getCalendar();
+
+            if (buttonRight.getVisibility() == View.VISIBLE) {
+                buttonRight.setVisibility(View.GONE);
+                buttonLeft.setText("Создать запись");
+                note.setVisibility(View.GONE);
+
+                Toast
+                        .makeText(getActivity(), "Update: " + calendar.getId() + " " + note.getText(), Toast.LENGTH_LONG)
+                        .show();
+
+                updateNoteRecord(timeView, calendar.getId(), note.getText().toString());
+            } else {
+                note.setVisibility(View.VISIBLE);
+                buttonRight.setVisibility(View.VISIBLE);
+                buttonLeft.setText("Сохранить запись");
+                createNoteRecord(timeView, currentDay.getTime(), timeView.getHours().toArray(new Integer[timeView.getHours().size()]), note.getText().toString());
+            }
+        });
+
+        buttonRight.setOnClickListener(view -> {
+            Calendar calendar = MemoryService.getInstance().getCalendar();
+            buttonRight.setVisibility(View.GONE);
+            timeView.clearHours();
+            buttonLeft.setText("Создать запись");
+            note.setVisibility(View.GONE);
+            if (calendar != null)
+                deleteNoteRecord(timeView, calendar.getId());
         });
 
         timeView.setOnTouchListener((view, event) -> {
             switch (timeView.click(view, event)) {
-                case ORDER: {
-
+                case ORDER:
+                case NOTEBOOK: {
+                    Calendar calendar = MemoryService.getInstance().getCalendar();
+                    note.setVisibility(View.VISIBLE);
+                    note.setText(calendar.getNote());
+                    buttonLeft.setText("Сохранить запись");
+                    buttonRight.setVisibility(View.VISIBLE);
                     break;
                 }
 
-                case NOTEBOOK: {
-
+                case FREE:
+                case REQUEST: {
+                    note.setVisibility(View.GONE);
+                    buttonLeft.setText("Создать запись");
+                    buttonRight.setVisibility(View.GONE);
                     break;
                 }
 

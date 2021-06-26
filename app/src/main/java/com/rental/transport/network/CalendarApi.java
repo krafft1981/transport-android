@@ -1,11 +1,9 @@
 package com.rental.transport.network;
 
-import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Text;
 
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,7 +31,7 @@ public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
     @POST("/calendar/note")
-    Call<Calendar> doPostCalendarNote(
+    Call<List<Event>> doPostCalendarNote(
             @Query("hour") Integer[] hour,
             @Query("day") Long day,
             @Body Text body
@@ -41,14 +39,14 @@ public interface CalendarApi {
 
     @Headers("Content-Type: application/json")
     @PUT("/calendar/note")
-    Call<Calendar> doPutCalendarNote(
+    Call<List<Event>> doPutCalendarNote(
             @Query("calendar_id") Long calendarId,
             @Body Text body
     );
 
     @Headers("Content-Type: application/json")
     @DELETE("/calendar/note")
-    Call<Void> doDeleteCalendarNote(
+    Call<List<Event>> doDeleteCalendarNote(
             @Query("calendar_id") Long calendarId
     );
 }

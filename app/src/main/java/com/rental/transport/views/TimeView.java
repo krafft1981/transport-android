@@ -13,6 +13,7 @@ import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.service.MemoryService;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -125,16 +126,15 @@ public class TimeView extends View {
             return;
 
         for (Integer hour = 0; hour < 24; hour++) {
-
             for (Event event : data) {
                 if (event.getCalendar().getHours().contains(hour)) {
-                    if (event.getType() != EventTypeEnum.GENERATED.getId()) {
-                        EventTypeEnum type = EventTypeEnum.byId(event.getType());
-                        String value = hour.toString() + ":00";
-                        Long object = event.getObjectId();
-                        Calendar calendar = event.getCalendar();
-                        box.put(hour, new BusyBox(type, value, calendar, object));
-                    }
+                    if (event.getType() == EventTypeEnum.GENERATED.getId())
+                        break;
+                    EventTypeEnum type = EventTypeEnum.byId(event.getType());
+                    String value = hour.toString() + ":00";
+                    Long object = event.getObjectId();
+                    Calendar calendar = event.getCalendar();
+                    box.put(hour, new BusyBox(type, value, calendar, object));
                 }
             }
         }
@@ -164,36 +164,43 @@ public class TimeView extends View {
         if (box.size() % 2 != 0)
             delimiter++;
 
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTime(new Date());
+
         for (Integer hour = min; hour <= max; hour++) {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
-            switch (busyBox.type) {
-                case GENERATED: {
-                    paint.setColor(Color.GRAY);
-                    break;
-                }
+            if (hour < c.get(java.util.Calendar.HOUR_OF_DAY))
+                paint.setColor(Color.GRAY);
 
-                case ORDER: {
-                    paint.setColor(Color.WHITE);
-                    break;
-                }
+            else
+                switch (busyBox.type) {
+                    case GENERATED: {
+                        paint.setColor(Color.GRAY);
+                        break;
+                    }
 
-                case NOTEBOOK:
-                case BUSY: {
-                    paint.setColor(Color.RED);
-                    break;
-                }
+                    case ORDER: {
+                        paint.setColor(Color.WHITE);
+                        break;
+                    }
 
-                case REQUEST: {
-                    paint.setColor(Color.YELLOW);
-                    break;
-                }
+                    case NOTEBOOK:
+                    case BUSY: {
+                        paint.setColor(Color.RED);
+                        break;
+                    }
 
-                case FREE: {
-                    paint.setColor(Color.GREEN);
-                    break;
+                    case REQUEST: {
+                        paint.setColor(Color.YELLOW);
+                        break;
+                    }
+
+                    case FREE: {
+                        paint.setColor(Color.GREEN);
+                        break;
+                    }
                 }
-            }
 
             Coordinate coordinate = new Coordinate();
 

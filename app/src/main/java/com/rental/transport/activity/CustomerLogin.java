@@ -55,7 +55,7 @@ public class CustomerLogin extends Fragment {
                             MemoryService.getInstance().setCustomer(response.body());
                             ((MainActivity) getActivity()).setMenuActive(R.id.request_menu);
                             ((MainActivity) getActivity()).showMenu(true);
-                            NotifyService.getInstance(getContext());
+                            NotifyService.getInstance(getContext()).connect();
                         }
                     }
 

@@ -11,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
-import com.rental.transport.model.Transport;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,20 +19,25 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class NotifyService {
 
-    private Integer counter = 1;
+    // Объявим переменную в начале класса
+    private int counter = 1;
 
     private Context context;
 
-    private WebSocketClient webSocketClient = Connect();
+    // Идентификатор канала
+    private static String CHANNEL_ID = "Capitan";
+
+    private WebSocketClient webSocketClient = null;
     private static NotifyService mInstance;
 
     public NotifyService(Context context) {
         this.context = context;
     }
 
-    private WebSocketClient Connect() {
+    public WebSocketClient connect() {
 
-        System.out.println("Connect to WebSocket");
+        if (webSocketClient != null)
+            webSocketClient.close();
 
         URI uri;
         try {
@@ -47,7 +51,6 @@ public class NotifyService {
         WebSocketClient client = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
-
             }
 
             @Override
@@ -57,14 +60,32 @@ public class NotifyService {
 
             @Override
             public void onBinaryReceived(byte[] data) {
+                System.out.println("onBinaryReceived");
             }
 
             @Override
             public void onPingReceived(byte[] data) {
+                System.out.println("onPingReceived");
             }
 
             @Override
             public void onPongReceived(byte[] data) {
+
+                System.out.println("onPongReceived");
+
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(15000);
+                            sendPing(null);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                        .run();
             }
 
             @Override
@@ -81,11 +102,11 @@ public class NotifyService {
         Customer customer = MemoryService.getInstance().getCustomer();
         client.addHeader("username", customer.getAccount());
 
-        client.setConnectTimeout(60000);
-        client.setReadTimeout(10000);
+        client.setConnectTimeout(30000);
+        client.setReadTimeout(30000);
         client.enableAutomaticReconnection(5000);
         client.connect();
-
+        client.sendPing(null);
         return client;
     }
 
@@ -97,26 +118,21 @@ public class NotifyService {
         return mInstance;
     }
 
-    public void sendNotify(Context context, String notify) {
+    public void sendNotify(Context context, String text) {
+
         Intent notificationIntent = new Intent();
-        PendingIntent pendingIntent = PendingIntent
+        PendingIntent contentIntent = PendingIntent
                 .getActivity(context,
                         0,
                         notificationIntent,
                         PendingIntent.FLAG_CANCEL_CURRENT
                 );
 
-        Transport transport = MemoryService
-                .getInstance()
-                .getTransport();
-
-        String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Capitan")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.icon_transport)
-                .setContentText(notify)
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(contentIntent)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.transport))
                 .setAutoCancel(false);

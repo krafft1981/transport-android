@@ -50,4 +50,9 @@ public class TransportDetails extends Fragment {
 
         return root;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

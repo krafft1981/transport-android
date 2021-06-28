@@ -91,4 +91,9 @@ public class TransportFragment extends Fragment {
         loadTransport(grid);
         return root;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

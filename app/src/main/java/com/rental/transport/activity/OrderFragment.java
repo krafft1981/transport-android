@@ -138,4 +138,9 @@ public class OrderFragment extends Fragment {
 //        updateOrder(list, order.getId());
         return root;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

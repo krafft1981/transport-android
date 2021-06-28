@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import lombok.AllArgsConstructor;
 
@@ -164,13 +165,27 @@ public class TimeView extends View {
         if (box.size() % 2 != 0)
             delimiter++;
 
-        java.util.Calendar c = java.util.Calendar.getInstance();
-        c.setTime(new Date());
+        Date date = new Date();
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.setTime(date);
+        Integer currentHour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
+//        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+//        calendar.setTime(date);
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        calendar.set(java.util.Calendar.MINUTE, 0);
+        calendar.set(java.util.Calendar.SECOND, 0);
+        calendar.set(java.util.Calendar.MILLISECOND, 0);
+        Long currentDay = calendar.getTimeInMillis();
 
         for (Integer hour = min; hour <= max; hour++) {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
-            if (hour < c.get(java.util.Calendar.HOUR_OF_DAY))
+            Long paintintedDay = box.get(hour).calendar.getDay();
+
+            if (paintintedDay < currentDay)
+                paint.setColor(Color.GRAY);
+
+            else if ((paintintedDay.equals(currentDay)) && (hour < currentHour))
                 paint.setColor(Color.GRAY);
 
             else
@@ -216,7 +231,8 @@ public class TimeView extends View {
                 coordinate.bottom = height / 2 - 1;
 
                 textHeight = height / 4;
-            } else {
+            }
+            else {
                 coordinate.left = size * (sequense - delimiter + 0);
                 coordinate.right = size * (sequense - delimiter + 1) - 2;
 

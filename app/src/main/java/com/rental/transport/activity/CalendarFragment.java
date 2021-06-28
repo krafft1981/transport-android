@@ -21,6 +21,7 @@ import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
 
-    private Long currentDay;
+    private Long currentDay = new Date().getTime();
     private TimeView timeView;
 
     private void loadDetails(TimeView tv) {
@@ -132,7 +133,7 @@ public class CalendarFragment extends Fragment {
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
         timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
-        currentDay = cv.getDate();
+        cv.setDate(currentDay);
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
             currentDay = cal.getTimeInMillis();
@@ -149,5 +150,10 @@ public class CalendarFragment extends Fragment {
 
         loadDetails(timeView);
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

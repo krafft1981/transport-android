@@ -265,4 +265,9 @@ public class CalendarFragment extends Fragment {
         loadDetails(timeView);
         return root;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

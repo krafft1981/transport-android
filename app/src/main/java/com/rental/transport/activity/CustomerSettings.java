@@ -245,4 +245,10 @@ public class CustomerSettings extends Fragment {
             }
         }
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

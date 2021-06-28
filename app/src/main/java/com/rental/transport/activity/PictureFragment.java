@@ -33,4 +33,10 @@ public class PictureFragment extends Fragment {
 
         return root;
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

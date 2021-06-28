@@ -85,4 +85,10 @@ public class MapFragment extends Fragment {
         super.onLowMemory();
         view.onLowMemory();
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

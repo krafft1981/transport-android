@@ -55,7 +55,7 @@ public class CustomerLogin extends Fragment {
                             MemoryService.getInstance().setCustomer(response.body());
                             ((MainActivity) getActivity()).setMenuActive(R.id.request_menu);
                             ((MainActivity) getActivity()).showMenu(true);
-                            NotifyService.getInstance();
+                            NotifyService.getInstance(getContext());
                         }
                     }
 
@@ -147,5 +147,11 @@ public class CustomerLogin extends Fragment {
 
         ((MainActivity) getActivity()).showMenu(false);
         return root;
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

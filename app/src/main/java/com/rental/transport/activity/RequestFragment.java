@@ -26,4 +26,10 @@ public class RequestFragment extends Fragment {
         list.setAdapter(new RequestListAdapter(getContext()));
         return root;
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }

@@ -20,11 +20,15 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class NotifyService {
 
-    private Integer counter = 0;
+    private Integer counter = 1;
+
+    private Context context;
+
     private WebSocketClient webSocketClient = Connect();
     private static NotifyService mInstance;
 
-    public NotifyService() {
+    public NotifyService(Context context) {
+        this.context = context;
     }
 
     private WebSocketClient Connect() {
@@ -48,7 +52,7 @@ public class NotifyService {
 
             @Override
             public void onTextReceived(String message) {
-                System.out.println(message);
+                sendNotify(context, message);
             }
 
             @Override
@@ -77,18 +81,18 @@ public class NotifyService {
         Customer customer = MemoryService.getInstance().getCustomer();
         client.addHeader("username", customer.getAccount());
 
-        client.setConnectTimeout(5000);
-        client.setReadTimeout(60000);
+        client.setConnectTimeout(60000);
+        client.setReadTimeout(10000);
         client.enableAutomaticReconnection(5000);
         client.connect();
 
         return client;
     }
 
-    public static NotifyService getInstance() {
+    public static NotifyService getInstance(Context context) {
 
         if (mInstance == null)
-            mInstance = new NotifyService();
+            mInstance = new NotifyService(context);
 
         return mInstance;
     }
@@ -108,7 +112,7 @@ public class NotifyService {
 
         String name = PropertyService.getInstance().getValue(transport.getProperty(), "transport_name");
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Client")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Capitan")
                 .setSmallIcon(R.drawable.icon_transport)
                 .setContentText(notify)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

@@ -56,7 +56,7 @@ public class NotifyService {
 
             @Override
             public void onTextReceived(String message) {
-                Notify(context, message);
+                sendNotify(context, message);
             }
 
             @Override
@@ -85,11 +85,11 @@ public class NotifyService {
         Customer customer = MemoryService.getInstance().getCustomer();
         client.addHeader("username", customer.getAccount());
 
-        client.setConnectTimeout(5000);
-        client.setReadTimeout(60000);
+        client.setConnectTimeout(60000);
+        client.setReadTimeout(10000);
         client.enableAutomaticReconnection(5000);
         client.connect();
-        client.send(id.toString());
+
         return client;
     }
 
@@ -101,7 +101,7 @@ public class NotifyService {
         return mInstance;
     }
 
-    public void Notify(Context context, String text) {
+    public void sendNotify(Context context, String text) {
 
         Intent notificationIntent = new Intent();
         PendingIntent contentIntent = PendingIntent

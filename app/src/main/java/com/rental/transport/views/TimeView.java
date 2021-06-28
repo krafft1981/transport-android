@@ -190,36 +190,28 @@ public class TimeView extends View {
         if (box.size() % 2 != 0)
             delimiter++;
 
+        Date date = new Date();
         java.util.Calendar calendar = java.util.Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(date);
         Integer currentHour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
-
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
-        calendar.setTime(new Date());
         calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
         calendar.set(java.util.Calendar.MINUTE, 0);
         calendar.set(java.util.Calendar.SECOND, 0);
         calendar.set(java.util.Calendar.MILLISECOND, 0);
-
         Long currentDay = calendar.getTimeInMillis();
 
         for (Integer hour = min; hour <= max; hour++) {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
-            Long drawingDay = busyBox.calendar.getDay();
+            Long paintintedDay = box.get(hour).calendar.getDay();
 
-            if (drawingDay == currentDay) {
+            if (paintintedDay < currentDay)
                 paint.setColor(Color.GRAY);
 
-            }
-//            else if ((drawingDay == currentDay) && (hour <= currentHour)) {
-//
-//                Toast
-//                        .makeText(getContext(), "Fail", Toast.LENGTH_LONG)
-//                        .show();
-//
-//                paint.setColor(Color.GRAY);
-//            }
+            else if ((paintintedDay.equals(currentDay)) && (hour <= currentHour))
+                paint.setColor(Color.GRAY);
+
             else {
                 switch (busyBox.type) {
                     case ORDER:

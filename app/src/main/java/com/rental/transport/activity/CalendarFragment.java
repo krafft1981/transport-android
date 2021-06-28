@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import lombok.NonNull;
 import retrofit2.Call;
@@ -202,6 +203,7 @@ public class CalendarFragment extends Fragment {
 
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
+            cal.setTimeZone(TimeZone.getTimeZone("GMT"));
             currentDay = cal.getTimeInMillis();
             note.setVisibility(View.GONE);
             loadDetails(timeView);

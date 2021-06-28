@@ -169,8 +169,7 @@ public class TimeView extends View {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         calendar.setTime(date);
         Integer currentHour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
-//        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
-//        calendar.setTime(date);
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
         calendar.set(java.util.Calendar.MINUTE, 0);
         calendar.set(java.util.Calendar.SECOND, 0);
@@ -185,7 +184,7 @@ public class TimeView extends View {
             if (paintintedDay < currentDay)
                 paint.setColor(Color.GRAY);
 
-            else if ((paintintedDay.equals(currentDay)) && (hour < currentHour))
+            else if ((paintintedDay.equals(currentDay)) && (hour <= currentHour))
                 paint.setColor(Color.GRAY);
 
             else

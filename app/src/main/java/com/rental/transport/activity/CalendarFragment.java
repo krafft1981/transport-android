@@ -22,7 +22,7 @@ import com.rental.transport.views.TimeView;
 
 import org.json.JSONObject;
 
-import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import lombok.NonNull;
@@ -32,7 +32,7 @@ import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
 
-    private Date currentDay = new Date();
+    private Long currentDay;
 
     private void deleteNoteRecord(TimeView timeView, Long noteId) {
 
@@ -48,13 +48,15 @@ public class CalendarFragment extends Fragment {
                         if (response.isSuccessful()) {
                             timeView.setData(response.body());
                             timeView.invalidate();
-                        } else {
+                        }
+                        else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                             }
                         }
                     }
@@ -83,13 +85,15 @@ public class CalendarFragment extends Fragment {
                         if (response.isSuccessful()) {
                             timeView.setData(response.body());
                             timeView.invalidate();
-                        } else {
+                        }
+                        else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                             }
                         }
                     }
@@ -118,13 +122,15 @@ public class CalendarFragment extends Fragment {
                         if (response.isSuccessful()) {
                             timeView.setData(response.body());
                             timeView.invalidate();
-                        } else {
+                        }
+                        else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                             }
                         }
                     }
@@ -146,7 +152,7 @@ public class CalendarFragment extends Fragment {
         NetworkService
                 .getInstance()
                 .getCalendarApi()
-                .doGetCustomerCalendar(currentDay.getTime())
+                .doGetCustomerCalendar(currentDay)
                 .enqueue(new Callback<List<Event>>() {
                     @Override
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
@@ -154,13 +160,15 @@ public class CalendarFragment extends Fragment {
                         if (response.isSuccessful()) {
                             tv.setData(response.body());
                             tv.invalidate();
-                        } else {
+                        }
+                        else {
                             try {
                                 JSONObject jObjError = new JSONObject(response.errorBody().string());
                                 Toast
                                         .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                             }
                         }
                     }
@@ -189,10 +197,11 @@ public class CalendarFragment extends Fragment {
         EditText note = root.findViewById(R.id.calendarNote);
         Button buttonLeft = root.findViewById(R.id.calendarActionLeft);
         Button buttonRight = root.findViewById(R.id.calendarActionRight);
-        cv.setDate(currentDay.getTime());
+        currentDay = cv.getDate();
 
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            currentDay = new Date(year - 1900, month, dayOfMonth + 1);
+            GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
+            currentDay = cal.getTimeInMillis();
             note.setVisibility(View.GONE);
             loadDetails(timeView);
             buttonLeft.setText("Создать запись");
@@ -206,17 +215,14 @@ public class CalendarFragment extends Fragment {
                 buttonRight.setVisibility(View.GONE);
                 buttonLeft.setText("Создать запись");
                 note.setVisibility(View.GONE);
-
-                Toast
-                        .makeText(getActivity(), "Update: " + calendar.getId() + " " + note.getText(), Toast.LENGTH_LONG)
-                        .show();
-
                 updateNoteRecord(timeView, calendar.getId(), note.getText().toString());
-            } else {
+            }
+            else {
                 note.setVisibility(View.VISIBLE);
                 buttonRight.setVisibility(View.VISIBLE);
                 buttonLeft.setText("Сохранить запись");
-                createNoteRecord(timeView, currentDay.getTime(), timeView.getHours().toArray(new Integer[timeView.getHours().size()]), note.getText().toString());
+                note.setText("");
+                createNoteRecord(timeView, currentDay, timeView.getHours().toArray(new Integer[timeView.getHours().size()]), note.getText().toString());
             }
         });
 
@@ -234,9 +240,8 @@ public class CalendarFragment extends Fragment {
             switch (timeView.click(view, event)) {
                 case ORDER:
                 case NOTEBOOK: {
-                    Calendar calendar = MemoryService.getInstance().getCalendar();
                     note.setVisibility(View.VISIBLE);
-                    note.setText(calendar.getNote());
+                    note.setText(MemoryService.getInstance().getCalendar().getNote());
                     buttonLeft.setText("Сохранить запись");
                     buttonRight.setVisibility(View.VISIBLE);
                     break;

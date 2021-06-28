@@ -7,17 +7,20 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.rental.transport.enums.EventTypeEnum;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.service.MemoryService;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import lombok.AllArgsConstructor;
 
@@ -150,13 +153,14 @@ public class TimeView extends View {
 
             for (Event event : data) {
                 if (event.getCalendar().getHours().contains(hour)) {
-                    if (event.getType() != EventTypeEnum.GENERATED.getId()) {
-                        EventTypeEnum type = EventTypeEnum.byId(event.getType());
-                        String value = hour.toString() + ":00";
-                        Long object = event.getObjectId();
-                        Calendar calendar = event.getCalendar();
-                        box.put(hour, new BusyBox(type, value, calendar, object));
-                    }
+                    if (event.getType() == EventTypeEnum.GENERATED.getId())
+                        break;
+                    box.put(hour, new BusyBox(
+                            EventTypeEnum.byId(event.getType()),
+                            hour.toString() + ":00",
+                            event.getCalendar(),
+                            event.getObjectId()
+                    ));
                 }
             }
         }
@@ -177,7 +181,7 @@ public class TimeView extends View {
         Integer width = this.getWidth();
 
         Paint textPaint = new Paint();
-        textPaint.setTextSize(30);
+        textPaint.setTextSize(40);
         textPaint.setColor(Color.BLACK);
 
         Integer sequence = 0;
@@ -186,24 +190,53 @@ public class TimeView extends View {
         if (box.size() % 2 != 0)
             delimiter++;
 
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.setTime(new Date());
+        Integer currentHour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
+
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+        calendar.setTime(new Date());
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        calendar.set(java.util.Calendar.MINUTE, 0);
+        calendar.set(java.util.Calendar.SECOND, 0);
+        calendar.set(java.util.Calendar.MILLISECOND, 0);
+
+        Long currentDay = calendar.getTimeInMillis();
+
         for (Integer hour = min; hour <= max; hour++) {
             Paint paint = new Paint();
             BusyBox busyBox = box.get(hour);
-            switch (busyBox.type) {
-                case ORDER:
-                case NOTEBOOK: {
-                    paint.setColor(Color.WHITE);
-                    break;
-                }
+            Long drawingDay = busyBox.calendar.getDay();
 
-                case FREE: {
-                    paint.setColor(Color.GREEN);
-                    break;
-                }
+            if (drawingDay == currentDay) {
+                paint.setColor(Color.GRAY);
 
-                case REQUEST: {
-                    paint.setColor(Color.YELLOW);
-                    break;
+            }
+//            else if ((drawingDay == currentDay) && (hour <= currentHour)) {
+//
+//                Toast
+//                        .makeText(getContext(), "Fail", Toast.LENGTH_LONG)
+//                        .show();
+//
+//                paint.setColor(Color.GRAY);
+//            }
+            else {
+                switch (busyBox.type) {
+                    case ORDER:
+                    case NOTEBOOK: {
+                        paint.setColor(Color.WHITE);
+                        break;
+                    }
+
+                    case FREE: {
+                        paint.setColor(Color.GREEN);
+                        break;
+                    }
+
+                    case REQUEST: {
+                        paint.setColor(Color.YELLOW);
+                        break;
+                    }
                 }
             }
 
@@ -221,7 +254,8 @@ public class TimeView extends View {
                 coordinate.bottom = height / 2 - 1;
 
                 textHeight = height / 4;
-            } else {
+            }
+            else {
                 coordinate.left = size * (sequence - delimiter + 0);
                 coordinate.right = size * (sequence - delimiter + 1) - 2;
 

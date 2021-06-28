@@ -43,28 +43,24 @@ public class NotifyService {
         WebSocketClient client = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
-                Customer customer = MemoryService.getInstance().getCustomer();
-                send(customer.getId().toString());
+
             }
 
             @Override
             public void onTextReceived(String message) {
-                System.out.println("onTextReceived");
+                System.out.println(message);
             }
 
             @Override
             public void onBinaryReceived(byte[] data) {
-                System.out.println("onBinaryReceived");
             }
 
             @Override
             public void onPingReceived(byte[] data) {
-                System.out.println("onPingReceived");
             }
 
             @Override
             public void onPongReceived(byte[] data) {
-                System.out.println("onPongReceived");
             }
 
             @Override
@@ -77,6 +73,9 @@ public class NotifyService {
                 System.out.println("onCloseReceived");
             }
         };
+
+        Customer customer = MemoryService.getInstance().getCustomer();
+        client.addHeader("username", customer.getAccount());
 
         client.setConnectTimeout(5000);
         client.setReadTimeout(60000);

@@ -34,7 +34,7 @@ public class NotifyService {
         this.context = context;
     }
 
-    public WebSocketClient Connect(Long id) {
+    public WebSocketClient connect() {
 
         if (webSocketClient != null)
             webSocketClient.close();
@@ -69,6 +69,20 @@ public class NotifyService {
 
             @Override
             public void onPongReceived(byte[] data) {
+                System.out.println("onPongReceived");
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(15000);
+                            sendPing(null);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                .run();
             }
 
             @Override
@@ -85,11 +99,11 @@ public class NotifyService {
         Customer customer = MemoryService.getInstance().getCustomer();
         client.addHeader("username", customer.getAccount());
 
-        client.setConnectTimeout(60000);
-        client.setReadTimeout(10000);
+        client.setConnectTimeout(30000);
+        client.setReadTimeout(30000);
         client.enableAutomaticReconnection(5000);
         client.connect();
-
+        client.sendPing(null);
         return client;
     }
 

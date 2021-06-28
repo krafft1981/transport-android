@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -21,8 +20,6 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
 import org.json.JSONObject;
-
-import java.util.Date;
 
 import lombok.NonNull;
 import retrofit2.Call;

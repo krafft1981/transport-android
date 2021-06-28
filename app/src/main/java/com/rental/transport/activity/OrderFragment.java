@@ -118,27 +118,24 @@ public class OrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.order_fragment, container, false);
-        Order order = MemoryService.getInstance().getOrder();
-
-        TextView day = root.findViewById(R.id.orderDay);
-        TextView hours = root.findViewById(R.id.orderHours);
-        day.setText(df.format(format, new Date(order.getDay())));
-        hours.setText(order.getMinHour() + ":00" + " - " + order.getMaxHour() + ":00");
-
-        ListView list = root.findViewById(R.id.orderMessageChat);
-        list.setAdapter(new OrderChatAdapter(getContext(), order.getMessage()));
-
-        EditText source = root.findViewById(R.id.chatMessageBody);
-
-        root.findViewById(R.id.chatMessageSend).setOnClickListener(v -> sendOrderMessage(list, source, order.getId()));
-        root.findViewById(R.id.chatMessageListUpdate).setOnClickListener(v -> updateOrder(list, order.getId()));
-
+//        Long orderId = MemoryService.getInstance().getOrderId();
+//
+//        ListView list = root.findViewById(R.id.orderMessageChat);
+//        list.setAdapter(new OrderChatAdapter(getContext(), order.getMessage()));
+//
+//        EditText source = root.findViewById(R.id.chatMessageBody);
+//
+//        root.findViewById(R.id.chatMessageSend).setOnClickListener(v -> sendOrderMessage(list, source, order.getId()));
+//        root.findViewById(R.id.chatMessageListUpdate).setOnClickListener(v -> updateOrder(list, order.getId()));
+//
+//        updateOrder(list, order.getId());
         return root;
     }
 }

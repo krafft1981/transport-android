@@ -32,7 +32,7 @@ public class MemoryService {
 
     @Getter
     @Setter
-    private Order order;
+    private Long orderId;
 
     @Getter
     @Setter

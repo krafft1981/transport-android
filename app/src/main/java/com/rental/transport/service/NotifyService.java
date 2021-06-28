@@ -112,7 +112,7 @@ public class NotifyService {
                 );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.del)
+                .setSmallIcon(R.drawable.icon_transport)
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)

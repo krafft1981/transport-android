@@ -6,17 +6,16 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;
-import com.rental.transport.service.NotifyService;
 
 public class MainActivity extends FragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle state) {
 
-        super.onCreate(savedInstanceState);
+        super.onCreate(state);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null)
+        if (state == null)
             FragmentService.getInstance().load(this, "CustomerLogin");
     }
 }

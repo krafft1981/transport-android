@@ -56,13 +56,15 @@ public class CalendarFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 tv.setData(response.body());
                                 tv.invalidate();
-                            } else {
+                            }
+                            else {
                                 try {
                                     JSONObject jObjError = new JSONObject(response.errorBody().string());
                                     Toast
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                 }
                             }
                         }
@@ -99,13 +101,15 @@ public class CalendarFragment extends Fragment {
                             if (response.isSuccessful()) {
                                 tv.setData(response.body());
                                 tv.invalidate();
-                            } else {
+                            }
+                            else {
                                 try {
                                     JSONObject jObjError = new JSONObject(response.errorBody().string());
                                     Toast
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                 }
                                 loadDetails(tv);
                             }
@@ -135,10 +139,12 @@ public class CalendarFragment extends Fragment {
         timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
         cv.setDate(currentDay);
+
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
-            cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-            currentDay = cal.getTimeInMillis();            loadDetails(timeView);
+            GregorianCalendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+            calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+            currentDay = calendar.getTimeInMillis();
+            loadDetails(timeView);
         });
 
         root.findViewById(R.id.calendarCreateRequest).setOnClickListener(view -> updateDetails(timeView));

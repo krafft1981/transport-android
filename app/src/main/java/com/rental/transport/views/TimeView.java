@@ -104,8 +104,10 @@ public class TimeView extends View {
                             return box.get(entry.getKey()).type;
                         }
 
-                        if (box.get(entry.getKey()).type == EventTypeEnum.ORDER)
+                        if (box.get(entry.getKey()).type == EventTypeEnum.ORDER) {
+                            MemoryService.getInstance().setOrderId(box.get(entry.getKey()).object);
                             MemoryService.getInstance().setCalendar(box.get(entry.getKey()).calendar);
+                        }
 
                         return box.get(entry.getKey()).type;
                     }

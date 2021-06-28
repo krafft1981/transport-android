@@ -125,13 +125,13 @@ public class OrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.order_fragment, container, false);
-//        Long orderId = MemoryService.getInstance().getOrderId();
-//
-//        ListView list = root.findViewById(R.id.orderMessageChat);
+        Long orderId = MemoryService.getInstance().getOrderId();
+
+        ListView list = root.findViewById(R.id.orderMessageChat);
 //        list.setAdapter(new OrderChatAdapter(getContext(), order.getMessage()));
-//
+
 //        EditText source = root.findViewById(R.id.chatMessageBody);
-//
+
 //        root.findViewById(R.id.chatMessageSend).setOnClickListener(v -> sendOrderMessage(list, source, order.getId()));
 //        root.findViewById(R.id.chatMessageListUpdate).setOnClickListener(v -> updateOrder(list, order.getId()));
 //

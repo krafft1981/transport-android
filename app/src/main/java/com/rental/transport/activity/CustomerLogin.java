@@ -55,7 +55,7 @@ public class CustomerLogin extends Fragment {
                                     SharedService.getInstance().setValue(getActivity(), getString(R.string.preferred_password), password);
                                 }
                                 MemoryService.getInstance().setCustomer(response.body());
-                                NotifyService.getInstance().Connect(response.body().getId());
+                                NotifyService.getInstance(getContext()).Connect(response.body().getId());
                                 FragmentService.getInstance().load(getActivity(), "TransportFragment");
                             }
                         }

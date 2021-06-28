@@ -11,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
-import com.rental.transport.model.Transport;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,13 +22,16 @@ public class NotifyService {
     // Объявим переменную в начале класса
     private int counter = 1;
 
+    private Context context;
+
     // Идентификатор канала
     private static String CHANNEL_ID = "Client";
 
     private WebSocketClient webSocketClient = null;
     private static NotifyService mInstance;
 
-    public NotifyService() {
+    public NotifyService(Context context) {
+        this.context = context;
     }
 
     public WebSocketClient Connect(Long id) {
@@ -49,27 +51,24 @@ public class NotifyService {
         WebSocketClient client = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
-                send(id.toString());
+
             }
 
             @Override
             public void onTextReceived(String message) {
-                System.out.println("onTextReceived");
+                Notify(context, message);
             }
 
             @Override
             public void onBinaryReceived(byte[] data) {
-                System.out.println("onBinaryReceived");
             }
 
             @Override
             public void onPingReceived(byte[] data) {
-                System.out.println("onPingReceived");
             }
 
             @Override
             public void onPongReceived(byte[] data) {
-                System.out.println("onPongReceived");
             }
 
             @Override
@@ -83,6 +82,9 @@ public class NotifyService {
             }
         };
 
+        Customer customer = MemoryService.getInstance().getCustomer();
+        client.addHeader("username", customer.getAccount());
+
         client.setConnectTimeout(5000);
         client.setReadTimeout(60000);
         client.enableAutomaticReconnection(5000);
@@ -91,10 +93,10 @@ public class NotifyService {
         return client;
     }
 
-    public static NotifyService getInstance() {
+    public static NotifyService getInstance(Context context) {
 
         if (mInstance == null)
-            mInstance = new NotifyService();
+            mInstance = new NotifyService(context);
 
         return mInstance;
     }

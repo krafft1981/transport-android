@@ -12,20 +12,26 @@ import androidx.core.app.NotificationManagerCompat;
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class NotifyService {
 
-    // Объявим переменную в начале класса
+    private static final String format = "d MMMM (EEE)";
+    private android.text.format.DateFormat df = new android.text.format.DateFormat();
+
     private int counter = 1;
 
     private Context context;
 
     // Идентификатор канала
-    private static String CHANNEL_ID = "Client";
+    private static String CHANNEL_ID = "Capitan";
 
     private WebSocketClient webSocketClient = null;
     private static NotifyService mInstance;
@@ -51,25 +57,75 @@ public class NotifyService {
         WebSocketClient client = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
-
             }
 
             @Override
             public void onTextReceived(String message) {
-                sendNotify(context, message);
+
+                try {
+                    JSONObject notify = new JSONObject(message);
+                    String action = notify.getString("action");
+                    JSONObject request = notify.getJSONObject("request");
+                    JSONArray events = notify.getJSONArray("events");
+
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("Заявка ");
+
+                    switch (action) {
+                        case "create": {
+
+                            builder.append("создана ");
+                            break;
+                        }
+
+                        case "confirm": {
+
+                            builder.append("подтверждена ");
+                            break;
+                        }
+
+                        case "reject": {
+
+                            builder.append("отклонена ");
+                            break;
+                        }
+
+                        case "cancel": {
+
+                            builder.append("удалена ");
+                            break;
+                        }
+                    }
+
+//                  на 29.06.21 с19:00-21:00 +79001188... Иван
+                    builder.append("на ");
+                    builder.append(df.format(format, new Date(request.getLong("day"))));
+                    builder.append(" ");
+                    builder.append(request.getJSONArray("hours"));
+                    builder.append(" часов");
+
+                    sendNotify(context, builder.toString());
+                }
+                catch (Exception e) {
+
+                }
             }
 
             @Override
             public void onBinaryReceived(byte[] data) {
+                System.out.println("onBinaryReceived");
             }
 
             @Override
             public void onPingReceived(byte[] data) {
+                System.out.println("onPingReceived");
             }
 
             @Override
             public void onPongReceived(byte[] data) {
+
                 System.out.println("onPongReceived");
+
                 new Runnable() {
                     @Override
                     public void run() {
@@ -82,7 +138,7 @@ public class NotifyService {
                         }
                     }
                 }
-                .run();
+                        .run();
             }
 
             @Override

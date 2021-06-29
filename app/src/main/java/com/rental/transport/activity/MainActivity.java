@@ -18,9 +18,4 @@ public class MainActivity extends FragmentActivity {
         if (state == null)
             FragmentService.getInstance().load(this, "CustomerLogin");
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }

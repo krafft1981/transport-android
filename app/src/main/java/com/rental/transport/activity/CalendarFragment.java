@@ -129,7 +129,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        super.setRetainInstance(true);
     }
 
     @Override
@@ -138,7 +138,15 @@ public class CalendarFragment extends Fragment {
         View root = inflater.inflate(R.layout.calendar_fragment, container, false);
         timeView = root.findViewById(R.id.calendarContainer);
         CalendarView cv = root.findViewById(R.id.calendarBody);
-        cv.setDate(currentDay);
+
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeInMillis(cv.getDate());
+        gc.setTimeZone(TimeZone.getTimeZone("GMT"));
+        gc.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        gc.set(java.util.Calendar.MINUTE, 0);
+        gc.set(java.util.Calendar.SECOND, 0);
+        gc.set(java.util.Calendar.MILLISECOND, 0);
+        currentDay = gc.getTimeInMillis();
 
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             GregorianCalendar calendar = new GregorianCalendar(year, month, dayOfMonth);
@@ -160,7 +168,22 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

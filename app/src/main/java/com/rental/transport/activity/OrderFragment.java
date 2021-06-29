@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,8 @@ import com.rental.transport.service.ProgresService;
 
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import lombok.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +34,10 @@ public class OrderFragment extends Fragment {
     private static final String format = "d MMMM (EEE)";
     android.text.format.DateFormat df = new android.text.format.DateFormat();
 
-    private void sendOrderMessage(ListView list, EditText source, Long orderId) {
+    private void sendOrderMessage(View root, Long orderId) {
+
+        ListView list = root.findViewById(R.id.orderMessageChat);
+        EditText source = root.findViewById(R.id.chatMessageBody);
 
         ProgresService.getInstance().showProgress(getContext(), getContext().getString(R.string.events_loading));
         NetworkService
@@ -45,19 +51,22 @@ public class OrderFragment extends Fragment {
 
                         if (response.code() == 401)
                             FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+
                         else {
 
                             if (response.isSuccessful()) {
                                 list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
                                 list.invalidate();
                                 source.getText().clear();
-                            } else {
+                            }
+                            else {
                                 try {
                                     JSONObject jObjError = new JSONObject(response.errorBody().string());
                                     Toast
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                 }
                             }
                         }
@@ -73,7 +82,11 @@ public class OrderFragment extends Fragment {
                 });
     }
 
-    private void updateOrder(ListView list, Long orderId) {
+    private void updateOrder(View root, Long orderId) {
+
+        ListView list = root.findViewById(R.id.orderMessageChat);
+        TextView orderDay = root.findViewById(R.id.orderDay);
+        TextView orderHours = root.findViewById(R.id.orderHours);
 
         ProgresService.getInstance().showProgress(getContext(), getContext().getString(R.string.events_loading));
         NetworkService
@@ -88,15 +101,22 @@ public class OrderFragment extends Fragment {
                             FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
                             if (response.isSuccessful()) {
-                                list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
+                                Order order = response.body();
+
+                                orderDay.setText(df.format(format, new Date(order.getDay())));
+                                orderHours.setText(order.getMinHour() + ":00" + " - " + order.getMaxHour() + ":00");
+
+                                list.setAdapter(new OrderChatAdapter(getContext(), order.getMessage()));
                                 list.invalidate();
-                            } else {
+                            }
+                            else {
                                 try {
                                     JSONObject jObjError = new JSONObject(response.errorBody().string());
                                     Toast
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                 }
                             }
                         }
@@ -124,20 +144,10 @@ public class OrderFragment extends Fragment {
         View root = inflater.inflate(R.layout.order_fragment, container, false);
         Long orderId = MemoryService.getInstance().getOrderId();
 
-        ListView list = root.findViewById(R.id.orderMessageChat);
-//        list.setAdapter(new OrderChatAdapter(getContext(), order.getMessage()));
+        root.findViewById(R.id.chatMessageSend).setOnClickListener(v -> sendOrderMessage(root, orderId));
+        root.findViewById(R.id.chatMessageListUpdate).setOnClickListener(v -> updateOrder(root, orderId));
 
-//        EditText source = root.findViewById(R.id.chatMessageBody);
-
-//        root.findViewById(R.id.chatMessageSend).setOnClickListener(v -> sendOrderMessage(list, source, order.getId()));
-//        root.findViewById(R.id.chatMessageListUpdate).setOnClickListener(v -> updateOrder(list, order.getId()));
-//
-//        updateOrder(list, order.getId());
+        updateOrder(root, orderId);
         return root;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }

@@ -1,10 +1,16 @@
 package com.rental.transport.activity;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,15 +48,16 @@ public class MapFragment extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                // For showing a move to my location button
+                String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+
 //                googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
                 LatLng sydney = new LatLng(-34, 151);
                 googleMap.addMarker(new MarkerOptions()
                         .position(sydney)
-                        .title("Marker Title")
-                        .snippet("Marker Description")
+                        .title("Стоянка")
+                        .snippet("Место сбора")
                 );
 
                 // For zooming automatically to the location of the marker

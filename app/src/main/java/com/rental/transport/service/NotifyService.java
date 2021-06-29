@@ -48,8 +48,7 @@ public class NotifyService {
         URI uri;
         try {
             uri = new URI("ws://138.124.187.10:8080/websocket");
-        }
-        catch (URISyntaxException e) {
+        } catch (URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -74,39 +73,38 @@ public class NotifyService {
                     switch (action) {
                         case "create": {
 
-                            builder.append("создана ");
+                            builder.append("создана");
                             break;
                         }
 
                         case "confirm": {
 
-                            builder.append("подтверждена ");
+                            builder.append("подтверждена");
                             break;
                         }
 
                         case "reject": {
 
-                            builder.append("отклонена ");
+                            builder.append("отклонена");
                             break;
                         }
 
                         case "cancel": {
 
-                            builder.append("удалена ");
+                            builder.append("удалена");
                             break;
                         }
                     }
 
 //                  на 29.06.21 с19:00-21:00 +79001188... Иван
-                    builder.append("на ");
+                    builder.append(" на ");
                     builder.append(df.format(format, new Date(request.getLong("day"))));
                     builder.append(" ");
                     builder.append(request.getJSONArray("hours"));
                     builder.append(" часов");
 
                     sendNotify(context, builder.toString());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
@@ -132,8 +130,7 @@ public class NotifyService {
                         try {
                             Thread.sleep(15000);
                             sendPing(null);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

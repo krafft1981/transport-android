@@ -5,7 +5,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         multiDexEnabled true
-        applicationId "com.rental.transport"
+        applicationId "com.rental.transport.client"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1

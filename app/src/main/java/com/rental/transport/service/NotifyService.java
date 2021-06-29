@@ -31,7 +31,7 @@ public class NotifyService {
     private Context context;
 
     // Идентификатор канала
-    private static String CHANNEL_ID = "Capitan";
+    private static String CHANNEL_ID = "Client";
 
     private WebSocketClient webSocketClient = null;
     private static NotifyService mInstance;

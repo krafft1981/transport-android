@@ -157,6 +157,10 @@ public class CalendarFragment extends Fragment {
 
     private void loadDetails(TimeView tv) {
 
+        Toast
+                .makeText(getActivity(), currentDay.toString(), Toast.LENGTH_LONG)
+                .show();
+
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.calendar_loading));
         NetworkService
                 .getInstance()
@@ -210,6 +214,15 @@ public class CalendarFragment extends Fragment {
         Button buttonLeft = root.findViewById(R.id.calendarActionLeft);
         Button buttonRight = root.findViewById(R.id.calendarActionRight);
         cv.setDate(currentDay);
+
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTimeInMillis(cv.getDate());
+        gc.setTimeZone(TimeZone.getTimeZone("GMT"));
+        gc.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        gc.set(java.util.Calendar.MINUTE, 0);
+        gc.set(java.util.Calendar.SECOND, 0);
+        gc.set(java.util.Calendar.MILLISECOND, 0);
+        currentDay = gc.getTimeInMillis();
 
         cv.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);

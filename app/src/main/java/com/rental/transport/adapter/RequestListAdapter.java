@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
-import com.rental.transport.model.Request;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
@@ -24,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -104,12 +104,10 @@ public class RequestListAdapter extends BaseAdapter {
                             acceptRequest(position);
                             break;
                         }
-
                         case 2: {
                             rejectRequest(position);
                             break;
                         }
-
                         default:
                             break;
                     }
@@ -128,6 +126,7 @@ public class RequestListAdapter extends BaseAdapter {
         Calendar calendar = event.getCalendar();
 
         holder.requestDay.setText(df.format(format, new Date(calendar.getDay())));
+
         holder.requestHours.setText(calendar.getMinHour() + ":00" + " - " + calendar.getMaxHour() + ":00");
 
         return convertView;

@@ -15,6 +15,7 @@ import com.rental.transport.R;
 import com.rental.transport.adapter.OrderChatAdapter;
 import com.rental.transport.model.Order;
 import com.rental.transport.model.Text;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -44,19 +45,21 @@ public class OrderDetails extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
-                            list.invalidate();
-                            source.setText("");
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
+                            if (response.isSuccessful()) {
+                                list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
+                                list.invalidate();
+                                source.setText("");
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -82,18 +85,20 @@ public class OrderDetails extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<Order> call, @NonNull Response<Order> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
-                            list.invalidate();
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
+                            if (response.isSuccessful()) {
+                                list.setAdapter(new OrderChatAdapter(getContext(), response.body().getMessage()));
+                                list.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -111,6 +116,7 @@ public class OrderDetails extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setRetainInstance(true);
     }
 
     @Override
@@ -134,9 +140,23 @@ public class OrderDetails extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

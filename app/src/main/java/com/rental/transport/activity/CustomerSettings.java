@@ -50,6 +50,7 @@ public class CustomerSettings extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setRetainInstance(true);
     }
 
     @Override
@@ -88,21 +89,23 @@ public class CustomerSettings extends Fragment {
                         @Override
                         public void onResponse(Call<Customer> call, Response<Customer> response) {
                             ProgresService.getInstance().hideProgress();
-                            if (response.isSuccessful()) {
-                                MemoryService.getInstance().setCustomer(response.body());
-                                gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
-                                gallery.invalidate();
-                                if (response.body().getImage().isEmpty())
-                                    buttonDelete.setEnabled(false);
-                            }
+                            if (response.code() == 401)
+                                FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                             else {
-                                try {
-                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                    Toast
-                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                                catch (Exception e) {
+                                if (response.isSuccessful()) {
+                                    MemoryService.getInstance().setCustomer(response.body());
+                                    gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
+                                    gallery.invalidate();
+                                    if (response.body().getImage().isEmpty())
+                                        buttonDelete.setEnabled(false);
+                                } else {
+                                    try {
+                                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                        Toast
+                                                .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                                .show();
+                                    } catch (Exception e) {
+                                    }
                                 }
                             }
                         }
@@ -129,19 +132,21 @@ public class CustomerSettings extends Fragment {
                         @Override
                         public void onResponse(Call<Customer> call, Response<Customer> response) {
                             ProgresService.getInstance().hideProgress();
-                            if (response.isSuccessful()) {
-                                MemoryService.getInstance().setCustomer(response.body());
-                                gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
-                                gallery.invalidate();
-                            }
+                            if (response.code() == 401)
+                                FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                             else {
-                                try {
-                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                    Toast
-                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                            .show();
-                                }
-                                catch (Exception e) {
+                                if (response.isSuccessful()) {
+                                    MemoryService.getInstance().setCustomer(response.body());
+                                    gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
+                                    gallery.invalidate();
+                                } else {
+                                    try {
+                                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                        Toast
+                                                .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                                .show();
+                                    } catch (Exception e) {
+                                    }
                                 }
                             }
                         }
@@ -164,13 +169,11 @@ public class CustomerSettings extends Fragment {
                     takePictureIntent.setType("image/*");
                     if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
                         startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
-                }
-                else {
+                } else {
 
                     ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
                 }
-            }
-            else {
+            } else {
                 Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 takePictureIntent.setType("image/*");
                 if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
@@ -207,21 +210,23 @@ public class CustomerSettings extends Fragment {
                                     @Override
                                     public void onResponse(Call<Customer> call, Response<Customer> response) {
                                         ProgresService.getInstance().hideProgress();
-                                        if (response.isSuccessful()) {
-                                            MemoryService.getInstance().setCustomer(response.body());
-                                            gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
-                                            gallery.invalidate();
-                                            if (!response.body().getImage().isEmpty())
-                                                buttonDelete.setEnabled(true);
-                                        }
+                                        if (response.code() == 401)
+                                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                                         else {
-                                            try {
-                                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                                Toast
-                                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                                        .show();
-                                            }
-                                            catch (Exception e) {
+                                            if (response.isSuccessful()) {
+                                                MemoryService.getInstance().setCustomer(response.body());
+                                                gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
+                                                gallery.invalidate();
+                                                if (!response.body().getImage().isEmpty())
+                                                    buttonDelete.setEnabled(true);
+                                            } else {
+                                                try {
+                                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                                    Toast
+                                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                                            .show();
+                                                } catch (Exception e) {
+                                                }
                                             }
                                         }
                                     }
@@ -234,8 +239,7 @@ public class CustomerSettings extends Fragment {
                                                 .show();
                                     }
                                 });
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Toast
                                 .makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG)
                                 .show();
@@ -246,9 +250,23 @@ public class CustomerSettings extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

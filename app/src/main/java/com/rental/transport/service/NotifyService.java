@@ -73,32 +73,28 @@ public class NotifyService {
 
                     switch (action) {
                         case "create": {
-
-                            builder.append("создана ");
+                            builder.append("создана");
                             break;
                         }
 
                         case "confirm": {
-
-                            builder.append("подтверждена ");
+                            builder.append("подтверждена");
                             break;
                         }
 
                         case "reject": {
-
-                            builder.append("отклонена ");
+                            builder.append("отклонена");
                             break;
                         }
 
                         case "cancel": {
-
-                            builder.append("удалена ");
+                            builder.append("удалена");
                             break;
                         }
                     }
 
 //                  на 29.06.21 с19:00-21:00 +79001188... Иван
-                    builder.append("на ");
+                    builder.append(" на ");
                     builder.append(df.format(format, new Date(request.getLong("day"))));
                     builder.append(" ");
                     builder.append(request.getJSONArray("hours"));

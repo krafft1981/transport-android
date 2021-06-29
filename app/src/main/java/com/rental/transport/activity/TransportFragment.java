@@ -17,6 +17,8 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import lombok.NonNull;
@@ -37,8 +39,23 @@ public class TransportFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<List<Transport>> call, @NonNull Response<List<Transport>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful())
-                            grid.setAdapter(new TransportGridAdapter(getActivity(), response.body()));
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
+
+                        else {
+                            if (response.isSuccessful())
+                                grid.setAdapter(new TransportGridAdapter(getActivity(), response.body()));
+
+                            else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
                     }
 
                     @Override
@@ -54,6 +71,7 @@ public class TransportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setRetainInstance(true);
     }
 
     @Override
@@ -71,9 +89,23 @@ public class TransportFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

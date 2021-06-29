@@ -20,6 +20,7 @@ public class OrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setRetainInstance(true);
     }
 
     @Override
@@ -38,9 +39,23 @@ public class OrderFragment extends Fragment {
          return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

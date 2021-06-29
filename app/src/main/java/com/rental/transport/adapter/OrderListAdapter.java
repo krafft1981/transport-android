@@ -14,6 +14,8 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,6 +116,15 @@ public class OrderListAdapter extends BaseAdapter {
                         ProgresService.getInstance().hideProgress();
                         if (response.isSuccessful())
                             setData(response.body());
+                        else {
+                            try {
+                                JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                Toast
+                                        .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
+                                        .show();
+                            } catch (Exception e) {
+                            }
+                        }
                     }
 
                     @Override

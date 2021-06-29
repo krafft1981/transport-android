@@ -15,6 +15,7 @@ import com.rental.transport.R;
 import com.rental.transport.model.Calendar;
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Text;
+import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
@@ -47,18 +48,20 @@ public class CalendarFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            timeView.setData(response.body());
-                            timeView.invalidate();
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
+                            if (response.isSuccessful()) {
+                                timeView.setData(response.body());
+                                timeView.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -84,18 +87,20 @@ public class CalendarFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            timeView.setData(response.body());
-                            timeView.invalidate();
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
+                            if (response.isSuccessful()) {
+                                timeView.setData(response.body());
+                                timeView.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -121,18 +126,20 @@ public class CalendarFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            timeView.setData(response.body());
-                            timeView.invalidate();
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
+                            if (response.isSuccessful()) {
+                                timeView.setData(response.body());
+                                timeView.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -159,18 +166,20 @@ public class CalendarFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<Event>> call, Response<List<Event>> response) {
                         ProgresService.getInstance().hideProgress();
-                        if (response.isSuccessful()) {
-                            tv.setData(response.body());
-                            tv.invalidate();
-                        }
+                        if (response.code() == 401)
+                            FragmentService.getInstance().load(getActivity(), "CustomerLogin");
                         else {
-                            try {
-                                JSONObject jObjError = new JSONObject(response.errorBody().string());
-                                Toast
-                                        .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
-                                        .show();
-                            }
-                            catch (Exception e) {
+                            if (response.isSuccessful()) {
+                                tv.setData(response.body());
+                                tv.invalidate();
+                            } else {
+                                try {
+                                    JSONObject jObjError = new JSONObject(response.errorBody().string());
+                                    Toast
+                                            .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
+                                            .show();
+                                } catch (Exception e) {
+                                }
                             }
                         }
                     }
@@ -188,6 +197,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        super.setRetainInstance(true);
     }
 
     @Override
@@ -219,8 +229,7 @@ public class CalendarFragment extends Fragment {
                 buttonLeft.setText("Создать запись");
                 note.setVisibility(View.GONE);
                 updateNoteRecord(timeView, calendar.getId(), note.getText().toString());
-            }
-            else {
+            } else {
                 note.setVisibility(View.VISIBLE);
                 buttonRight.setVisibility(View.VISIBLE);
                 buttonLeft.setText("Сохранить запись");
@@ -270,7 +279,22 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

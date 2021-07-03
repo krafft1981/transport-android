@@ -65,42 +65,8 @@ public class NotifyService {
                 try {
                     JSONObject notify = new JSONObject(message);
                     String action = notify.getString("action");
-                    JSONObject request = notify.getJSONObject("request");
-                    JSONArray events = notify.getJSONArray("events");
-
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("Заявка ");
-
-                    switch (action) {
-                        case "create": {
-                            builder.append("создана");
-                            break;
-                        }
-
-                        case "confirm": {
-                            builder.append("подтверждена");
-                            break;
-                        }
-
-                        case "reject": {
-                            builder.append("отклонена");
-                            break;
-                        }
-
-                        case "cancel": {
-                            builder.append("удалена");
-                            break;
-                        }
-                    }
-
-//                  на 29.06.21 с19:00-21:00 +79001188... Иван
-                    builder.append(" на ");
-                    builder.append(df.format(format, new Date(request.getLong("day"))));
-                    builder.append(" ");
-                    builder.append(request.getJSONArray("hours"));
-                    builder.append(" часов");
-
-                    sendNotify(context, builder.toString());
+                    String text = notify.getString("message");
+                    sendNotify(context, text);
                 }
                 catch (Exception e) {
 

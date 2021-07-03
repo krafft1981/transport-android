@@ -26,7 +26,6 @@ import lombok.AllArgsConstructor;
 public class TimeView extends View {
 
     private Map<Integer, BusyBox> box = new HashMap();
-    private Map<Integer, Coordinate> pos = new HashMap();
 
     public TimeView(Context context) {
         super(context);
@@ -45,7 +44,7 @@ public class TimeView extends View {
 
         Set<Integer> result = new HashSet();
 
-        for (Map.Entry<Integer, Coordinate> entry : pos.entrySet()) {
+        for (Map.Entry<Integer, BusyBox> entry : box.entrySet()) {
             if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST)
                 result.add(entry.getKey());
         }
@@ -59,6 +58,7 @@ public class TimeView extends View {
         private String text;
         private Calendar calendar;
         private Long object;
+        private Coordinate coordinate;
     }
 
     private class Coordinate {
@@ -82,13 +82,13 @@ public class TimeView extends View {
                 float x = event.getX();
                 float y = event.getY();
 
-                for (Map.Entry<Integer, Coordinate> entry : pos.entrySet()) {
+                for (Map.Entry<Integer, BusyBox> entry : box.entrySet()) {
 
                     Boolean myX = false;
                     Boolean myY = false;
 
-                    if ((entry.getValue().left < x) && (x < entry.getValue().right)) myX = true;
-                    if ((entry.getValue().top < y) && (y < entry.getValue().bottom)) myY = true;
+                    if ((entry.getValue().coordinate.left < x) && (x < entry.getValue().coordinate.right)) myX = true;
+                    if ((entry.getValue().coordinate.top < y) && (y < entry.getValue().coordinate.bottom)) myY = true;
 
                     if (myX && myY) {
 
@@ -123,7 +123,6 @@ public class TimeView extends View {
     public void setData(List<Event> data) {
 
         box.clear();
-        pos.clear();
 
         if (data == null)
             return;
@@ -133,11 +132,14 @@ public class TimeView extends View {
                 if (event.getCalendar().getHours().contains(hour)) {
                     if (event.getType() == EventTypeEnum.GENERATED.getId())
                         break;
-                    EventTypeEnum type = EventTypeEnum.byId(event.getType());
-                    String value = hour.toString() + ":00";
-                    Long object = event.getObjectId();
-                    Calendar calendar = event.getCalendar();
-                    box.put(hour, new BusyBox(type, value, calendar, object));
+
+                    box.put(hour, new BusyBox(
+                            EventTypeEnum.byId(event.getType()),
+                            hour.toString() + ":00",
+                            event.getCalendar(),
+                            event.getObjectId(),
+                            new Coordinate()
+                    ));
                 }
             }
         }
@@ -257,8 +259,8 @@ public class TimeView extends View {
                     textPaint
             );
 
-            pos.put(hour, coordinate);
             sequense++;
+            busyBox.coordinate = coordinate;
         }
     }
 }

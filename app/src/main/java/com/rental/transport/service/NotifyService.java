@@ -62,6 +62,8 @@ public class NotifyService {
             @Override
             public void onTextReceived(String message) {
 
+                System.out.println(message);
+
                 try {
                     JSONObject notify = new JSONObject(message);
                     String action = notify.getString("action");

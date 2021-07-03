@@ -157,10 +157,6 @@ public class CalendarFragment extends Fragment {
 
     private void loadDetails(TimeView tv) {
 
-        Toast
-                .makeText(getActivity(), currentDay.toString(), Toast.LENGTH_LONG)
-                .show();
-
         ProgresService.getInstance().showProgress(getContext(), getString(R.string.calendar_loading));
         NetworkService
                 .getInstance()

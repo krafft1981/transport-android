@@ -197,7 +197,7 @@ public class TransportDetails extends Fragment {
                                 true
                         );
                         ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.JPEG, 80, os);
+                        image.compress(Bitmap.CompressFormat.JPEG, 90, os);
                         byte[] data = os.toByteArray();
 
                         Transport transport = MemoryService.getInstance().getTransport();

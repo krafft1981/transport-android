@@ -1,5 +1,6 @@
 package com.rental.transport.service;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.fragment.app.FragmentActivity;
@@ -31,7 +32,7 @@ public class SharedService {
 
     public void save(FragmentActivity activity, String username, String password) {
 
-        settings = activity.getPreferences(activity.MODE_PRIVATE);
+        settings = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(activity.getString(R.string.preferred_username), username);
         editor.putString(activity.getString(R.string.preferred_password), password);
@@ -39,14 +40,14 @@ public class SharedService {
     }
 
     public void setValue(FragmentActivity activity, String key, String value) {
-        settings = activity.getPreferences(activity.MODE_PRIVATE);
+        settings = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
     public String getValue(FragmentActivity activity, String key) {
-        settings = activity.getPreferences(activity.MODE_PRIVATE);
+        settings = activity.getPreferences(Context.MODE_PRIVATE);
         return settings.getString(key, null);
     }
 }

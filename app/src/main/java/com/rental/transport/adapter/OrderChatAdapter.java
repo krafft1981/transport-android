@@ -1,6 +1,7 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +80,7 @@ public class OrderChatAdapter extends BaseAdapter {
         Customer customer = MemoryService.getInstance().getCustomer();
         Integer gravity = customer.getId() == message.getCustomerId() ? Gravity.RIGHT : Gravity.LEFT;
 
-        holder.date.setText(df.format(format, message.getDate()));
+        holder.date.setText(DateFormat.format(format, message.getDate()));
         holder.text.setText(message.getText());
         holder.text.setGravity(gravity);
 

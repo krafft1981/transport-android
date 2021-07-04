@@ -198,7 +198,7 @@ public class CustomerSettings extends Fragment {
                                 true
                         );
                         ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.JPEG, 80, os);
+                        image.compress(Bitmap.CompressFormat.JPEG, 90, os);
                         byte[] data = os.toByteArray();
 
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));

@@ -66,14 +66,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Создать запись" />
+            android:text="сохранить" />
 
         <Button
             android:id="@+id/calendarActionRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:text="Удалить запись" />
+            android:text="Удалить" />
     </LinearLayout>
 </RelativeLayout>

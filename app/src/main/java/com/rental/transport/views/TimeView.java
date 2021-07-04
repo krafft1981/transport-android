@@ -113,26 +113,25 @@ public class TimeView extends View {
                         myY = true;
 
                     if (myX && myY) {
-                        if (box.get(entry.getKey()).type == EventTypeEnum.FREE) {
-                            box.get(entry.getKey()).type = EventTypeEnum.REQUEST;
-                            this.invalidate();
-                            return box.get(entry.getKey()).type;
-                        }
+                        switch (box.get(entry.getKey()).type) {
+                            case FREE: {
+                                box.get(entry.getKey()).type = EventTypeEnum.REQUEST;
+                                this.invalidate();
+                                break;
+                            }
 
-                        if (box.get(entry.getKey()).type == EventTypeEnum.REQUEST) {
-                            box.get(entry.getKey()).type = EventTypeEnum.FREE;
-                            this.invalidate();
-                            return box.get(entry.getKey()).type;
-                        }
+                            case REQUEST: {
+                                box.get(entry.getKey()).type = EventTypeEnum.FREE;
+                                this.invalidate();
+                                break;
+                            }
 
-                        if (box.get(entry.getKey()).type == EventTypeEnum.ORDER) {
-                            Calendar calendar = box.get(entry.getKey()).calendar;
-                            MemoryService.getInstance().setCalendar(calendar);
-                        }
-
-                        if (box.get(entry.getKey()).type == EventTypeEnum.NOTEBOOK) {
-                            Calendar calendar = box.get(entry.getKey()).calendar;
-                            MemoryService.getInstance().setCalendar(calendar);
+                            case NOTEBOOK:
+                            case ORDER: {
+                                Calendar calendar = box.get(entry.getKey()).calendar;
+                                MemoryService.getInstance().setCalendar(calendar);
+                                break;
+                            }
                         }
 
                         return box.get(entry.getKey()).type;
@@ -195,9 +194,8 @@ public class TimeView extends View {
         if (box.size() % 2 != 0)
             delimiter++;
 
-        Date date = new Date();
         java.util.Calendar calendar = java.util.Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTime(new Date());
         Integer currentHour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
         calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);

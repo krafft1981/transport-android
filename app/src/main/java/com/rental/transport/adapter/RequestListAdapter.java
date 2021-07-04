@@ -1,6 +1,7 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,7 @@ public class RequestListAdapter extends BaseAdapter {
         Event event = data.get(position);
         Calendar calendar = event.getCalendar();
 
-        holder.requestDay.setText(df.format(format, new Date(calendar.getDay())));
+        holder.requestDay.setText(DateFormat.format(format, new Date(calendar.getDay())));
 
         StringBuilder builder = new StringBuilder();
         builder.append(calendar.getMinHour());

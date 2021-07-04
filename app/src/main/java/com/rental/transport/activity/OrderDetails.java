@@ -1,6 +1,7 @@
 package com.rental.transport.activity;
 
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +127,7 @@ public class OrderDetails extends Fragment {
 
         View root = inflater.inflate(R.layout.order_details, container, false);
         TextView day = root.findViewById(R.id.orderDay);
-        day.setText(df.format(format, new Date(order.getDay())));
+        day.setText(DateFormat.format(format, new Date(order.getDay())));
         TextView hours = root.findViewById(R.id.orderHours);
         hours.setText(order.getMinHour() + ":00" + " - " + order.getMaxHour() + ":00");
 

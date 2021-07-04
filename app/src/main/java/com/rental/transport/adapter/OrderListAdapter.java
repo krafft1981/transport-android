@@ -1,6 +1,7 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +98,7 @@ public class OrderListAdapter extends BaseAdapter {
 
         String phone = PropertyService.getInstance().getValue(order.getProperty(), "order_customer_phone");
 
-        holder.orderDay.setText(df.format(format, new Date(order.getDay())));
+        holder.orderDay.setText(DateFormat.format(format, new Date(order.getDay())));
         holder.orderHours.setText(order.getMinHour() + ":00" + " - " + order.getMaxHour() + ":00");
         holder.orderCustomerPhone.setText(phone);
         return convertView;

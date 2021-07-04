@@ -224,37 +224,30 @@ public class CalendarFragment extends Fragment {
             GregorianCalendar cal = new GregorianCalendar(year, month, dayOfMonth);
             cal.setTimeZone(TimeZone.getTimeZone("GMT"));
             currentDay = cal.getTimeInMillis();
-            note.setVisibility(View.GONE);
             loadDetails(timeView);
-            buttonLeft.setText("Создать запись");
-            buttonRight.setVisibility(View.GONE);
+            note.setVisibility(View.GONE);
+            MemoryService.getInstance().setCalendar(null);
         });
 
         buttonLeft.setOnClickListener(view -> {
-            Calendar calendar = MemoryService.getInstance().getCalendar();
-
-            if (buttonRight.getVisibility() == View.VISIBLE) {
-                buttonRight.setVisibility(View.GONE);
-                buttonLeft.setText("Создать запись");
-                note.setVisibility(View.GONE);
-                updateNoteRecord(timeView, calendar.getId(), note.getText().toString());
+            if (timeView.getHours().isEmpty()) {
+                Calendar calendar = MemoryService.getInstance().getCalendar();
+                if (calendar != null)
+                    updateNoteRecord(timeView, calendar.getId(), note.getText().toString());
             } else {
-                note.setVisibility(View.VISIBLE);
-                buttonRight.setVisibility(View.VISIBLE);
-                buttonLeft.setText("Сохранить запись");
-                note.setText("");
-                createNoteRecord(timeView, currentDay, timeView.getHours().toArray(new Integer[timeView.getHours().size()]), note.getText().toString());
+                createNoteRecord(timeView, currentDay, timeView.getHours().toArray(new Integer[timeView.getHours().size()]), "");
+                MemoryService.getInstance().setCalendar(null);
             }
         });
 
         buttonRight.setOnClickListener(view -> {
             Calendar calendar = MemoryService.getInstance().getCalendar();
-            buttonRight.setVisibility(View.GONE);
             timeView.clearHours();
-            buttonLeft.setText("Создать запись");
             note.setVisibility(View.GONE);
-            if (calendar != null)
+            if (calendar != null) {
                 deleteNoteRecord(timeView, calendar.getId());
+                MemoryService.getInstance().setCalendar(null);
+            }
         });
 
         timeView.setOnTouchListener((view, event) -> {
@@ -263,16 +256,14 @@ public class CalendarFragment extends Fragment {
                 case NOTEBOOK: {
                     note.setVisibility(View.VISIBLE);
                     note.setText(MemoryService.getInstance().getCalendar().getNote());
-                    buttonLeft.setText("Сохранить запись");
-                    buttonRight.setVisibility(View.VISIBLE);
+                    timeView.clearHours();
                     break;
                 }
 
                 case FREE:
                 case REQUEST: {
                     note.setVisibility(View.GONE);
-                    buttonLeft.setText("Создать запись");
-                    buttonRight.setVisibility(View.GONE);
+                    MemoryService.getInstance().setCalendar(null);
                     break;
                 }
 

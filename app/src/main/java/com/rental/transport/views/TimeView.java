@@ -231,13 +231,13 @@ public class TimeView extends View {
                 textHeight = height / 4 * 3;
             }
 
-            if (paintintedDay < currentDay)
+            if (paintintedDay < currentDay) {
                 paintBody.setColor(Color.GRAY);
-
-            else if ((paintintedDay.equals(currentDay)) && (hour <= currentHour))
+                busyBox.type = EventTypeEnum.EXPIRED;
+            } else if ((paintintedDay.equals(currentDay)) && (hour <= currentHour)) {
                 paintBody.setColor(Color.GRAY);
-
-            else {
+                busyBox.type = EventTypeEnum.EXPIRED;
+            } else {
                 switch (busyBox.type) {
                     case ORDER:
                     case NOTEBOOK: {

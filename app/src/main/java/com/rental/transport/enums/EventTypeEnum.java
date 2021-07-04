@@ -10,7 +10,8 @@ public enum EventTypeEnum {
     REQUEST(3, "Request"),
     ORDER(4, "Order"),
     BUSY(5, "Busy"),
-    FREE(6, "Free");
+    FREE(6, "Free"),
+    EXPIRED(0, "Expired");
 
     @Getter
     private Integer id = 0;

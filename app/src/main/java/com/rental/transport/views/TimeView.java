@@ -54,19 +54,26 @@ public class TimeView extends View {
 
     @AllArgsConstructor
     private class BusyBox {
+
+        private float left = 0;
+        private float right = 0;
+        private float top = 0;
+        private float bottom = 0;
+
         private EventTypeEnum type;
         private String text;
         private Calendar calendar;
         private Long object;
-        private Coordinate coordinate;
+
+        public BusyBox(EventTypeEnum type, String text, Calendar calendar, Long object) {
+
+            this.type = type;
+            this.text = text;
+            this.calendar = calendar;
+            this.object = object;
+        }
     }
 
-    private class Coordinate {
-        float left = 0;
-        float right = 0;
-        float top = 0;
-        float bottom = 0;
-    }
 
     public EventTypeEnum click(View view, MotionEvent event) {
 
@@ -87,8 +94,10 @@ public class TimeView extends View {
                     Boolean myX = false;
                     Boolean myY = false;
 
-                    if ((entry.getValue().coordinate.left < x) && (x < entry.getValue().coordinate.right)) myX = true;
-                    if ((entry.getValue().coordinate.top < y) && (y < entry.getValue().coordinate.bottom)) myY = true;
+                    if ((entry.getValue().left < x) && (x < entry.getValue().right))
+                        myX = true;
+                    if ((entry.getValue().top < y) && (y < entry.getValue().bottom))
+                        myY = true;
 
                     if (myX && myY) {
 
@@ -137,8 +146,7 @@ public class TimeView extends View {
                             EventTypeEnum.byId(event.getType()),
                             hour.toString() + ":00",
                             event.getCalendar(),
-                            event.getObjectId(),
-                            new Coordinate()
+                            event.getObjectId()
                     ));
                 }
             }
@@ -180,87 +188,105 @@ public class TimeView extends View {
         calendar.set(java.util.Calendar.MILLISECOND, 0);
         Long currentDay = calendar.getTimeInMillis();
 
+        Paint paintFrame = new Paint();
+        paintFrame.setColor(Color.BLACK);
+
         for (Integer hour = min; hour <= max; hour++) {
-            Paint paint = new Paint();
+            Paint paintBody = new Paint();
             BusyBox busyBox = box.get(hour);
             Long paintintedDay = box.get(hour).calendar.getDay();
-
-            if (paintintedDay < currentDay)
-                paint.setColor(Color.GRAY);
-
-            else if ((paintintedDay.equals(currentDay)) && (hour <= currentHour))
-                paint.setColor(Color.GRAY);
-
-            else
-                switch (busyBox.type) {
-                    case GENERATED: {
-                        paint.setColor(Color.GRAY);
-                        break;
-                    }
-
-                    case ORDER: {
-                        paint.setColor(Color.WHITE);
-                        break;
-                    }
-
-                    case NOTEBOOK:
-                    case BUSY: {
-                        paint.setColor(Color.RED);
-                        break;
-                    }
-
-                    case REQUEST: {
-                        paint.setColor(Color.YELLOW);
-                        break;
-                    }
-
-                    case FREE: {
-                        paint.setColor(Color.GREEN);
-                        break;
-                    }
-                }
-
-            Coordinate coordinate = new Coordinate();
 
             float textHeight = 0;
             Integer size = width / delimiter;
 
             // Рассчитываем координаты основываясь на delimiter
             if (sequense < delimiter) {
-
-                coordinate.left = size * (sequense + 0);
-                coordinate.right = size * (sequense + 1) - 2;
-                coordinate.top = 0;
-                coordinate.bottom = height / 2 - 1;
-
+                busyBox.left = size * (sequense + 0);
+                busyBox.right = size * (sequense + 1) - 2;
+                busyBox.top = 2;
+                busyBox.bottom = height / 2 - 1;
                 textHeight = height / 4;
-            }
-            else {
-                coordinate.left = size * (sequense - delimiter + 0);
-                coordinate.right = size * (sequense - delimiter + 1) - 2;
-
-                coordinate.top = height / 2 + 1;
-                coordinate.bottom = height;
-
+            } else {
+                busyBox.left = size * (sequense - delimiter + 0);
+                busyBox.right = size * (sequense - delimiter + 1) - 2;
+                busyBox.top = height / 2 + 1;
+                busyBox.bottom = height - 2;
                 textHeight = height / 4 * 3;
             }
 
+            if (paintintedDay < currentDay)
+                paintBody.setColor(Color.GRAY);
+
+            else if ((paintintedDay.equals(currentDay)) && (hour <= currentHour))
+                paintBody.setColor(Color.GRAY);
+
+            else {
+                switch (busyBox.type) {
+                    case GENERATED: {
+                        paintBody.setColor(Color.GRAY);
+                        break;
+                    }
+
+                    case ORDER: {
+                        paintBody.setColor(Color.WHITE);
+                        break;
+                    }
+
+                    case NOTEBOOK:
+                    case BUSY: {
+                        paintBody.setColor(Color.RED);
+                        break;
+                    }
+
+                    case REQUEST: {
+                        paintBody.setColor(Color.YELLOW);
+                        break;
+                    }
+
+                    case FREE: {
+                        paintBody.setColor(Color.GREEN);
+                        break;
+                    }
+                }
+
+                if (busyBox.calendar != null) {
+
+                    switch (busyBox.type) {
+                        case NOTEBOOK:
+                        case ORDER: {
+                            if (hour == busyBox.calendar.getMinHour())
+                                canvas.drawRect(busyBox.left - 2, busyBox.top - 2, busyBox.right, busyBox.bottom + 2, paintFrame);
+
+                            if (hour == busyBox.calendar.getMaxHour())
+                                canvas.drawRect(busyBox.left, busyBox.top - 2, busyBox.right + 2, busyBox.bottom + 2, paintFrame);
+
+                            if ((busyBox.calendar.getMinHour() < hour) && (hour < busyBox.calendar.getMaxHour()))
+                                canvas.drawRect(busyBox.left, busyBox.top - 2, busyBox.right, busyBox.bottom + 2, paintFrame);
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                    }
+                }
+            }
+
             canvas.drawRect(
-                    coordinate.left,
-                    coordinate.top,
-                    coordinate.right,
-                    coordinate.bottom,
-                    paint
+                    busyBox.left,
+                    busyBox.top,
+                    busyBox.right,
+                    busyBox.bottom,
+                    paintBody
             );
 
             canvas.drawText(busyBox.text,
-                    coordinate.left,
+                    busyBox.left,
                     textHeight,
                     textPaint
             );
 
             sequense++;
-            busyBox.coordinate = coordinate;
         }
     }
 }

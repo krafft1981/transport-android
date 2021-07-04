@@ -250,10 +250,10 @@ public class TimeView extends View {
                 }
 
                 if (busyBox.calendar != null) {
-
                     switch (busyBox.type) {
-                        case NOTEBOOK:
+                        case REQUEST:
                         case ORDER: {
+
                             if (hour == busyBox.calendar.getMinHour())
                                 canvas.drawRect(busyBox.left - 2, busyBox.top - 2, busyBox.right, busyBox.bottom + 2, paintFrame);
 
@@ -262,7 +262,6 @@ public class TimeView extends View {
 
                             if ((busyBox.calendar.getMinHour() < hour) && (hour < busyBox.calendar.getMaxHour()))
                                 canvas.drawRect(busyBox.left, busyBox.top - 2, busyBox.right, busyBox.bottom + 2, paintFrame);
-
                             break;
                         }
 

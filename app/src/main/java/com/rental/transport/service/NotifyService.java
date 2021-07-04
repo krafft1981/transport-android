@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -12,12 +13,10 @@ import androidx.core.app.NotificationManagerCompat;
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
 
 import tech.gusavila92.websocketclient.WebSocketClient;
 
@@ -48,8 +47,7 @@ public class NotifyService {
         URI uri;
         try {
             uri = new URI("ws://138.124.187.10:8080/websocket");
-        }
-        catch (URISyntaxException e) {
+        } catch (URISyntaxException e) {
             e.printStackTrace();
             return null;
         }
@@ -69,9 +67,42 @@ public class NotifyService {
                     String action = notify.getString("action");
                     String text = notify.getString("message");
                     sendNotify(context, text);
-                }
-                catch (Exception e) {
 
+                    Toast
+                            .makeText(context, action, Toast.LENGTH_LONG)
+                            .show();
+
+                    switch (action) {
+                        case "message": {
+
+                            break;
+                        }
+
+                        case "create": {
+
+                            break;
+                        }
+
+                        case "confirm": {
+
+                            break;
+                        }
+
+                        case "reject": {
+
+                            break;
+                        }
+
+                        case "cancel": {
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
             }
 
@@ -96,8 +127,7 @@ public class NotifyService {
                         try {
                             Thread.sleep(15000);
                             sendPing(null);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -120,7 +150,7 @@ public class NotifyService {
         client.addHeader("username", customer.getAccount());
 
         client.setConnectTimeout(30000);
-        client.setReadTimeout(30000);
+        client.setReadTimeout(60000);
         client.enableAutomaticReconnection(5000);
         client.connect();
         client.sendPing(null);

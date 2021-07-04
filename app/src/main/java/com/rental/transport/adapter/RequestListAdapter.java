@@ -127,7 +127,14 @@ public class RequestListAdapter extends BaseAdapter {
 
         holder.requestDay.setText(df.format(format, new Date(calendar.getDay())));
 
-        holder.requestHours.setText(calendar.getMinHour() + ":00" + " - " + calendar.getMaxHour() + ":00");
+        StringBuilder builder = new StringBuilder();
+        builder.append(calendar.getMinHour());
+        builder.append(":00");
+        builder.append(" - ");
+        builder.append(calendar.getMaxHour() + 1);
+        builder.append(":00");
+
+        holder.requestHours.setText(builder.toString());
 
         return convertView;
     }

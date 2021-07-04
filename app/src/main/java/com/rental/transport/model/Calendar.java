@@ -43,7 +43,6 @@ public class Calendar {
             if (max < value) max = value;
         }
 
-        max++;
         return max;
     }
 }

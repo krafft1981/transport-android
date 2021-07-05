@@ -39,7 +39,7 @@
     <string name="noOrder">Отгул</string>
     <string name="calendar_begin">Время начала</string>
     <string name="calendar_end">Время окончания</string>
-    <string name="google_maps_key">AIzaSyBY3c7RFvwzs06juEg0nzIU7PVERTIV3U8</string>
+    <string name="google_maps_key">AIzaSyAKCUA63kOoU-N0mdmnJFLXOicjM4zvGxM</string>
     <string name="order_creating">Создание заказа</string>
     <string name="event_creating">Создание отгула</string>
     <string name="forbidden">Запрещено</string>

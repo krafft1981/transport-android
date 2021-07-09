@@ -77,8 +77,10 @@ public class TransportFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState
+    ) {
 
         View root = inflater.inflate(R.layout.transport_fragment, container, false);
         GridView grid = root.findViewById(R.id.gridview);

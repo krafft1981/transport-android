@@ -71,6 +71,7 @@ public class CustomerCreate extends Fragment {
                                             .show();
                                 }
                                 catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }

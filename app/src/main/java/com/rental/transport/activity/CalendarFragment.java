@@ -61,6 +61,7 @@ public class CalendarFragment extends Fragment {
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
                                 } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }
@@ -100,6 +101,7 @@ public class CalendarFragment extends Fragment {
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
                                 } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }
@@ -139,6 +141,7 @@ public class CalendarFragment extends Fragment {
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
                                 } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }
@@ -179,6 +182,7 @@ public class CalendarFragment extends Fragment {
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
                                 } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }

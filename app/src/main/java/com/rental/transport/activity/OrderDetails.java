@@ -60,6 +60,7 @@ public class OrderDetails extends Fragment {
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
                                 } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }
@@ -99,6 +100,7 @@ public class OrderDetails extends Fragment {
                                             .makeText(getContext(), jObjError.getString("message"), Toast.LENGTH_LONG)
                                             .show();
                                 } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }

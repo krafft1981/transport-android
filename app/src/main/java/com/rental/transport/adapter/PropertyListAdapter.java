@@ -1,8 +1,6 @@
 package com.rental.transport.adapter;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,9 +79,8 @@ public class PropertyListAdapter extends BaseAdapter {
                 holder.value.setKeyListener(null);
 
             convertView.setTag(holder);
-        } else {
+        } else
             holder = (PropertyListAdapter.ViewHolder) convertView.getTag();
-        }
 
         Property property = data.get(position);
 

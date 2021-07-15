@@ -161,6 +161,7 @@ public class RequestListAdapter extends BaseAdapter {
                                         .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
                             } catch (Exception e) {
+                                System.out.println(e);
                             }
                         }
                     }
@@ -196,6 +197,7 @@ public class RequestListAdapter extends BaseAdapter {
                                         .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
                             } catch (Exception e) {
+                                System.out.println(e);
                             }
                         }
                     }
@@ -230,6 +232,7 @@ public class RequestListAdapter extends BaseAdapter {
                                         .makeText(context, jObjError.getString("message"), Toast.LENGTH_LONG)
                                         .show();
                             } catch (Exception e) {
+                                System.out.println(e);
                             }
                         }
                     }

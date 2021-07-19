@@ -55,8 +55,6 @@ public class TransportDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Transport transport = MemoryService.getInstance().getTransport();
-
         root = inflater.inflate(R.layout.transport_details, container, false);
         buttonDelete = root.findViewById(R.id.buttonDelete);
         gallery = root.findViewById(R.id.gallery);
@@ -69,6 +67,7 @@ public class TransportDetails extends Fragment {
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
+        Transport transport = MemoryService.getInstance().getTransport();
         if (transport.getImage().isEmpty())
             buttonDelete.setEnabled(false);
 
@@ -88,7 +87,7 @@ public class TransportDetails extends Fragment {
             NetworkService
                     .getInstance()
                     .getTransportApi()
-                    .doDropTransportImage(transport.getId(), imageId)
+                    .doDropTransportImage(MemoryService.getInstance().getTransport().getId(), imageId)
                     .enqueue(new Callback<Transport>() {
                         @Override
                         public void onResponse(Call<Transport> call, Response<Transport> response) {
@@ -126,12 +125,12 @@ public class TransportDetails extends Fragment {
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-            transport.setProperty(PropertyService.getInstance().getPropertyFromList(listView));
+            MemoryService.getInstance().getTransport().setProperty(PropertyService.getInstance().getPropertyFromList(listView));
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
             NetworkService
                     .getInstance()
                     .getTransportApi()
-                    .doPutTransport(transport)
+                    .doPutTransport(MemoryService.getInstance().getTransport())
                     .enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
@@ -202,12 +201,11 @@ public class TransportDetails extends Fragment {
                         image.compress(Bitmap.CompressFormat.JPEG, 90, os);
                         byte[] data = os.toByteArray();
 
-                        Transport transport = MemoryService.getInstance().getTransport();
                         ProgresService.getInstance().showProgress(getContext(), getString(R.string.transport_saving));
                         NetworkService
                                 .getInstance()
                                 .getTransportApi()
-                                .doAddTransportImage(transport.getId(), data)
+                                .doAddTransportImage(MemoryService.getInstance().getTransport().getId(), data)
                                 .enqueue(new Callback<Transport>() {
                                     @Override
                                     public void onResponse(Call<Transport> call, Response<Transport> response) {

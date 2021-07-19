@@ -15,11 +15,9 @@ import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.rental.transport.R;
 import com.rental.transport.adapter.CustomerGalleryAdapter;
 import com.rental.transport.adapter.PropertyListAdapter;
@@ -29,12 +27,9 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
-
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.util.TimeZone;
-
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,15 +49,15 @@ public class CustomerSettings extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        Customer customer = MemoryService.getInstance().getCustomer();
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState
+    ) {
 
         root = inflater.inflate(R.layout.customer_settings, container, false);
         buttonDelete = root.findViewById(R.id.buttonDelete);
         ListView list = root.findViewById(R.id.customerProperty);
-        list.setAdapter(new PropertyListAdapter(getContext(), customer.getProperty(), true));
+        list.setAdapter(new PropertyListAdapter(getContext(), MemoryService.getInstance().getCustomer().getProperty(), true));
 
         gallery = root.findViewById(R.id.gallery);
         gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
@@ -74,7 +69,7 @@ public class CustomerSettings extends Fragment {
             FragmentService.getInstance().load(getActivity(), "PictureFragment");
         });
 
-        if (customer.getImage().isEmpty())
+        if (MemoryService.getInstance().getCustomer().getImage().isEmpty())
             buttonDelete.setEnabled(false);
 
         buttonDelete.setOnClickListener(v -> {
@@ -98,7 +93,8 @@ public class CustomerSettings extends Fragment {
                                     gallery.invalidate();
                                     if (response.body().getImage().isEmpty())
                                         buttonDelete.setEnabled(false);
-                                } else {
+                                }
+                                else {
                                     try {
                                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                                         Toast
@@ -122,13 +118,13 @@ public class CustomerSettings extends Fragment {
         });
 
         root.findViewById(R.id.buttonSave).setOnClickListener(v -> {
-            customer.setProperty(PropertyService.getInstance().getPropertyFromList(list));
-            customer.setTimeZone(TimeZone.getDefault().getID());
+            MemoryService.getInstance().getCustomer().setProperty(PropertyService.getInstance().getPropertyFromList(list));
+            MemoryService.getInstance().getCustomer().setTimeZone(TimeZone.getDefault().getID());
             ProgresService.getInstance().showProgress(getContext(), getString(R.string.customer_saving));
             NetworkService
                     .getInstance()
                     .getCustomerApi()
-                    .doPutCustomer(customer)
+                    .doPutCustomer(MemoryService.getInstance().getCustomer())
                     .enqueue(new Callback<Customer>() {
                         @Override
                         public void onResponse(Call<Customer> call, Response<Customer> response) {
@@ -140,7 +136,8 @@ public class CustomerSettings extends Fragment {
                                     MemoryService.getInstance().setCustomer(response.body());
                                     gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
                                     gallery.invalidate();
-                                } else {
+                                }
+                                else {
                                     try {
                                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                                         Toast
@@ -171,11 +168,13 @@ public class CustomerSettings extends Fragment {
                     takePictureIntent.setType("image/*");
                     if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
                         startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
-                } else {
+                }
+                else {
 
                     ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
                 }
-            } else {
+            }
+            else {
                 Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 takePictureIntent.setType("image/*");
                 if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
@@ -221,7 +220,8 @@ public class CustomerSettings extends Fragment {
                                                 gallery.invalidate();
                                                 if (!response.body().getImage().isEmpty())
                                                     buttonDelete.setEnabled(true);
-                                            } else {
+                                            }
+                                            else {
                                                 try {
                                                     JSONObject jObjError = new JSONObject(response.errorBody().string());
                                                     Toast

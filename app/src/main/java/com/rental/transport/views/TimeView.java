@@ -126,7 +126,7 @@ public class TimeView extends View {
                                 break;
                             }
 
-                            case NOTEBOOK:
+                            case NOTE:
                             case ORDER: {
                                 Calendar calendar = box.get(entry.getKey()).calendar;
                                 MemoryService.getInstance().setCalendar(calendar);
@@ -240,7 +240,7 @@ public class TimeView extends View {
             } else {
                 switch (busyBox.type) {
                     case ORDER:
-                    case NOTEBOOK: {
+                    case NOTE: {
                         paintBody.setColor(Color.WHITE);
                         break;
                     }
@@ -259,7 +259,7 @@ public class TimeView extends View {
                 if (busyBox.calendar != null) {
 
                     switch (busyBox.type) {
-                        case NOTEBOOK:
+                        case NOTE:
                         case ORDER: {
                             if (hour == busyBox.calendar.getMinHour())
                                 canvas.drawRect(busyBox.left - 2, busyBox.top - 2, busyBox.right, busyBox.bottom + 2, paintFrame);

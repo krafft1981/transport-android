@@ -257,7 +257,7 @@ public class CalendarFragment extends Fragment {
         timeView.setOnTouchListener((view, event) -> {
             switch (timeView.click(view, event)) {
                 case ORDER:
-                case NOTEBOOK: {
+                case NOTE: {
                     note.setVisibility(View.VISIBLE);
                     note.setText(MemoryService.getInstance().getCalendar().getNote());
                     timeView.clearHours();

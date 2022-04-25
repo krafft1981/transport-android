@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-
 import androidx.fragment.app.Fragment;
-
 import com.rental.transport.R;
 import com.rental.transport.adapter.OrderListAdapter;
 import com.rental.transport.model.Order;

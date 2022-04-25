@@ -2,9 +2,7 @@ package com.rental.transport.network;
 
 import com.rental.transport.model.Event;
 import com.rental.transport.model.Text;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

@@ -3,6 +3,14 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
+
+    def apiHost
+    if (project.hasProperty('host')) {
+        apiHost = project.property('host')
+    } else {
+        apiHost = 'https://api.fondy.eu'
+    }
+
     defaultConfig {
         multiDexEnabled true
         applicationId "com.rental.transport.capitan"
@@ -11,7 +19,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField 'String', 'API_HOST', "\"$apiHost\""
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -50,4 +60,7 @@ dependencies {
     implementation 'com.burgstaller:okhttp-digest:2.5'
 
     implementation 'tech.gusavila92:java-android-websocket-client:1.2.2'
+
+    implementation 'com.google.android.gms:play-services-base:17.5.0'
+    implementation 'com.google.android.gms:play-services-wallet:18.1.2'
 }

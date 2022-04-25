@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.rental.transport.R;
 import com.rental.transport.adapter.TransportGridAdapter;
 import com.rental.transport.model.Transport;
@@ -16,12 +14,9 @@ import com.rental.transport.service.FragmentService;
 import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
-
-import org.json.JSONObject;
-
 import java.util.List;
-
 import lombok.NonNull;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

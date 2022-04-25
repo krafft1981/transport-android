@@ -2,9 +2,7 @@ package com.rental.transport.activity;
 
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.fragment.app.FragmentActivity;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.rental.transport.R;
 import com.rental.transport.service.FragmentService;

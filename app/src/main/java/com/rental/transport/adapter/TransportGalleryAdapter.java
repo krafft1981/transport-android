@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-
 import com.rental.transport.R;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.MemoryService;
-
 import java.util.List;
 
 public class TransportGalleryAdapter extends BaseAdapter {

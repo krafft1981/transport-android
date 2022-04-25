@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.rental.transport.R;
 import com.rental.transport.model.Property;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

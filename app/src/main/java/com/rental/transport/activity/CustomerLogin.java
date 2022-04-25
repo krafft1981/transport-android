@@ -9,9 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.service.FragmentService;
@@ -20,7 +18,6 @@ import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.NotifyService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.SharedService;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -15,11 +15,9 @@ import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.rental.transport.R;
 import com.rental.transport.adapter.PropertyListAdapter;
 import com.rental.transport.adapter.TransportGalleryAdapter;
@@ -29,11 +27,8 @@ import com.rental.transport.service.MemoryService;
 import com.rental.transport.service.NetworkService;
 import com.rental.transport.service.ProgresService;
 import com.rental.transport.service.PropertyService;
-
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
-
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

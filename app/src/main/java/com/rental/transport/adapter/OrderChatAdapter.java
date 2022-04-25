@@ -8,16 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.rental.transport.R;
 import com.rental.transport.model.Customer;
 import com.rental.transport.model.Message;
 import com.rental.transport.service.MemoryService;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import lombok.Getter;
 
 public class OrderChatAdapter extends BaseAdapter {

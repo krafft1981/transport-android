@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.rental.transport.R;
 import com.rental.transport.model.Transport;
 import com.rental.transport.service.ImageService;
 import com.rental.transport.service.PropertyService;
-
 import java.util.List;
 
 public class TransportGridAdapter extends BaseAdapter {

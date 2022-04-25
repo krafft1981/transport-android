@@ -49,4 +49,7 @@
     <string name="calendar">Календарь</string>
     <string name="account">Профиль</string>
     <string name="actionPrompt">Выбор</string>
+    <string name="lbl_amount">Сумма</string>
+    <string name="lbl_email">email</string>
+    <string name="payment">Оплатить</string>
 </resources>

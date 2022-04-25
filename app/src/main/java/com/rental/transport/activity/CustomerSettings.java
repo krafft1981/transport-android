@@ -93,8 +93,7 @@ public class CustomerSettings extends Fragment {
                                     gallery.invalidate();
                                     if (response.body().getImage().isEmpty())
                                         buttonDelete.setEnabled(false);
-                                }
-                                else {
+                                } else {
                                     try {
                                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                                         Toast
@@ -136,8 +135,7 @@ public class CustomerSettings extends Fragment {
                                     MemoryService.getInstance().setCustomer(response.body());
                                     gallery.setAdapter(new CustomerGalleryAdapter(getContext()));
                                     gallery.invalidate();
-                                }
-                                else {
+                                } else {
                                     try {
                                         JSONObject jObjError = new JSONObject(response.errorBody().string());
                                         Toast
@@ -161,24 +159,20 @@ public class CustomerSettings extends Fragment {
         });
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            takePictureIntent.setType("image/*");
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-                    Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                    takePictureIntent.setType("image/*");
-                    if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
-                        startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
-                }
-                else {
+
+                    startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
+                } else {
 
                     ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
                 }
-            }
-            else {
-                Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                takePictureIntent.setType("image/*");
-                if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
-                    startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
+            } else {
+                startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
             }
         });
 
@@ -220,8 +214,7 @@ public class CustomerSettings extends Fragment {
                                                 gallery.invalidate();
                                                 if (!response.body().getImage().isEmpty())
                                                     buttonDelete.setEnabled(true);
-                                            }
-                                            else {
+                                            } else {
                                                 try {
                                                     JSONObject jObjError = new JSONObject(response.errorBody().string());
                                                     Toast

@@ -157,21 +157,19 @@ public class TransportDetails extends Fragment {
         });
 
         root.findViewById(R.id.buttonLoad).setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            takePictureIntent.setType("image/*");
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
                 if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
-                    Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                    takePictureIntent.setType("image/*");
-                    if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
+
                         startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
                 } else {
 
                     ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, STORAGE_PERMISSION_CODE);
                 }
             } else {
-                Intent takePictureIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                takePictureIntent.setType("image/*");
-                if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null)
                     startActivityForResult(takePictureIntent, PICK_IMAGE_SELECTED);
             }
         });

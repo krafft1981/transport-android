@@ -1,23 +1,12 @@
 package com.rental.transport.service;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.widget.ImageView;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.nio.file.FileSystemException;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
